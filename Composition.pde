@@ -38,12 +38,12 @@ class Composition {
 
     pg.beginDraw();
     pg.textFont(myPGFont);
-    pg.textSize(300);
+    pg.textSize(500);
     pg.background(255);
     pg.fill(0);
     pg.line(random(0, _pageWidth),random(0,_pageHeight),random(0, _pageWidth),random(0,_pageHeight));
     pg.rect(0,0,100,100);
-    pg.text(str(pageNum), _pageWidth/2, _pageHeight/2);
+    pg.text(String.format("%02d", pageNum), _pageWidth/3, _pageHeight/2);
     pg.textSize(50);
     pg.text(heading, 100, 100);
     pg.textSize(12);
