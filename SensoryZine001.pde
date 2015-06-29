@@ -83,10 +83,21 @@ void setup() {
   
   
   coverPage();
-
+  int currPage = 0;
+  
   for (int j=1; j<=printerPages*2; j++) {
        
      pdfg.nextPage();  // Tell it to go to the next page
+     
+     pdf.image(pages[currPage].getPage(), 0, 0, pages[currPage].getWidth(), pages[currPage].getHeight()); // top left
+     currPage++;
+     pdf.image(pages[currPage].getPage(), compWidth/2, 0, pages[currPage].getWidth(), pages[currPage].getHeight()); // top right
+     currPage++;
+     pdf.image(pages[currPage].getPage(), 0, compHeight/2, pages[currPage].getWidth(), pages[currPage].getHeight()); // bottom left
+     currPage++;
+     pdf.image(pages[currPage].getPage(), compWidth/2, compHeight/2, pages[currPage].getWidth(), pages[currPage].getHeight()); // bottom right
+     currPage++;
+     
      println("Printer Page: "+j);
   }
 
@@ -98,25 +109,6 @@ void setup() {
   myFont = createFont("DINPro-Black", 48);
   textFont(myFont);
   textAlign(CENTER, CENTER);
-  
-
-
-  pdf.rect(margin, margin, pdf.width/2-(margin*2), pdf.height/2-(margin*2)); // top left rect
-  pdf.rect(pdf.width/2+margin, margin, pdf.width/2-(margin*2), pdf.height/2-(margin*2)); // top right rect
-  pdf.rect(margin, pdf.height/2+margin, pdf.width/2-(margin*2), pdf.height/2-(margin*2)); // bottom left rect
-  pdf.rect(pdf.width/2+margin, pdf.height/2+margin, pdf.width/2-(margin*2), pdf.height/2-(margin*2)); // top right rect
-    
-  pdf.line(pdf.width/2, 0, pdf.width/2, pdf.height);
-  pdf.line(0, pdf.height/2, pdf.width, pdf.height/2);
-  
-  pdf.fill(0);
-  pdf.text("One", margin*2, margin*2);
-
-  
-  // creating a second page
-  //pdfg.nextPage();  // Tell it to go to the next page
-  pdf.line(pdf.width/2, 0, pdf.width/2, pdf.height);
-  pdf.line(0, pdf.height/2, pdf.width, pdf.height/2);
   
   pdf.dispose();
   pdf.endDraw();
@@ -168,18 +160,6 @@ void coverPage() {
   
   }
   
-  
-  //for (int k=0; k<numPages; k++) { // this repeats for each spread
-  //  //for (int l=0; l<2; l++) { // this uses both pages
-  //  if (k%2 = 0) { // its even
-  //    float tXPos = float(reportX + 1500) + (k*pages[k].getWidth()/10);
-  //    float tYPos = 50+(k*300);
-  //    pdf.image(pages[k].getPage(), tXPos, tYPos, pages[k].getWidth()/10, pages[k].getHeight()/10);
-  //    pdf.rect(tXPos, tYPos, pages[k].getWidth()/10, pages[k].getHeight()/10);
-  //  } else {
-  //    pdf.image(pages[k].getPage(), tXPos, tYPos, pages[k].getWidth()/10, pages[k].getHeight()/10);
-  //    pdf.rect(tXPos, tYPos, pages[k].getWidth()/10, pages[k].getHeight()/10);
-  //}
 }
 
 void draw() {
