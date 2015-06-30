@@ -16,6 +16,8 @@ class Spread {
   String heading;
   String subheading;
   String body;
+  String contentimages;
+  String quote;
   
   Spread(int _spreadNum, int _spreadWidthPx, int _spreadHeightPx) {
     spreadNum = _spreadNum;
@@ -48,10 +50,12 @@ class Spread {
     pg.fill(0);
     
     //draw page-specific content
-    XML heading, body;
+    XML heading, body, contentimages, quote;
     for(int i = 0; i < pages.length; i++){
       heading = pages[i].getChild("heading");
       body = pages[i].getChild("body");
+      contentimages = pages[i].getChild("image");
+      quote = pages[i].getChild("quote");
       if (heading != null){
         pg.textSize(50);
         pg.text(heading.getContent(), pageWidthPx * i + 100, 100);
@@ -59,6 +63,18 @@ class Spread {
       if (body != null){
         pg.textSize(12);
         pg.text(body.getContent(), pageWidthPx * i + 100, 300, 400, 700);
+      }
+      if (contentimages != null) {
+          PImage img = loadImage(contentimages.getString("src"));
+          println("loaded "+contentimages.getContent());
+          pg.image(img, (pageWidthPx * i)/2, (pageHeightPx * i)/2);
+      }
+      if (quote !=null) {
+        pg.fill(0);
+        pg.textSize(120);
+        pg.text(quote.getContent(), 100, 100, pageWidthPx-100, pageHeightPx-100);
+        pg.textSize(50);
+        pg.text(quote.getString("author"), 100, pageHeightPx-200);
       }
       pg.text(pages[i].getString("id"), pageWidthPx*(i+1)-100, spreadHeightPx-100);
     }

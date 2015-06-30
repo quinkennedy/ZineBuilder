@@ -62,7 +62,7 @@ Eventually we can use the processing window to show the controls
 Lets special case the cover
 
 Content Block Types (Information Blocks):
-  * Quotation
+  * Quote
     * Quotation
     * Author
   * Table of Contents
@@ -72,11 +72,11 @@ Content Block Types (Information Blocks):
   * Drawing 
 
 Base Class 
-  * Heading
-  * Subheading
-  * BodyText
-  * Footer
-  * Image
+  * heading
+  * subheading
+  * body
+  * footer
+  * image
 */
 
 

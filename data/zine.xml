@@ -30,10 +30,7 @@
 		<footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="4">
-	   <heading>Integer egestas</heading>
-	   <subheading></subheading>
-	   <body>Nullam vehicula erat sed consequat porttitor. Nullam hendrerit mattis massa ac eleifend. Fusce magna lorem, viverra a est fringilla, dapibus sagittis velit. Maecenas auctor ultrices tincidunt. Integer egestas mi a posuere pellentesque. Donec eleifend ante massa, et vestibulum leo blandit eget. Mauris mattis, ex et imperdiet auctor, ex purus rhoncus lectus, vel condimentum ligula enim id neque. Aliquam fringilla ac lacus sed tincidunt. Cras nec malesuada quam. Curabitur vitae massa sed ipsum consectetur dapibus vel pulvinar mi. Aenean consequat pulvinar diam ac sollicitudin. Pellentesque eget ligula est. Suspendisse leo ipsum, ornare quis ipsum pellentesque, vestibulum ullamcorper diam.</body>
-	   <footer>Sensory Aesthetics</footer>
+	   <image src="images/U_2_694819491672_archigram.jpg"></image>
 	</page>
 </spread>
 <spread id="3">
