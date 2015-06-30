@@ -1,29 +1,32 @@
-import controlP5.*; //<>//
+import controlP5.*; //<>// //<>//
 import processing.pdf.*;
 PGraphics pdf;
 PFont myFont;
 float margin = 50;
-float paperWidth = 8.5; //inches
-float paperHeight = 11; //inches
+float paperWidthIn = 8.5; //inches
+float paperHeightIn = 11; //inches
 int desiredDPI = 300; //pixels per inch
-int compWidth = int(paperWidth * desiredDPI);
-int compHeight = int(paperHeight * desiredDPI);
+int paperWidthPx = int(paperWidthIn * desiredDPI);
+int paperHeightPx = int(paperHeightIn * desiredDPI);
 // how many folds you want to create for your zine
 int widthFolds = 1;
 int heightFolds = 1;
+int pageWidthPx = paperWidthPx / (int)Math.pow(2, widthFolds);
+int pageHeightPx = paperHeightPx / (int)Math.pow(2, heightFolds);
+int compWidthPx = pageWidthPx * 2;
+int compHeightPx = pageHeightPx;
 //how many pages you plan to print on, 
 //so for a quarter size book each printer page represents 8 of the book pages
 int printerPages = 2; // double sided
-int numPages = ((widthFolds * 2) * (heightFolds * 2) * 2) * printerPages;
-int pageWidth = compWidth/2;
-int pageHeight = compHeight/2;
+int numPages = (int)Math.pow(2, widthFolds) * (int)Math.pow(2, heightFolds) * 2 * printerPages;
+int numCompositions = numPages/2 + 1;//front and back covers are only 1 page
 
 int topMargin = 200;
 int bottomMargin = 300;
 int centerLeft = 50;
 int centerRight = 50;
 String bookTitle = "Sensory Aesthetics";
-Composition[] pages = new Composition[numPages];
+Composition[] pages = new Composition[numCompositions];
 
 /*
  *  SensoryZine001.pde
@@ -65,7 +68,7 @@ We should make textbox class - the one in controlP5 has rendering problems
 void setup() {
   size(400, 400);
   noLoop();
-  pdf = createGraphics(compWidth, compHeight, PDF, "sensory.pdf");
+  pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "sensory.pdf");
   
   println ("Your zine will have "+numPages+" pages");
   //// CHECK WHAT FONTS ARE ON THE SYSTEM
@@ -76,35 +79,44 @@ void setup() {
   PGraphicsPDF pdfg = (PGraphicsPDF) pdf; // Get the renderer
 
   // Create a set of Compositions
-  for (int k=1; k<=numPages; k++) {
-    pages[k-1] = new Composition(k, pageWidth, pageHeight); 
+  pages[0] = new Composition(1, pageWidthPx, pageHeightPx);
+  pages[numCompositions - 1] = new Composition(numCompositions, pageWidthPx, pageHeightPx);
+  for (int k=2; k < numCompositions; k++) {
+    pages[k-1] = new Composition(k, pageWidthPx * 2, pageHeightPx); 
   }
   println("---------------------");
   
   
   coverPage();
-  int currPage = 0;
   
-  for (int j=1; j<=printerPages*2; j++) {
-       
-     pdfg.nextPage();  // Tell it to go to the next page
-     
-     pdf.image(pages[currPage].getPage(), 0, 0, pages[currPage].getWidth(), pages[currPage].getHeight()); // top left
-     currPage++;
-     pdf.image(pages[currPage].getPage(), compWidth/2, 0, pages[currPage].getWidth(), pages[currPage].getHeight()); // top right
-     currPage++;
-     pdf.image(pages[currPage].getPage(), 0, compHeight/2, pages[currPage].getWidth(), pages[currPage].getHeight()); // bottom left
-     currPage++;
-     pdf.image(pages[currPage].getPage(), compWidth/2, compHeight/2, pages[currPage].getWidth(), pages[currPage].getHeight()); // bottom right
-     currPage++;
-     
-     println("Printer Page: "+j);
+  ZinePageLayout[][][] zpl = getLayout(heightFolds, widthFolds, printerPages*2);
+  printLayout(zpl);
+  for(int page = 0; page < zpl.length; page++){
+    pdfg.nextPage();  // Tell it to go to the next page
+    pdfg.endDraw();
+    PGraphics paperg = createGraphics(paperWidthPx, paperHeightPx);
+    paperg.beginDraw();
+    for(int row = 0; row < zpl[0].length; row++){
+      for(int cell = 0; cell < zpl[0][0].length; cell++){
+        ZinePageLayout cpg = zpl[page][row][cell];
+        int compI = cpg.getNumber()/2;
+        boolean leftComp = (compI == 0 || cpg.getNumber()%2 == 0);
+        Composition comp = pages[compI];
+        if (cpg.getHFlip()){
+          paperg.copy(comp.getPage(),
+            leftComp ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
+            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
+        } else {
+          paperg.copy(comp.getPage(), 
+            leftComp ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
+            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
+        }
+      }
+    }
+    paperg.endDraw();
+    pdf.beginDraw();
+    pdf.image(paperg, 0, 0);
   }
-
-  
-
-  //PGraphicsPDF pdfg = (PGraphicsPDF) pdf;  // Get the renderer
-  //pdfg.nextPage();  // Tell it to go to the next page
   
   myFont = createFont("DINPro-Black", 48);
   textFont(myFont);
@@ -131,7 +143,7 @@ void coverPage() {
   int column2 = reportX+1500;
   pdf.text(bookTitle, 100, reportHeight);
   reportHeight += reportSpace;
-  pdf.text("This book is "+paperWidth+" in. wide x "+paperHeight+" in. height", reportX, reportHeight);
+  pdf.text("This book is "+paperWidthIn+" in. wide x "+paperHeightIn+" in. height", reportX, reportHeight);
   reportHeight += reportSpace;
   pdf.text("Targeting a DPI of: " + desiredDPI, reportX, reportHeight);
   reportHeight += reportSpace;
@@ -143,28 +155,21 @@ void coverPage() {
   
   float tXPos = 0;
   float tYPos = 50;
-  for (int k=0; k<numPages; k++) { // this repeats for each spread
+  for (int k=0; k<numCompositions; k++) { // this repeats for each spread
       
     // even or odd to set the x
-
-    if (k%2 == 0) {
+    if (k == 0){
       tXPos = column2 + pages[k].getWidth()/10;
     } else {
       tXPos = column2;
-      tYPos += 300;
-
     }
     
     pdf.image(pages[k].getPage(), tXPos, tYPos, pages[k].getWidth()/10, pages[k].getHeight()/10);
     pdf.rect(tXPos, tYPos, pages[k].getWidth()/10, pages[k].getHeight()/10);
-  
+    tYPos += 300;
+    
   }
   
 }
 
-void draw() {
-  
-
-
-  
-}
+void draw() {}
