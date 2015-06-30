@@ -19,14 +19,14 @@ int compHeightPx = pageHeightPx;
 //so for a quarter size book each printer page represents 8 of the book pages
 int printerPages = 2; // double sided
 int numPages = (int)Math.pow(2, widthFolds) * (int)Math.pow(2, heightFolds) * 2 * printerPages;
-int numCompositions = numPages/2 + 1;//front and back covers are only 1 page
+int numSpreads = numPages/2;//front and back covers share the first spread
 
 int topMargin = 200;
 int bottomMargin = 300;
 int centerLeft = 50;
 int centerRight = 50;
 String bookTitle = "Sensory Aesthetics";
-Composition[] pages = new Composition[numCompositions];
+Spread[] spreads = new Spread[numSpreads];
 
 /*
  *  SensoryZine001.pde
@@ -79,10 +79,8 @@ void setup() {
   PGraphicsPDF pdfg = (PGraphicsPDF) pdf; // Get the renderer
 
   // Create a set of Compositions
-  pages[0] = new Composition(1, pageWidthPx, pageHeightPx);
-  pages[numCompositions - 1] = new Composition(numCompositions, pageWidthPx, pageHeightPx);
-  for (int k=2; k < numCompositions; k++) {
-    pages[k-1] = new Composition(k, pageWidthPx * 2, pageHeightPx); 
+  for (int k=1; k <= numSpreads; k++) {
+    spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx); 
   }
   println("---------------------");
   
@@ -99,16 +97,16 @@ void setup() {
     for(int row = 0; row < zpl[0].length; row++){
       for(int cell = 0; cell < zpl[0][0].length; cell++){
         ZinePageLayout cpg = zpl[page][row][cell];
-        int compI = cpg.getNumber()/2;
-        boolean leftComp = (compI == 0 || cpg.getNumber()%2 == 0);
-        Composition comp = pages[compI];
+        int spreadI = ((cpg.getNumber() / 2) % numSpreads);
+        boolean leftPage = cpg.getNumber()%2 == 0;
+        Spread comp = spreads[spreadI];
         if (cpg.getHFlip()){
           paperg.copy(comp.getPage(),
-            leftComp ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
+            leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
             pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
         } else {
           paperg.copy(comp.getPage(), 
-            leftComp ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
+            leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
             pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
         }
       }
@@ -155,17 +153,14 @@ void coverPage() {
   
   float tXPos = 0;
   float tYPos = 50;
-  for (int k=0; k<numCompositions; k++) { // this repeats for each spread
-      
-    // even or odd to set the x
-    if (k == 0){
-      tXPos = column2 + pages[k].getWidth()/10;
-    } else {
-      tXPos = column2;
-    }
+  for (int k=0; k<numSpreads; k++) { // this repeats for each spread
     
-    pdf.image(pages[k].getPage(), tXPos, tYPos, pages[k].getWidth()/10, pages[k].getHeight()/10);
-    pdf.rect(tXPos, tYPos, pages[k].getWidth()/10, pages[k].getHeight()/10);
+    tXPos = column2;
+    
+    pdf.image(spreads[k].getPage(), 
+              tXPos, tYPos, 
+              spreads[k].getWidth()/10, spreads[k].getHeight()/10);
+    pdf.rect(tXPos, tYPos, spreads[k].getWidth()/10, spreads[k].getHeight()/10);
     tYPos += 300;
     
   }
