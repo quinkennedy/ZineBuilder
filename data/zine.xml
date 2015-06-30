@@ -7,18 +7,26 @@
 	   <body>Aenean pellentesque erat sit amet dui convallis sagittis. Praesent eget aliquet velit. Praesent ante dolor, efficitur vel metus iaculis, dapibus tempus neque. Duis in eros augue. Duis quam lorem, iaculis consequat dui a, auctor maximus enim. Nunc non nunc nec tellus euismod ultricies. Praesent pharetra mauris eget mauris condimentum, quis ultricies quam tincidunt. Praesent dictum ligula vitae felis accumsan auctor. Donec sed neque sit amet orci finibus ornare id et velit. Proin consectetur est non tortor ultricies, id vestibulum dui faucibus. Donec vestibulum leo sit amet arcu rutrum, a pulvinar felis tristique.</body>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
-	<page id="1">
+	<page id="1" type="toc">
 		<heading>Table of Contents</heading>
+		<table>
+			<content page="3">Hello World</content>
+			<content page="5">What is real?</content>
+			<content page="7">Lorem Ipsum FTW</content>
+			<content page="8">Subconcious and Extension</content>
+			<content page="10">This is the longest most obnoxious title that we will have.</content>
+			<content page="11">Love/Hate</content>
+			<content page="14">Conclusions</content>
+		</table>
 		<subheading>(remember we had to learn how to use this)</subheading>
 		<body>Nullam arcu leo, egestas non sagittis vel, consectetur quis sapien. Praesent ut tempus mauris. Maecenas ac pellentesque sapien. Sed suscipit sem vitae maximus placerat. Donec at justo quis magna tincidunt posuere vel quis sapien. Maecenas posuere tellus mi, in aliquet odio lacinia vitae. Donec eu nisi consectetur, tristique tortor et, egestas purus. Phasellus at purus a arcu cursus tincidunt. Duis tortor nunc, pellentesque eu ornare et, consectetur eu felis.</body>
 		<footer>Sensory Aesthetics</footer>
 	</page>
 </spread>
 <spread id="2">
-	<page id="3">
-		<heading>Dui Dolor</heading>
-		<subheading></subheading>
-		<body>Phasellus volutpat dui dolor, in condimentum lectus eleifend ultricies. Nullam eu vestibulum ligula. Duis ultricies sodales ligula. Duis at cursus dolor. Morbi ac sodales mauris. Suspendisse ut sapien et justo viverra pharetra. Integer eu maximus urna. Donec volutpat ante vulputate, viverra nisi mollis, dignissim magna. Nullam tempor turpis nibh, quis elementum metus tempus nec. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla varius sem quis ex interdum auctor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sit amet varius libero, sit amet faucibus turpis. Proin eu quam ligula.</body>
+	<page id="3" type="quote">
+		<subheading>2015</subheading>
+		<quote author="Quin Kennedy">Today's noise is tomorrow's information.</quote>
 		<footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="4">

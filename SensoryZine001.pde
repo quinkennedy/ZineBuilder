@@ -1,4 +1,4 @@
-import controlP5.*; //<>// //<>//
+import controlP5.*; //<>// //<>// //<>//
 import processing.pdf.*;
 PGraphics pdf;
 PFont myFont;
@@ -61,7 +61,22 @@ Eventually we can use the processing window to show the controls
 
 Lets special case the cover
 
-We should make textbox class - the one in controlP5 has rendering problems
+Content Block Types (Information Blocks):
+  * Quotation
+    * Quotation
+    * Author
+  * Table of Contents
+    * Table (Page number, title)
+  * Information Block
+  * Photo 
+  * Drawing 
+
+Base Class 
+  * Heading
+  * Subheading
+  * BodyText
+  * Footer
+  * Image
 */
 
 
