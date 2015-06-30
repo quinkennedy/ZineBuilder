@@ -3,6 +3,7 @@
 //ASSUMPTIONS
 // - using both sides of the page.
 // - all horizontal folds before all vertical folds.
+// - pages are stacked before folding
 ZinePageLayout[][][] getLayout(int horizontalFolds, int verticalFolds, int paperSides){
   int vFoldsLeft = verticalFolds;
   int hFoldsLeft = horizontalFolds;

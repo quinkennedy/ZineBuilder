@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <zine>
 <spread id="1">
-	<page id="1">
-		<heading>Table of Contents</heading>
-		<subheading>(remember we had to learn how to use this)</subheading>
-		<body>Nullam arcu leo, egestas non sagittis vel, consectetur quis sapien. Praesent ut tempus mauris. Maecenas ac pellentesque sapien. Sed suscipit sem vitae maximus placerat. Donec at justo quis magna tincidunt posuere vel quis sapien. Maecenas posuere tellus mi, in aliquet odio lacinia vitae. Donec eu nisi consectetur, tristique tortor et, egestas purus. Phasellus at purus a arcu cursus tincidunt. Duis tortor nunc, pellentesque eu ornare et, consectetur eu felis.</body>
-		<footer>Sensory Aesthetics</footer>
-	</page>
 	<page id="16">
 	   <heading>Aenean Pellenteque</heading>
 	   <subheading></subheading>
 	   <body>Aenean pellentesque erat sit amet dui convallis sagittis. Praesent eget aliquet velit. Praesent ante dolor, efficitur vel metus iaculis, dapibus tempus neque. Duis in eros augue. Duis quam lorem, iaculis consequat dui a, auctor maximus enim. Nunc non nunc nec tellus euismod ultricies. Praesent pharetra mauris eget mauris condimentum, quis ultricies quam tincidunt. Praesent dictum ligula vitae felis accumsan auctor. Donec sed neque sit amet orci finibus ornare id et velit. Proin consectetur est non tortor ultricies, id vestibulum dui faucibus. Donec vestibulum leo sit amet arcu rutrum, a pulvinar felis tristique.</body>
 	   <footer>Sensory Aesthetics</footer>
+	</page>
+	<page id="1">
+		<heading>Table of Contents</heading>
+		<subheading>(remember we had to learn how to use this)</subheading>
+		<body>Nullam arcu leo, egestas non sagittis vel, consectetur quis sapien. Praesent ut tempus mauris. Maecenas ac pellentesque sapien. Sed suscipit sem vitae maximus placerat. Donec at justo quis magna tincidunt posuere vel quis sapien. Maecenas posuere tellus mi, in aliquet odio lacinia vitae. Donec eu nisi consectetur, tristique tortor et, egestas purus. Phasellus at purus a arcu cursus tincidunt. Duis tortor nunc, pellentesque eu ornare et, consectetur eu felis.</body>
+		<footer>Sensory Aesthetics</footer>
 	</page>
 </spread>
 <spread id="2">
