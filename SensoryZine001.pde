@@ -2,6 +2,7 @@ import controlP5.*; //<>// //<>// //<>//
 import processing.pdf.*;
 PGraphics pdf;
 PFont myFont;
+boolean testLayout = false;
 float margin = 50;
 float paperWidthIn = 8.5; //inches
 float paperHeightIn = 11; //inches
@@ -83,6 +84,10 @@ Base Class
 void setup() {
   size(400, 400);
   noLoop();
+  if (testLayout){
+    testLayout();
+    return;
+  }
   pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "sensory.pdf");
   
   println ("Your zine will have "+numPages+" pages");
