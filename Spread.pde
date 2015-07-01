@@ -13,17 +13,13 @@ class Spread {
   private int spreadHeightPx;
   PFont myPGFont;
   XML xml;
-  String heading;
-  String subheading;
-  String body;
-  String contentimages;
-  String quote;
-  
+
+
   Spread(int _spreadNum, int _spreadWidthPx, int _spreadHeightPx) {
     spreadNum = _spreadNum;
     spreadWidthPx = _spreadWidthPx;
     spreadHeightPx = _spreadHeightPx;
-    
+
     // load content
     xml = loadXML("zine.xml");
     XML[] children = xml.getChildren("spread");
@@ -31,73 +27,145 @@ class Spread {
     XML[] pages = children[spreadNum-1].getChildren("page");
     int numPages = pages.length;
     int pageWidthPx = spreadWidthPx;
-    if (numPages > 0){
+    if (numPages > 0) {
       pageWidthPx /= numPages;
     }
     //String page = children[spreadNum-1].getChildren("page")[0].getContent();
     //heading = children[pageNum-1].getChild("heading").getContent();
     //body = children[pageNum-1].getChild("body").getContent();
     //println("Created Page: "+pageNum);
-    
+
     myPGFont = createFont("DINPro-Black", 48);
     pg = createGraphics(_spreadWidthPx, _spreadHeightPx);  
-    
+
 
     //pg.textAlign(CENTER, CENTER);
     pg.beginDraw();
     pg.background(255);
     pg.textFont(myPGFont);
     pg.fill(0);
-    
+
     //draw page-specific content
-    XML heading, body, contentimages, quote;
-    for(int i = 0; i < pages.length; i++){
-      heading = pages[i].getChild("heading");
-      body = pages[i].getChild("body");
-      contentimages = pages[i].getChild("image");
-      quote = pages[i].getChild("quote");
-      if (heading != null){
-        pg.textSize(50);
-        pg.text(heading.getContent(), pageWidthPx * i + 100, 100);
+    String heading, subheading, body, footer;
+    PImage [] contentimages;
+    String quote, author; 
+    for (int i = 0; i < pages.length; i++) {
+      pg.pushMatrix();
+      pg.translate(pageWidthPx * i, 0);
+      heading = extractString(pages[i], "heading");
+      //heading = pages[i].getChild("heading");
+      subheading = extractString(pages[i], "subheading");
+      //subheading = pages[i].getChild("subheading");
+      body = extractString(pages[i], "body");
+      //body = pages[i].getChild("body");
+      footer = extractString(pages[i], "footer");
+      //footer = pages[i].getChild("footer");
+      contentimages = extractImages(pages[i]);
+
+      String contentType = pages[i].getString("type");
+      if (contentType == null) {
+        base(heading, subheading, body, footer, contentimages);
+       } else if (contentType.equals("quote")) {
+        quote = extractString(pages[i], "quote");
+        author = pages[i].getChild("quote").getString("author");
+        quote(heading, subheading, body, footer, quote, author);
+      } else if (contentType.equals("toc")) {
+        toc(heading, subheading, body, footer);
+      } else if (contentType.equals("photo")) {
+        photo(heading, subheading, body, footer, contentimages);
       }
-      if (body != null){
-        pg.textSize(12);
-        pg.text(body.getContent(), pageWidthPx * i + 100, 300, 400, 700);
-      }
-      if (contentimages != null) {
-          PImage img = loadImage(contentimages.getString("src"));
-          println("loaded "+contentimages.getContent());
-          pg.image(img, (pageWidthPx * i)/2, (pageHeightPx * i)/2);
-      }
-      if (quote !=null) {
-        pg.fill(0);
-        pg.textSize(120);
-        pg.text(quote.getContent(), 100, 100, pageWidthPx-100, pageHeightPx-100);
-        pg.textSize(50);
-        pg.text(quote.getString("author"), 100, pageHeightPx-200);
-      }
-      pg.text(pages[i].getString("id"), pageWidthPx*(i+1)-100, spreadHeightPx-100);
+      pg.popMatrix();
+      //quote = pages[i].getChild("quote");
     }
-    
+
     //draw spread-general content
     pg.textSize(500);
-    pg.line(random(0, _spreadWidthPx),random(0,_spreadHeightPx),
-            random(0, _spreadWidthPx),random(0,_spreadHeightPx));
-    pg.rect(0,0,100,100);
+    pg.line(random(0, _spreadWidthPx), random(0, _spreadHeightPx), 
+      random(0, _spreadWidthPx), random(0, _spreadHeightPx));
+    pg.rect(0, 0, 100, 100);
     pg.text(String.format("%02d", spreadNum), _spreadWidthPx/3, _spreadHeightPx/2);
-    
+
     pg.endDraw();
+  }
+
+  public String extractString(XML _page, String _tag) {
+    XML tXML = _page.getChild(_tag);
+    if (tXML == null) {
+      return null;
+    } else {
+      return tXML.getContent();
+    }
+  }
+  
+  public PImage[] extractImages(XML _page) {
+      XML [] tXML = _page.getChildren("image");
+      PImage [] tImages = new PImage[tXML.length];
+      for(int j=0; j<tXML.length; j++) {
+        tImages[j] = loadImage(tXML[j].getString("src")); 
+        println(tImages[j]);
+      }
+      return tImages;
+  }
+
+  public void quote(String _heading, String _subheading, String _body, String _footer, String _quote, String _author) {
+    pg.fill(0);
+    pg.textSize(120);
+    pg.text(_quote, 100, 100, pageWidthPx-100, pageHeightPx-100);
+    pg.textSize(50);
+    pg.text(_author, 100, pageHeightPx-200);
+  }
+
+  public void toc(String _heading, String _subheading, String _body, String _footer) {
+  }
+
+  public void photo(String _heading, String _subheading, String _body, String _footer, PImage [] _images) {
+        if (_heading != null) {
+          pg.textSize(50);
+          pg.text(_heading, 100, 100);
+        }
+        if (_body != null) {
+          pg.textSize(12);
+          pg.text(_body, 100, 300, 400, 700);
+        }
+        if (_images.length > 0) {
+          //PImage img = loadImage(_images[0].getString("src"));
+          println("loaded "+_images[0]);
+          pg.image(_images[0], 0, 0, pageWidthPx, pageHeightPx);
+        }
+        if (_footer != null) {
+          pg.text(_footer, -100, -100);
+        }
+  }
+
+  public void base(String _heading, String _subheading, String _body, String _footer, PImage [] _images) {
+        if (_heading != null) {
+          pg.textSize(50);
+          pg.text(_heading, 100, 100);
+        }
+        if (_body != null) {
+          pg.textSize(12);
+          pg.text(_body, 100, 300, 400, 700);
+        }
+        if (_images.length > 0) {
+          //PImage img = loadImage(_images[0].getString("src"));
+          println("loaded "+_images[0]);
+          pg.image(_images[0], (pageWidthPx)/2, (pageHeightPx)/2);
+        }
+        if (_footer != null) {
+          pg.text(_footer, -100, -100);
+        }
+
   }
   
   public PGraphics getPage() {
-   println("passing back page"+pg);
-   return pg;
+    println("passing back page"+pg);
+    return pg;
   }
-  
+
   public int getWidth() {
     return spreadWidthPx;
   }
-  
+
   public int getHeight() {
     return spreadHeightPx;
   }

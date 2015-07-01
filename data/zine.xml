@@ -48,11 +48,12 @@
 	</page>
 </spread>
 <spread id="4">
-	<page id="6">
+	<page id="6" type="photo">
 	   <heading>Id rhoncus nibh egestas</heading>
 	   <subheading></subheading>
 	   <body>Curabitur vulputate neque ut justo fermentum, id rhoncus nibh egestas. Vestibulum pharetra sed elit dignissim suscipit. Duis et eros in eros tristique convallis. Sed vitae vehicula ipsum, in tincidunt mi. Aliquam est augue, sollicitudin sed blandit a, sollicitudin eu nunc. Vivamus sed mauris dapibus, tincidunt ipsum nec, scelerisque tellus. Pellentesque convallis velit et ex pharetra, non pharetra erat tempor. Maecenas massa purus, tincidunt et leo eu, consectetur sollicitudin sem.</body>
 	   <footer>Sensory Aesthetics</footer>
+	   <image src="images/PbHNwg4.jpg"></image>
 	</page>
 	<page id="7">
 	   <heading>Aliquam faucibus felis et justo</heading>
