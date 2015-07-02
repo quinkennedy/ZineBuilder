@@ -168,15 +168,16 @@ void setup() {
 
   // Create a set of Compositions
   for (int k=1; k <= numSpreads; k++) {
+    println("assembling spread " + k);
     spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx); 
   }
   println("---------------------");
   
   
   coverPage();
-  
+  println("calculating layout");
   ZinePageLayout[][][] zpl = getLayout(heightFolds, widthFolds, printerPages*2);
-  printLayout(zpl);
+  int progress = 0;
   for(int page = 0; page < zpl.length; page++){
     pdfg.nextPage();  // Tell it to go to the next page
     pdfg.endDraw();
@@ -184,6 +185,7 @@ void setup() {
     paperg.beginDraw();
     for(int row = 0; row < zpl[0].length; row++){
       for(int cell = 0; cell < zpl[0][0].length; cell++){
+        println("placing cell " + (++progress));
         ZinePageLayout cpg = zpl[page][row][cell];
         int spreadI = ((cpg.getNumber() / 2) % numSpreads);
         boolean leftPage = cpg.getNumber()%2 == 0;
@@ -217,6 +219,7 @@ void setup() {
 
 void coverPage() {
   // Create the cover page
+  println("creating cover page");
   pdf.background(255);
   myFont = createFont("DINPro-Black", 48);
   pdf.textFont(myFont);
