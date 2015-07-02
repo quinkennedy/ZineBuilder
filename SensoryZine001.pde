@@ -70,7 +70,75 @@ Content Block Types (Information Blocks):
     * Table (Page number, title)
   * Information Block
   * Photo 
-  * Drawing 
+  * Drawing (Generative)
+  
+Potential Block Types: (Also the idea of maps for navigation and summary vs content blocks)
+  * Analogy 
+  * Metaphor / Simile
+  * Checklist
+  * Classification List / Table
+  * Classification Tree
+  * Comment
+  * Cycle Chart
+  * Decision Table
+  * Definition
+  * Description
+  * Diagram
+  * Discourse (Horn pg. 187)
+  * Infographic / Data Vis
+  * Meme
+  * Example / Non-example
+  * Fact
+  * Flow Chart
+  * Flow Diagram
+  * Formula
+  * Input - Procedure - Output
+  * Propaganda
+  * Notation
+  * Goals / Objectives
+  * Outline
+  * Parts-Function table
+  * Parts table
+  * Prerequisites
+  * Principle
+  * Review
+  * Rant
+  * Interview
+  * Case Study
+  * Parable
+  * Zinger
+  * Comic
+  * Message Exchange (IM, SMS, etc.)
+  * User Generated Content
+  * Testimonial
+  * Newsjacking
+  * Puzzle / Game
+  * Background
+  * FAQ
+  * Map
+  * Bio
+  * Procedure
+  * Purpose
+  * Rule(s)
+  * Synonym
+  * When to Use
+  * Theorem
+  * Who does what / Org chart
+  * Worksheet
+  * Overview
+  * Compare and Contrast
+  * Advice
+  * Summary
+  * Test / Practice
+  * Clickbait
+  * Listicle
+  * Structure
+  * Concept
+  * Process
+  * Table of Contents
+  * Index
+  
+  
 
 Base Class 
   * heading

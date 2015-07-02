@@ -117,6 +117,15 @@ class Spread {
 
   public void toc(String _heading, String _subheading, String _body, String _footer) {
   }
+  
+  public void clickbait(String _heading, String _subheading, String _body, String _footer() {
+       //his guy went to... What happens next will blow your mind 
+       //These facts about childbirth will change the way you look at life FOREVER
+       //What this little kid can do with a bongo drum will make you sob uncontrollably until you burst
+       //18 Stages of getting addicted to...
+       //TEMPLATES = ['{{quantity}} things {{group}} do to avoid {{event}}!', '{{quantity}} {{group}} that haven\'t aged well.', 'This {{individual}} took part in {{event}}. What happened next will amaze you!', 'Watch this {{individual}} {{activity}}. First you\'ll be shocked, then you\'ll be inspired.', 'He worked {{event}} and {{quantity}} {{group}} turned it into {{event}}.']
+
+  }
 
   public void photo(String _heading, String _subheading, String _body, String _footer, PImage [] _images) {
         if (_heading != null) {
