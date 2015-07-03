@@ -70,7 +70,8 @@ class Spread {
         author = pages[i].getChild("quote").getString("author");
         quote(heading, subheading, body, footer, quote, author);
       } else if (contentType.equals("toc")) {
-        toc(heading, subheading, body, footer);
+        Content[] content = extractContents(pages[i]);
+        toc(heading, subheading, body, footer, content);
       } else if (contentType.equals("photo")) {
         photo(heading, subheading, body, footer, contentimages);
       }
@@ -106,6 +107,15 @@ class Spread {
       }
       return tImages;
   }
+  
+  public Content[] extractContents(XML _page){
+    XML[] xContents = _page.getChild("table").getChildren("content");
+    Content[] tContents = new Content[xContents.length];
+    for(int i = 0; i < xContents.length; i++){
+      tContents[i] = new Content(xContents[i].getString("page"), xContents[i].getContent());
+    }
+    return tContents;
+  }
 
   public void quote(String _heading, String _subheading, String _body, String _footer, String _quote, String _author) {
     pg.fill(0);
@@ -115,10 +125,50 @@ class Spread {
     pg.text(_author, 100, pageHeightPx-200);
   }
 
-  public void toc(String _heading, String _subheading, String _body, String _footer) {
+  public void toc(String _heading, String _subheading, String _body, String _footer, Content[] contents) {
+    //parse the data into FormattedTextBlock;
+    String[] separators = {" ", "|", "   ", " | ", " /**/ ", "\n"};
+    int interI = (int)random(1, separators.length);
+    int intraI = (int)random(0, interI);
+    PFont regular = loadFont("reg-print.vlw");
+    PFont bold = loadFont("bold-print.vlw");
+    FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[contents.length*2];
+    for(int i = 0; i < contents.length; i++){
+      fText[i*2] = new FormattedTextBlock.FormattedText(contents[i].page, bold);
+      fText[i*2+1] = new FormattedTextBlock.FormattedText(
+        separators[intraI] + contents[i].text + separators[interI], regular);
+    }
+    FormattedTextBlock textBlock = new FormattedTextBlock(fText, pageWidthPx*2/3, pg);
+    
+    //now draw the text
+    drawBlockedText(textBlock, pg);
   }
   
-  public void clickbait(String _heading, String _subheading, String _body, String _footer() {
+  void drawBlockedText(FormattedTextBlock bt, PGraphics pg){
+    FormattedTextBlock.FormattedLine currLine;
+    float startX = pageWidthPx*2/12, currX = startX, currY = startX;
+    pg.noFill();
+    pg.stroke(100);
+    pg.rect(startX, startX, pageWidthPx*2/3, pageHeightPx*2/3);
+    pg.fill(0);
+    pg.noStroke();
+    ArrayList<FormattedTextBlock.FormattedLine> lines = bt.lines;
+    for(int i = 0; i < lines.size(); i++){
+      currLine = bt.lines.get(i);
+      for(int w = 0; w < currLine.texts.size(); w++){
+        FormattedTextBlock.FormattedText currContig = currLine.texts.get(w);
+        pg.textFont(currContig.font);
+        pg.text(currContig.text, currX, currY);
+        currX += pg.textWidth(currContig.text);
+      }
+      if (currX != startX){
+        currY += pg.textDescent() + pg.textAscent();
+        currX = startX;
+      }
+    }
+  }
+  
+  public void clickbait(String _heading, String _subheading, String _body, String _footer) {
        //his guy went to... What happens next will blow your mind 
        //These facts about childbirth will change the way you look at life FOREVER
        //What this little kid can do with a bongo drum will make you sob uncontrollably until you burst
@@ -167,7 +217,6 @@ class Spread {
   }
   
   public PGraphics getPage() {
-    println("passing back page"+pg);
     return pg;
   }
 
@@ -177,5 +226,19 @@ class Spread {
 
   public int getHeight() {
     return spreadHeightPx;
+  }
+  
+  class Content{
+    String page;
+    String text;
+    
+    public Content(String page, String text){
+      this.page = page;
+      this.text = text;
+    }
+    
+    public String toString(){
+      return page + ". " + text;
+    }
   }
 }
