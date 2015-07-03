@@ -168,7 +168,7 @@ class Spread {
     }
   }
   
-  public void clickbait(String _heading, String _subheading, String _body, String _footer() {
+  public void clickbait(String _heading, String _subheading, String _body, String _footer) {
        //his guy went to... What happens next will blow your mind 
        //These facts about childbirth will change the way you look at life FOREVER
        //What this little kid can do with a bongo drum will make you sob uncontrollably until you burst
