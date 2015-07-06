@@ -179,10 +179,23 @@ void setup() {
     println("beginning cover " + q);
     cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
   }
+
   println("---------------------");
   
   
-  coverPage();
+  infoPage(); //start with an info page with spread thumbnails
+  
+  pdfg.nextPage(); 
+  // layout cover
+
+  pdf.image(cover[0].getPage(), 0, 0);
+  pdf.image(cover[0].getPage(), 0, paperHeightPx/2);
+
+  pdfg.nextPage(); 
+  // layout inside cover 
+  pdf.image(cover[1].getPage(), 0, 0);
+  pdf.image(cover[1].getPage(), 0, paperHeightPx/2);
+  
   println("calculating layout");
   ZinePageLayout[][][] zpl = getLayout(heightFolds, widthFolds, printerPages*2);
   int progress = 0;
@@ -225,9 +238,9 @@ void setup() {
 
 }
 
-void coverPage() {
+void infoPage() {
   // Create the cover page
-  println("creating cover page");
+  println("creating info page");
   pdf.background(255);
   myFont = createFont("DINPro-Black", 48);
   pdf.textFont(myFont);
@@ -264,7 +277,7 @@ void coverPage() {
    pdf.image(cover[p].getPage(), 
              tXPos, tYPos, 
              cover[p].getWidth()/10, cover[p].getHeight()/10);
-   //pdf.rect(tXPos, report, spreads[k].getWidth()/10, spreads[k].getHeight()/10);
+   pdf.rect(tXPos, tYPos, cover[p].getWidth()/10, cover[p].getHeight()/10);
    tYPos += 300;
   }
   

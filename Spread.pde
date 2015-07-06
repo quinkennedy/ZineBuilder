@@ -174,10 +174,15 @@ class Spread {
      pg.rect(0,0,spreadWidthPx, spreadHeightPx);
      pg.fill(0);
      
+          
+     
+     
          String heading, subheading, body, footer;
     PImage [] contentimages;
     String quote, author; 
     for (int i = 0; i < pages.length; i++) {
+      pg.pushMatrix();
+      pg.translate(pageWidthPx * i, 0);
       heading = extractString(pages[i], "heading");
       //heading = pages[i].getChild("heading");
       subheading = extractString(pages[i], "subheading");
@@ -188,13 +193,18 @@ class Spread {
       //footer = pages[i].getChild("footer");
       contentimages = extractImages(pages[i]);
       
+      if (spreadNum < 2) {
+         topMargin = 800; 
+      } else {
+        topMargin = 200;
+      }
+      
       String contentType = pages[i].getString("type");
       if (contentType == null) {
         base(heading, subheading, body, footer, contentimages);
       }
       
-     pg.pushMatrix();
-     pg.translate(pageWidthPx * i, 0);
+
       
 
 

@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <zine>
 <cover id="1">
+	<page id="2">
+		<heading>Until next time.</heading>
+	</page>
 	<page id="1">
 		<heading>Sensory Aesthetics</heading>
 		<subheading>A dialogue about the future of Computation</subheading>
-	</page>
-	<page id="2">
-		<image src="images/U_2_694819491672_archigram.jpg"></image>
 	</page>
 </cover>
 <cover id="2">
@@ -23,12 +23,6 @@ Joshua and James
 		<page id="4">
 	   <heading>Inside Back Cover</heading>
 	   <subheading></subheading>
-	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics zine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run additions but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please contact us @sensoryixd with questions or comments.
-
-Talk soon,
-Joshua and James
-	   </body>
-	   <footer>This zine technology would not have been possible without a partnership with Quin Kennedy (@quinkennedy). Please find out more info at our Github page. </footer>
 	</page>
 </cover>
 <spread id="1">
