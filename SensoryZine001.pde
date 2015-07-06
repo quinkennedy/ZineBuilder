@@ -1,4 +1,4 @@
-import controlP5.*; //<>// //<>// //<>//
+import controlP5.*; //<>// //<>// //<>// //<>//
 import processing.pdf.*;
 PGraphics pdf;
 PFont myFont;
@@ -21,6 +21,7 @@ int compHeightPx = pageHeightPx;
 int printerPages = 2; // double sided
 int numPages = (int)Math.pow(2, widthFolds) * (int)Math.pow(2, heightFolds) * 2 * printerPages;
 int numSpreads = numPages/2;//front and back covers share the first spread
+int coverPages = 2;
 
 int topMargin = 200;
 int bottomMargin = 300;
@@ -28,7 +29,7 @@ int centerLeft = 50;
 int centerRight = 50;
 String bookTitle = "Sensory Aesthetics";
 Spread[] spreads = new Spread[numSpreads];
-
+Spread[] cover = new Spread[coverPages];
 /*
  *  SensoryZine001.pde
  *  
@@ -169,7 +170,14 @@ void setup() {
   // Create a set of Compositions
   for (int k=1; k <= numSpreads; k++) {
     println("assembling spread " + k);
-    spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx); 
+    spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
+    spreads[k-1].setMargins(100,100,100,100,50,50);
+  }
+  println("Creating cover");
+  
+  for (int q=1; q <= coverPages; q++) {
+    println("beginning cover " + q);
+    cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
   }
   println("---------------------");
   
@@ -229,21 +237,40 @@ void coverPage() {
   int reportHeight = 100;
   int reportSpace = 100;
   int reportX = 100;
-  int column2 = reportX+1500;
+  int column2 = reportX+1200;
+  int column3 = column2 + 500;
   pdf.text(bookTitle, 100, reportHeight);
+  text(bookTitle, width/2, 100);
   reportHeight += reportSpace;
-  pdf.text("This book is "+paperWidthIn+" in. wide x "+paperHeightIn+" in. height", reportX, reportHeight);
+  pdf.text("This book is "+paperWidthIn+" in. wide x "+paperHeightIn+" in. height", reportX, reportHeight, column2, pageHeightPx);
+  text("This book is "+paperWidthIn+" in. wide x "+paperHeightIn+" in. height", width/2, 120);
+  text("Please check the Sketch folder for the output PDF file", width/2, 140);
   reportHeight += reportSpace;
-  pdf.text("Targeting a DPI of: " + desiredDPI, reportX, reportHeight);
+  pdf.text("Targeting a DPI of: " + desiredDPI, reportX, reportHeight, column2, pageHeightPx);
   reportHeight += reportSpace;
-  pdf.text("It should be folded "+widthFolds+" time on the width and "+heightFolds+" on the height.", reportX, reportHeight);
+  pdf.text("It should be folded "+widthFolds+" time on the width and "+heightFolds+" on the height.", reportX, reportHeight, column2, pageHeightPx);
   reportHeight += reportSpace;
-  pdf.text("In order to bind the "+numPages+" pages using "+printerPages+" printer pages.", reportX, reportHeight);
+  pdf.text("In order to bind the "+numPages+" pages using "+printerPages+" printer pages.", reportX, reportHeight, column2, pageHeightPx);
   
   pdf.noFill();
   
+
   float tXPos = 0;
   float tYPos = 50;
+  // print covers
+  for (int p=0; p<cover.length; p++) {
+   tXPos = column3;
+    
+   pdf.image(cover[p].getPage(), 
+             tXPos, tYPos, 
+             cover[p].getWidth()/10, cover[p].getHeight()/10);
+   //pdf.rect(tXPos, report, spreads[k].getWidth()/10, spreads[k].getHeight()/10);
+   tYPos += 300;
+  }
+  
+  tXPos = 0;
+  tYPos = 50;
+  
   for (int k=0; k<numSpreads; k++) { // this repeats for each spread
     
     tXPos = column2;
