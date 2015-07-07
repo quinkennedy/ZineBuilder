@@ -17,14 +17,14 @@ class Spread {
   private int bottomMargin = 200;
   private int leftOutsideMargin = 200;
   private int rightOutsideMargin = 200;
-  private int insideLeftMargin = 50;
-  private int insideRightMargin = 50;
+  private int insideLeftMargin = 200;
+  private int insideRightMargin = 200;
   private int headingSize = 120;
   private int subheadingSize = 80;
   private int bodySize = 30;
   private int quoteSize = 120;
   private int footerSize = 30;
-  private int baseLine = 400;
+  private int baseLine = 700;
   private color bgColor = color(255);
   private color primaryColor = color(0);
   private color spotColor = color(122);
@@ -303,7 +303,7 @@ class Spread {
         }
         if (_body != null) {
           pg.textSize(bodySize);
-          pg.text(_body, leftOutsideMargin, baseLine, pageWidthPx-rightOutsideMargin, pageHeightPx-bottomMargin);
+          pg.text(_body, leftOutsideMargin, baseLine, pageWidthPx-rightOutsideMargin-leftOutsideMargin, pageHeightPx-bottomMargin);
         }
         if (_images.length > 0) {
           //PImage img = loadImage(_images[0].getString("src"));

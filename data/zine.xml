@@ -11,22 +11,6 @@
 </cover>
 <cover id="2">
 	<page id="3">
-	   <heading>Inside Cover.</heading>
-	   <subheading></subheading>
-	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics zine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run additions but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please contact us @sensoryixd with questions or comments.
-
-Talk soon,
-Joshua and James
-	   </body>
-	   <footer>This zine technology would not have been possible without a partnership with Quin Kennedy (@quinkennedy). Please find out more info at our Github page. </footer>
-	</page>
-		<page id="4">
-	   <heading>Inside Back Cover</heading>
-	   <subheading></subheading>
-	</page>
-</cover>
-<spread id="1">
-	<page id="16">
 	   <heading>Hello World.</heading>
 	   <subheading></subheading>
 	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics zine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run additions but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please contact us @sensoryixd with questions or comments.
@@ -36,14 +20,18 @@ Joshua and James
 	   </body>
 	   <footer>This zine technology would not have been possible without a partnership with Quin Kennedy (@quinkennedy). Please find out more info at our Github page. </footer>
 	</page>
-	<page id="1" type="quote">
+		<page id="4">
+	   <heading>Thanks for reading. #sensoryaesthetics</heading>
+	   <subheading></subheading>
+	</page>
+</cover>
+<spread id="1">
+	<page id="16" type="quote">
 		<subheading>2015</subheading>
 		<quote author="Quin Kennedy">Today's noise is tomorrow's information.</quote>
 		<footer>Sensory Aesthetics</footer>
 	</page>
-</spread>
-<spread id="2">
-	<page id="2" type="toc">
+	<page id="1" type="toc">
 		<heading>Table of Contents</heading>
 		<table>
 			<content page="3">Hello World</content>
@@ -57,27 +45,20 @@ Joshua and James
 		<footer>(do you remember learning how to use a table of contents? 
 __ yes  __no __not sure)</footer>
 	</page>
+</spread>
+<spread id="2">
+	<page id="2">
+		<heading>About this Zine.</heading>
+	</page>
 	<page id="3">
 	   <image src="images/U_2_694819491672_archigram.jpg"></image>
 	</page>
 </spread>
 <spread id="3">
-	<page id="4" type="top">
-	   <heading>n things we can't measure.</heading>
+	<page id="4">
+	   <heading>Human Attention</heading>
 	   <subheading></subheading>
-	   <body>
-1. Love
-2. The sublime
-3. Intention
-4. Success
-5. Reality
-6. Introspection
-7. History of time
-8. Godzilla’s Impact on Humanity
-9. Mercy
-10. Future time
-11. Wise judgment
-</body>
+	   <body>As humans we often move our input senses to the background of our brain to focus more on our thoughts. This activity ranges from staring into space when lost in thought or sticking your tounge out of your mouth when you are trying to concentrate, or turning down the radio when you need to focus on driving. How often do we use this technique with machines. How often do we need to turn off one mode of input to put more energy towards calculations. As we do this more will this lead to machines ignoring us more when they are tired. Will machines begin to develop attention spans. As much as we try and create this illusion with our digital assistants can a machine truly have any attention to give?</body>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="5">
@@ -92,16 +73,15 @@ To me this makes him a hero of sensing, someone who is pushing the envelope on i
 </spread>
 <spread id="4">
 	<page id="6" type="photo">
-	   <heading>Id rhoncus nibh egestas</heading>
-	   <subheading></subheading>
-	   <body>Curabitur vulputate neque ut justo fermentum, id rhoncus nibh egestas. Vestibulum pharetra sed elit dignissim suscipit. Duis et eros in eros tristique convallis. Sed vitae vehicula ipsum, in tincidunt mi. Aliquam est augue, sollicitudin sed blandit a, sollicitudin eu nunc. Vivamus sed mauris dapibus, tincidunt ipsum nec, scelerisque tellus. Pellentesque convallis velit et ex pharetra, non pharetra erat tempor. Maecenas massa purus, tincidunt et leo eu, consectetur sollicitudin sem.</body>
-	   <footer>Sensory Aesthetics</footer>
 	   <image src="images/PbHNwg4.jpg"></image>
 	</page>
 	<page id="7">
-	   <heading>Human Attention</heading>
+	   <heading>Connecting the Biomass</heading>
 	   <subheading></subheading>
-	   <body>As humans we often move our input senses to the background of our brain to focus more on our thoughts. This activity ranges from staring into space when lost in thought or sticking your tounge out of your mouth when you are trying to concentrate, or turning down the radio when you need to focus on driving. How often do we use this technique with machines. How often do we need to turn off one mode of input to put more energy towards calculations. As we do this more will this lead to machines ignoring us more when they are tired. Will machines begin to develop attention spans. As much as we try and create this illusion with our digital assistants can a machine truly have any attention to give?</body>
+	   <body>http://interspecies-internet.org/
+“When Bob and I did this design, we thought we were building a system to connect computers together. What we very quickly discovered is that this was a system for connecting people together. And what you’ve seen tonight tells you that we should not restrict this network to one species, that these other intelligent, sentient species should be part of the system too. “
+Biomass is biological material derived from living, or recently living organisms.
+</body>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
 </spread>
@@ -142,14 +122,8 @@ To me this makes him a hero of sensing, someone who is pushing the envelope on i
 	   <body>“Everything is deeply intertwingled" -Ted Nelson</body>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
-	<page id="13">
-	   <heading>Connecting the Biomass</heading>
-	   <subheading></subheading>
-	   <body>http://interspecies-internet.org/
-“When Bob and I did this design, we thought we were building a system to connect computers together. What we very quickly discovered is that this was a system for connecting people together. And what you’ve seen tonight tells you that we should not restrict this network to one species, that these other intelligent, sentient species should be part of the system too. “
-Biomass is biological material derived from living, or recently living organisms.
-</body>
-	   <footer>Sensory Aesthetics</footer>
+	<page id="13" type="photo">
+		<image src="images/drawing4.jpg"></image>
 	</page>
 </spread>
 <spread id="8">
