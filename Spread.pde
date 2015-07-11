@@ -28,75 +28,249 @@ class Spread {
   private color bgColor = color(255);
   private color primaryColor = color(0);
   private color spotColor = color(122);
+  private PageData[] pageData;
+  private boolean rendered = false;
+  private boolean isCover;
 
   Spread() {
   }
-  
+
   Spread(int _spreadNum, int _spreadWidthPx, int _spreadHeightPx, boolean isCover) {
     spreadNum = _spreadNum;
     spreadWidthPx = _spreadWidthPx;
     spreadHeightPx = _spreadHeightPx;
+    this.isCover = isCover;
 
     // load content
     xml = loadXML("zine.xml");
-    
+
     if (isCover == true) {
-        createCover();
-        println("laying out cover "+spreadNum);
+      createCover();
+      println("laying out cover "+spreadNum);
     } else {
-    // parse spreads
-    XML[] spreads = xml.getChildren("spread");
-    //XML spread = children[spreadNum-1];
-    XML[] pages = spreads[spreadNum-1].getChildren("page");
+      // parse spreads
+      XML[] spreads = xml.getChildren("spread");
+      //XML spread = children[spreadNum-1];
+      XML[] pages = spreads[spreadNum-1].getChildren("page");
+      int numPages = pages.length;
+      int pageWidthPx = spreadWidthPx;
+      if (numPages > 0) {
+        pageWidthPx /= numPages;
+      }
+      //String page = children[spreadNum-1].getChildren("page")[0].getContent();
+      //heading = children[pageNum-1].getChild("heading").getContent();
+      //body = children[pageNum-1].getChild("body").getContent();
+      //println("Created Page: "+pageNum);
+
+      myPGFont = createFont("DINPro-Black", 48);
+      pg = createGraphics(_spreadWidthPx, _spreadHeightPx);  
+
+
+      //pg.textAlign(CENTER, CENTER);
+      pg.beginDraw();
+
+      //parse page-specific content
+      pageData = new PageData[pages.length];
+      for (int i = 0; i < pages.length; i++) {
+        pageData[i] = new PageData();
+        pageData[i].heading = extractString(pages[i], "heading");
+        //heading = pages[i].getChild("heading");
+        pageData[i].subheading = extractString(pages[i], "subheading");
+        //subheading = pages[i].getChild("subheading");
+        pageData[i].body = extractString(pages[i], "body");
+        //body = pages[i].getChild("body");
+        pageData[i].footer = extractString(pages[i], "footer");
+        //footer = pages[i].getChild("footer");
+        pageData[i].contentImages = extractImages(pages[i]);
+
+        pageData[i].type = pages[i].getString("type");
+        if (pageData[i].type == null) {
+        } else if (pageData[i].type.equals("quote")) {
+          pageData[i].quote = extractString(pages[i], "quote");
+          pageData[i].author = pages[i].getChild("quote").getString("author");
+        } else if (pageData[i].type.equals("toc")) {
+          pageData[i].content = extractContents(spreads);
+        } else if (pageData[i].type.equals("photo")) {
+        }
+        //quote = pages[i].getChild("quote");
+      }
+
+      pg.endDraw();
+    }
+  }
+
+  public int getMaxHeaderSize() {
+    int pageWidthPx = spreadWidthPx / pageData.length;
+    pageWidthPx -= leftOutsideMargin;
+    pageWidthPx -= insideLeftMargin;
+    int pageHeightPx = spreadHeightPx;
+    pageHeightPx -= topMargin;
+    pageHeightPx -= bottomMargin;
+    return maxHeaderSize(pageWidthPx, pageHeightPx/4);
+  }
+
+  public int maxHeaderSize(int widthPx, int heightPx) {
+    FormattedTextBlock textBlock;
+    FormattedTextBlock.FormattedText[] headerLines = new FormattedTextBlock.FormattedText[1];
+    PFont font = loadFont("bold-print.vlw");
+    int currHeight = heightPx;
+    for (int i = 0; i < pageData.length; i++) {
+      while (currHeight > 1) {
+        headerLines[0] = new FormattedTextBlock.FormattedText(pageData[i].heading, font, currHeight);
+        textBlock = new FormattedTextBlock(headerLines, widthPx, pg);
+        if (textBlock.totalHeight <= heightPx) {
+          break;
+        } else {
+          int lastHeight = currHeight;
+          currHeight /= textBlock.totalHeight / (float)heightPx;
+          if (currHeight == lastHeight){
+            currHeight--;
+          }
+        }
+      }
+    }
+    return currHeight;
+  }
+
+  public void setHeadingSize(int size) {
+    headingSize = size;
+    subheadingSize = size/2;
+  }
+
+  public String extractString(XML _page, String _tag) {
+    XML tXML = _page.getChild(_tag);
+    if (tXML == null) {
+      return null;
+    } else {
+      return tXML.getContent();
+    }
+  }
+
+  public PImage[] extractImages(XML _page) {
+    XML [] tXML = _page.getChildren("image");
+    PImage [] tImages = new PImage[tXML.length];
+    for (int j=0; j<tXML.length; j++) {
+      tImages[j] = loadImage(tXML[j].getString("src")); 
+      println(tImages[j]);
+    }
+    return tImages;
+  }
+
+  public Content[] extractContents(XML[] _spreads) {
+    ArrayList<XML> pages = new ArrayList<XML>();
+    ArrayList<Content> contents = new ArrayList<Content>();
+    for(int i = 0; i < _spreads.length; i++){
+      XML[] temp = _spreads[i].getChildren("page");
+      for(int j = 0; j < temp.length; j++){
+        pages.add(temp[j]);
+      }
+    }
+    for(int i = 0; i < pages.size(); i++){
+      String heading = extractString(pages.get(i), "heading");
+      String pageno = pages.get(i).getString("id");
+      if (heading != null && heading.length() > 0){
+        contents.add(new Content(pageno, heading));
+      }
+    }
+    return contents.toArray(new Content[contents.size()]);
+  }
+
+  public void setMargins(int _topMargin, int _bottomMargin, 
+    int _leftOutsideMargin, int _rightOutsideMargin, 
+    int _insideLeftMargin, int _insideRightMargin) {
+    topMargin = _topMargin;
+    bottomMargin = _bottomMargin;
+    leftOutsideMargin = _leftOutsideMargin;
+    rightOutsideMargin = _rightOutsideMargin;
+    insideLeftMargin = _insideLeftMargin;
+    insideRightMargin = _insideRightMargin;
+  }
+
+  public void createCover() {
+    XML[] cover = xml.getChildren("cover");
+    XML[] pages = cover[spreadNum-1].getChildren("page");
+    //println(cover);
+
     int numPages = pages.length;
     int pageWidthPx = spreadWidthPx;
     if (numPages > 0) {
       pageWidthPx /= numPages;
     }
-    //String page = children[spreadNum-1].getChildren("page")[0].getContent();
-    //heading = children[pageNum-1].getChild("heading").getContent();
-    //body = children[pageNum-1].getChild("body").getContent();
-    //println("Created Page: "+pageNum);
 
     myPGFont = createFont("DINPro-Black", 48);
-    pg = createGraphics(_spreadWidthPx, _spreadHeightPx);  
+    pg = createGraphics(spreadWidthPx, spreadHeightPx);  
+
+    ////pg.textAlign(CENTER, CENTER);
+    pg.beginDraw();
 
 
+
+    pageData = new PageData[pages.length];
+    for (int i = 0; i < pages.length; i++) {
+      pageData[i] = new PageData();
+      pageData[i].heading = extractString(pages[i], "heading");
+      //heading = pages[i].getChild("heading");
+      pageData[i].subheading = extractString(pages[i], "subheading");
+      //subheading = pages[i].getChild("subheading");
+      pageData[i].body = extractString(pages[i], "body");
+      //body = pages[i].getChild("body");
+      pageData[i].footer = extractString(pages[i], "footer");
+      //footer = pages[i].getChild("footer");
+      pageData[i].contentImages = extractImages(pages[i]);
+
+      if (spreadNum < 2) {
+        topMargin = 800;
+      } else {
+        topMargin = 200;
+      }
+
+      pageData[i].type = pages[i].getString("type");
+      if (pageData[i].type == null) {
+      }
+    }
+
+    pg.endDraw();
+
+
+    //XML[] coverpages = cover[].getChildren("page");
+
+    //XML[] outsideCover = cover[0].getChildren("page");
+    //XML[] outsideBackCover = cover[0].getChildren("page");
+    //XML[] insideCover = cover[0].getChildren("page");
+    //XML[] insideBackCover = cover[0].getChildren("page");
+
+
+    //heading = extractString(pages[i], "heading");
+    //heading = pages[i].getChild("heading");
+    //subheading = extractString(pages[i], "subheading");
+  }
+
+  public void render() {
     //pg.textAlign(CENTER, CENTER);
     pg.beginDraw();
     pg.background(bgColor);
     pg.textFont(myPGFont);
     pg.fill(primaryColor);
+    if (isCover) {
+      pg.fill(255, 122, 255);
+      pg.rect(0, 0, spreadWidthPx, spreadHeightPx);
+      pg.fill(0);
+    } else {
+    }
 
     //parse page-specific content
-    String heading, subheading, body, footer;
-    PImage [] contentimages;
-    String quote, author; 
-    for (int i = 0; i < pages.length; i++) {
+    for (int i = 0; i < pageData.length; i++) {
       pg.pushMatrix();
       pg.translate(pageWidthPx * i, 0);
-      heading = extractString(pages[i], "heading");
-      //heading = pages[i].getChild("heading");
-      subheading = extractString(pages[i], "subheading");
-      //subheading = pages[i].getChild("subheading");
-      body = extractString(pages[i], "body");
-      //body = pages[i].getChild("body");
-      footer = extractString(pages[i], "footer");
-      //footer = pages[i].getChild("footer");
-      contentimages = extractImages(pages[i]);
 
-      String contentType = pages[i].getString("type");
-      if (contentType == null) {
-        base(heading, subheading, body, footer, contentimages);
-       } else if (contentType.equals("quote")) {
-        quote = extractString(pages[i], "quote");
-        author = pages[i].getChild("quote").getString("author");
-        quote(heading, subheading, body, footer, quote, author);
-      } else if (contentType.equals("toc")) {
-        Content[] content = extractContents(pages[i]);
-        toc(heading, subheading, body, footer, content);
-      } else if (contentType.equals("photo")) {
-        photo(heading, subheading, body, footer, contentimages);
+      if (pageData[i].type == null) {
+        base(pageData[i]);
+      } else if (pageData[i].type.equals("quote")) {
+        quote(pageData[i]);
+      } else if (pageData[i].type.equals("toc")) {
+        toc(pageData[i]);
+      } else if (pageData[i].type.equals("photo")) {
+        photo(pageData[i]);
       }
       pg.popMatrix();
       //quote = pages[i].getChild("quote");
@@ -109,215 +283,113 @@ class Spread {
     //pg.text(String.format("%02d", spreadNum), _spreadWidthPx/3, _spreadHeightPx/2);
 
     pg.endDraw();
-    }
   }
 
-  public String extractString(XML _page, String _tag) {
-    XML tXML = _page.getChild(_tag);
-    if (tXML == null) {
-      return null;
-    } else {
-      return tXML.getContent();
-    }
-  }
-  
-  public PImage[] extractImages(XML _page) {
-      XML [] tXML = _page.getChildren("image");
-      PImage [] tImages = new PImage[tXML.length];
-      for(int j=0; j<tXML.length; j++) {
-        tImages[j] = loadImage(tXML[j].getString("src")); 
-        println(tImages[j]);
-      }
-      return tImages;
-  }
-  
-  public Content[] extractContents(XML _page){
-    XML[] xContents = _page.getChild("table").getChildren("content");
-    Content[] tContents = new Content[xContents.length];
-    for(int i = 0; i < xContents.length; i++){
-      tContents[i] = new Content(xContents[i].getString("page"), xContents[i].getContent());
-    }
-    return tContents;
-  }
-
-  public void setMargins(int _topMargin, int _bottomMargin, 
-                         int _leftOutsideMargin, int _rightOutsideMargin, 
-                         int _insideLeftMargin, int _insideRightMargin) {
-    topMargin = _topMargin;
-    bottomMargin = _bottomMargin;
-    leftOutsideMargin = _leftOutsideMargin;
-    rightOutsideMargin = _rightOutsideMargin;
-    insideLeftMargin = _insideLeftMargin;
-    insideRightMargin = _insideRightMargin;
-  }
-  
-  public void createCover() {
-    XML[] cover = xml.getChildren("cover");
-    XML[] pages = cover[spreadNum-1].getChildren("page");
-    //println(cover);
-    
-    int numPages = pages.length;
-    int pageWidthPx = spreadWidthPx;
-    if (numPages > 0) {
-     pageWidthPx /= numPages;
-    }
-      
-    myPGFont = createFont("DINPro-Black", 48);
-    pg = createGraphics(spreadWidthPx, spreadHeightPx);  
-
-     ////pg.textAlign(CENTER, CENTER);
-     pg.beginDraw();
-     pg.background(bgColor);
-     pg.textFont(myPGFont);
-     //pg.text(100,100,
-     pg.fill(255,122,255);
-     pg.rect(0,0,spreadWidthPx, spreadHeightPx);
-     pg.fill(0);
-     
-          
-     
-     
-         String heading, subheading, body, footer;
-    PImage [] contentimages;
-    String quote, author; 
-    for (int i = 0; i < pages.length; i++) {
-      pg.pushMatrix();
-      pg.translate(pageWidthPx * i, 0);
-      heading = extractString(pages[i], "heading");
-      //heading = pages[i].getChild("heading");
-      subheading = extractString(pages[i], "subheading");
-      //subheading = pages[i].getChild("subheading");
-      body = extractString(pages[i], "body");
-      //body = pages[i].getChild("body");
-      footer = extractString(pages[i], "footer");
-      //footer = pages[i].getChild("footer");
-      contentimages = extractImages(pages[i]);
-      
-      if (spreadNum < 2) {
-         topMargin = 800; 
-      } else {
-        topMargin = 200;
-      }
-      
-      String contentType = pages[i].getString("type");
-      if (contentType == null) {
-        base(heading, subheading, body, footer, contentimages);
-      }
-      
-
-      
-
-
-     pg.popMatrix();
-    }
-    
-    pg.endDraw();
-
-    
-    //XML[] coverpages = cover[].getChildren("page");
-
-    //XML[] outsideCover = cover[0].getChildren("page");
-    //XML[] outsideBackCover = cover[0].getChildren("page");
-    //XML[] insideCover = cover[0].getChildren("page");
-    //XML[] insideBackCover = cover[0].getChildren("page");
-    
-    
-    //heading = extractString(pages[i], "heading");
-    //heading = pages[i].getChild("heading");
-    //subheading = extractString(pages[i], "subheading");
-  }
-  
-  public void quote(String _heading, String _subheading, String _body, String _footer, String _quote, String _author) {
+  public void quote(PageData pd) {
     // TODO: Check to see if the quote will fit and shrink to fit.
     pg.fill(primaryColor);
     pg.textSize(quoteSize);
-    pg.text(_quote, topMargin, leftOutsideMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
+    pg.text(pd.quote, topMargin, leftOutsideMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
     pg.textSize(headingSize);
-    pg.text(_author, leftOutsideMargin, pageHeightPx-bottomMargin);
+    pg.text(pd.author, leftOutsideMargin, pageHeightPx-bottomMargin);
   }
 
-  public void toc(String _heading, String _subheading, String _body, String _footer, Content[] contents) {
+  public void toc(PageData pd) {
     //parse the data into FormattedTextBlock;
     String[] separators = {" ", "|", "   ", " | ", " /**/ ", "\n"};
     int interI = (int)random(1, separators.length);
     int intraI = (int)random(0, interI);
     PFont regular = loadFont("reg-print.vlw");
     PFont bold = loadFont("bold-print.vlw");
-    FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[contents.length*2];
-    for(int i = 0; i < contents.length; i++){
-      fText[i*2] = new FormattedTextBlock.FormattedText(contents[i].page, bold);
+    int size = 80;
+    FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[pd.content.length*2];
+    for (int i = 0; i < pd.content.length; i++) {
+      fText[i*2] = new FormattedTextBlock.FormattedText(pd.content[i].page, bold, size);
       fText[i*2+1] = new FormattedTextBlock.FormattedText(
-        separators[intraI] + contents[i].text + separators[interI], regular);
+        separators[intraI] + pd.content[i].text + separators[interI], regular, size);
     }
-    FormattedTextBlock textBlock = new FormattedTextBlock(fText, pageWidthPx*2/3, pg);
-    
+    int contentWidth = pageWidthPx - insideRightMargin - rightOutsideMargin;
+    FormattedTextBlock textBlock = new FormattedTextBlock(fText, contentWidth, pg);
+    int pageWidthPx = spreadWidthPx/2;
+    int contentHeight = spreadHeightPx - topMargin - bottomMargin;
+    while (textBlock.totalHeight > contentHeight){
+      float overby = textBlock.totalHeight / (float)contentHeight;
+      int lastSize = size;
+      size /= overby;
+      if (size == lastSize){
+        size--;
+      }
+      for(int i = 0; i < fText.length; i++){
+        fText[i].fontSize = size;
+      }
+      textBlock = new FormattedTextBlock(fText, contentWidth, pg);
+    }
+
     //now draw the text
     drawBlockedText(textBlock, pg);
   }
-  
-  void drawBlockedText(FormattedTextBlock bt, PGraphics pg){
+
+  void drawBlockedText(FormattedTextBlock bt, PGraphics pg) {
     FormattedTextBlock.FormattedLine currLine;
-    float startX = pageWidthPx*2/12, currX = startX, currY = startX;
     pg.noFill();
     pg.stroke(100);
-    pg.rect(startX, startX, pageWidthPx*2/3, pageHeightPx*2/3);
+    pg.pushMatrix();
+    pg.translate(insideRightMargin, topMargin);
+    pg.rect(0, 0, bt.maxWidth, bt.totalHeight);
     pg.fill(0);
     pg.noStroke();
     ArrayList<FormattedTextBlock.FormattedLine> lines = bt.lines;
-    for(int i = 0; i < lines.size(); i++){
+    for (int i = 0; i < lines.size(); i++) {
       currLine = bt.lines.get(i);
-      for(int w = 0; w < currLine.texts.size(); w++){
+      for (int w = 0; w < currLine.texts.size(); w++) {
         FormattedTextBlock.FormattedText currContig = currLine.texts.get(w);
         pg.textFont(currContig.font);
-        pg.text(currContig.text, currX, currY);
-        currX += pg.textWidth(currContig.text);
-      }
-      if (currX != startX){
-        currY += pg.textDescent() + pg.textAscent();
-        currX = startX;
+        //pg.text(currContig.text, currX, currY);
+        pg.text(currContig.text, currContig.startX, currContig.startY);
       }
     }
   }
-  
+
   public void clickbait(String _heading, String _subheading, String _body, String _footer) {
-       //his guy went to... What happens next will blow your mind 
-       //These facts about childbirth will change the way you look at life FOREVER
-       //What this little kid can do with a bongo drum will make you sob uncontrollably until you burst
-       //18 Stages of getting addicted to...
-       //TEMPLATES = ['{{quantity}} things {{group}} do to avoid {{event}}!', '{{quantity}} {{group}} that haven\'t aged well.', 'This {{individual}} took part in {{event}}. What happened next will amaze you!', 'Watch this {{individual}} {{activity}}. First you\'ll be shocked, then you\'ll be inspired.', 'He worked {{event}} and {{quantity}} {{group}} turned it into {{event}}.']
-
+    //his guy went to... What happens next will blow your mind 
+    //These facts about childbirth will change the way you look at life FOREVER
+    //What this little kid can do with a bongo drum will make you sob uncontrollably until you burst
+    //18 Stages of getting addicted to...
+    //TEMPLATES = ['{{quantity}} things {{group}} do to avoid {{event}}!', '{{quantity}} {{group}} that haven\'t aged well.', 'This {{individual}} took part in {{event}}. What happened next will amaze you!', 'Watch this {{individual}} {{activity}}. First you\'ll be shocked, then you\'ll be inspired.', 'He worked {{event}} and {{quantity}} {{group}} turned it into {{event}}.']
   }
 
-  public void photo(String _heading, String _subheading, String _body, String _footer, PImage [] _images) {
-        if (_images.length > 0) {
-          //PImage img = loadImage(_images[0].getString("src"));
-          println("loaded "+_images[0]);
-          pg.image(_images[0], 0, 0, pageWidthPx, pageHeightPx);
-        }
+  public void photo(PageData pd) {
+    if (pd.contentImages != null && pd.contentImages.length > 0) {
+      //PImage img = loadImage(pd.contentImages[0].getString("src"));
+      println("loaded "+pd.contentImages[0]);
+      pg.image(pd.contentImages[0], 0, 0, pageWidthPx, pageHeightPx);
+    }
   }
 
-  public void base(String _heading, String _subheading, String _body, String _footer, PImage [] _images) {
-        if (_heading != null) {
-          pg.textSize(headingSize);
-          pg.text(_heading, leftOutsideMargin, topMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
-        }
-        if (_body != null) {
-          pg.textSize(bodySize);
-          pg.text(_body, leftOutsideMargin, baseLine, pageWidthPx-rightOutsideMargin-leftOutsideMargin, pageHeightPx-bottomMargin);
-        }
-        if (_images.length > 0) {
-          //PImage img = loadImage(_images[0].getString("src"));
-          println("loaded "+_images[0]);
-          pg.image(_images[0], (pageWidthPx)/2, (pageHeightPx)/2);
-        }
-        if (_footer != null) {
-          pg.textSize(footerSize);
-          pg.text(_footer, leftOutsideMargin, pageHeightPx-300, pageWidthPx-rightOutsideMargin, pageHeightPx-bottomMargin);
-        }
-
+  public void base(PageData pd) {
+    if (pd.heading != null) {
+      pg.textSize(headingSize);
+      pg.text(pd.heading, leftOutsideMargin, topMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
+    }
+    if (pd.body != null) {
+      pg.textSize(bodySize);
+      pg.text(pd.body, leftOutsideMargin, baseLine, pageWidthPx-rightOutsideMargin-leftOutsideMargin, pageHeightPx-bottomMargin);
+    }
+    if (pd.contentImages.length > 0) {
+      //PImage img = loadImage(pd.contentImages[0].getString("src"));
+      println("loaded "+pd.contentImages[0]);
+      pg.image(pd.contentImages[0], (pageWidthPx)/2, (pageHeightPx)/2);
+    }
+    if (pd.footer != null) {
+      pg.textSize(footerSize);
+      pg.text(pd.footer, leftOutsideMargin, pageHeightPx-300, pageWidthPx-rightOutsideMargin, pageHeightPx-bottomMargin);
+    }
   }
-  
+
   public PGraphics getPage() {
+    if (!rendered) {
+      render();
+    }
     return pg;
   }
 
@@ -328,18 +400,25 @@ class Spread {
   public int getHeight() {
     return spreadHeightPx;
   }
-  
-  class Content{
+
+  class Content {
     String page;
     String text;
-    
-    public Content(String page, String text){
+
+    public Content(String page, String text) {
       this.page = page;
       this.text = text;
     }
-    
-    public String toString(){
+
+    public String toString() {
       return page + ". " + text;
     }
+  }
+
+  class PageData {
+    String heading, subheading, body, footer, quote, author;
+    String type;
+    PImage[] contentImages;
+    Content[] content;
   }
 }

@@ -164,77 +164,7 @@ void setup() {
   //String[] fontList = PFont.list();
   //println(fontList);
   
-  pdf.beginDraw();
-  PGraphicsPDF pdfg = (PGraphicsPDF) pdf; // Get the renderer
-
-  // Create a set of Compositions
-  for (int k=1; k <= numSpreads; k++) {
-    println("assembling spread " + k);
-    spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
-    spreads[k-1].setMargins(100,100,100,100,50,50);
-  }
-  println("Creating cover");
   
-  for (int q=1; q <= coverPages; q++) {
-    println("beginning cover " + q);
-    cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
-  }
-
-  println("---------------------");
-  
-  
-  infoPage(); //start with an info page with spread thumbnails
-  
-  pdfg.nextPage(); 
-  // layout cover
-
-  pdf.image(cover[0].getPage(), 0, 0);
-  pdf.image(cover[0].getPage(), 0, paperHeightPx/2);
-
-  pdfg.nextPage(); 
-  // layout inside cover 
-  pdf.image(cover[1].getPage(), 0, 0);
-  pdf.image(cover[1].getPage(), 0, paperHeightPx/2);
-  
-  println("calculating layout");
-  ZinePageLayout[][][] zpl = getLayout(heightFolds, widthFolds, printerPages*2);
-  int progress = 0;
-  for(int page = 0; page < zpl.length; page++){
-    pdfg.nextPage();  // Tell it to go to the next page
-    pdfg.endDraw();
-    PGraphics paperg = createGraphics(paperWidthPx, paperHeightPx);
-    paperg.beginDraw();
-    for(int row = 0; row < zpl[0].length; row++){
-      for(int cell = 0; cell < zpl[0][0].length; cell++){
-        println("placing cell " + (++progress));
-        ZinePageLayout cpg = zpl[page][row][cell];
-        int spreadI = ((cpg.getNumber() / 2) % numSpreads);
-        boolean leftPage = cpg.getNumber()%2 == 0;
-        Spread comp = spreads[spreadI];
-        if (cpg.getHFlip()){
-          paperg.copy(comp.getPage(),
-            leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
-            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
-        } else {
-          paperg.copy(comp.getPage(), 
-            leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
-            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
-        }
-      }
-    }
-    paperg.endDraw();
-    pdf.beginDraw();
-    pdf.image(paperg, 0, 0);
-  }
-  
-  myFont = createFont("DINPro-Black", 48);
-  textFont(myFont);
-  textAlign(CENTER, CENTER);
-  
-  pdf.dispose();
-  pdf.endDraw();
-  
-  println("PDF output");
 
 }
 
@@ -298,4 +228,87 @@ void infoPage() {
   
 }
 
-void draw() {}
+void draw() {
+  pdf.beginDraw();
+  PGraphicsPDF pdfg = (PGraphicsPDF) pdf; // Get the renderer
+
+  int minHeaderSize = -1;
+  int currHeaderSize;
+  // Create a set of Compositions
+  for (int k=1; k <= numSpreads; k++) {
+    println("assembling spread " + k);
+    spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
+    spreads[k-1].setMargins(100,100,100,100,50,50);
+    currHeaderSize = spreads[k-1].getMaxHeaderSize();
+    if (minHeaderSize == -1){
+      minHeaderSize = currHeaderSize;
+    } else if (minHeaderSize > currHeaderSize){
+      minHeaderSize = currHeaderSize;
+    }
+  }
+  for(int i = 0; i < numSpreads; i++){
+    spreads[i].setHeadingSize(minHeaderSize);
+  }
+  println("Creating cover");
+  
+  for (int q=1; q <= coverPages; q++) {
+    println("beginning cover " + q);
+    cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
+  }
+
+  println("---------------------");
+  
+  
+  infoPage(); //start with an info page with spread thumbnails
+  
+  pdfg.nextPage(); 
+  // layout cover
+
+  pdf.image(cover[0].getPage(), 0, 0);
+  pdf.image(cover[0].getPage(), 0, paperHeightPx/2);
+
+  pdfg.nextPage(); 
+  // layout inside cover 
+  pdf.image(cover[1].getPage(), 0, 0);
+  pdf.image(cover[1].getPage(), 0, paperHeightPx/2);
+  
+  println("calculating layout");
+  ZinePageLayout[][][] zpl = getLayout(heightFolds, widthFolds, printerPages*2);
+  int progress = 0;
+  for(int page = 0; page < zpl.length; page++){
+    pdfg.nextPage();  // Tell it to go to the next page
+    pdfg.endDraw();
+    PGraphics paperg = createGraphics(paperWidthPx, paperHeightPx);
+    paperg.beginDraw();
+    for(int row = 0; row < zpl[0].length; row++){
+      for(int cell = 0; cell < zpl[0][0].length; cell++){
+        println("placing cell " + (++progress));
+        ZinePageLayout cpg = zpl[page][row][cell];
+        int spreadI = ((cpg.getNumber() / 2) % numSpreads);
+        boolean leftPage = cpg.getNumber()%2 == 0;
+        Spread comp = spreads[spreadI];
+        if (cpg.getHFlip()){
+          paperg.copy(comp.getPage(),
+            leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
+            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
+        } else {
+          paperg.copy(comp.getPage(), 
+            leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
+            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
+        }
+      }
+    }
+    paperg.endDraw();
+    pdf.beginDraw();
+    pdf.image(paperg, 0, 0);
+  }
+  
+  myFont = createFont("DINPro-Black", 48);
+  textFont(myFont);
+  textAlign(CENTER, CENTER);
+  
+  pdf.dispose();
+  pdf.endDraw();
+  
+  println("PDF output");
+}
