@@ -26,15 +26,6 @@
 	</page>
 	<page id="1" type="toc">
 		<heading>Table of Contents</heading>
-		<table>
-			<content page="3">Hello World</content>
-			<content page="5">What is real?</content>
-			<content page="7">Lorem Ipsum FTW</content>
-			<content page="8">Subconcious and Extension</content>
-			<content page="10">This is the longest most obnoxious title that we will have.</content>
-			<content page="11">Love/Hate</content>
-			<content page="14">Conclusions</content>
-		</table>
 		<footer>(do you remember learning how to use a table of contents? 
 __ yes  __no __not sure)</footer>
 	</page>

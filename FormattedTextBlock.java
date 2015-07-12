@@ -171,7 +171,7 @@ public class FormattedTextBlock{ //<>//
     if (debug){
       g.pushStyle();
       g.noFill();
-      g.stroke(255);
+      g.stroke(200);
       g.rect(0, 0, maxWidth, constrainHeight);
       g.stroke(0);
       g.rect(0, 0, maxWidth, totalHeight);
