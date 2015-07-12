@@ -1,4 +1,4 @@
-import controlP5.*; //<>// //<>// //<>// //<>//
+import controlP5.*; //<>//
 import processing.pdf.*;
 PGraphics pdf;
 PFont myFont;
@@ -232,22 +232,22 @@ void draw() {
   pdf.beginDraw();
   PGraphicsPDF pdfg = (PGraphicsPDF) pdf; // Get the renderer
 
-  int minHeaderSize = -1;
-  int currHeaderSize;
+  int minHeadingSize = -1;
+  int currHeadingSize;
   // Create a set of Compositions
   for (int k=1; k <= numSpreads; k++) {
     println("assembling spread " + k);
     spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
     spreads[k-1].setMargins(100,100,100,100,50,50);
-    currHeaderSize = spreads[k-1].getMaxHeaderSize();
-    if (minHeaderSize == -1){
-      minHeaderSize = currHeaderSize;
-    } else if (minHeaderSize > currHeaderSize){
-      minHeaderSize = currHeaderSize;
+    currHeadingSize = spreads[k-1].getMaxHeadingSize();
+    if (minHeadingSize == -1){
+      minHeadingSize = currHeadingSize;
+    } else if (minHeadingSize > currHeadingSize){
+      minHeadingSize = currHeadingSize;
     }
   }
   for(int i = 0; i < numSpreads; i++){
-    spreads[i].setHeadingSize(minHeaderSize);
+    spreads[i].setHeadingSize(minHeadingSize);
   }
   println("Creating cover");
   

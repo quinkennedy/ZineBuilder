@@ -31,6 +31,22 @@ class Spread {
   private PageData[] pageData;
   private boolean rendered = false;
   private boolean isCover;
+  /*
+  / v-leftOutsideMargin
+  / v     rightOutsideMargin
+  / v______ ______v
+  / |      |      |<-topMargin
+  / |      |      |
+  / |      |      |
+  / |______|______|<-bottomMargin
+  /       ^ ^-insideRightMargin
+  /       ^-insideLeftMargin
+  /*/
+  private int rightOfPageMargin[] = {insideRightMargin, rightOutsideMargin};
+  private int leftOfPageMargin[] = {leftOutsideMargin, insideLeftMargin};
+  private int contentWidthPx[];
+  private int contentHeightPx;
+  private int pageWidthPx;
 
   Spread() {
   }
@@ -53,10 +69,15 @@ class Spread {
       //XML spread = children[spreadNum-1];
       XML[] pages = spreads[spreadNum-1].getChildren("page");
       int numPages = pages.length;
-      int pageWidthPx = spreadWidthPx;
+      pageWidthPx = spreadWidthPx;
       if (numPages > 0) {
         pageWidthPx /= numPages;
       }
+      contentWidthPx = new int[numPages];
+      for(int i = 0; i < numPages; i++){
+        contentWidthPx[i] = pageWidthPx - rightOfPageMargin[i] - leftOfPageMargin[i];
+      }
+      contentHeightPx = spreadHeightPx - topMargin - bottomMargin;
       //String page = children[spreadNum-1].getChildren("page")[0].getContent();
       //heading = children[pageNum-1].getChild("heading").getContent();
       //body = children[pageNum-1].getChild("body").getContent();
@@ -99,37 +120,19 @@ class Spread {
     }
   }
 
-  public int getMaxHeaderSize() {
-    int pageWidthPx = spreadWidthPx / pageData.length;
-    pageWidthPx -= leftOutsideMargin;
-    pageWidthPx -= insideLeftMargin;
-    int pageHeightPx = spreadHeightPx;
-    pageHeightPx -= topMargin;
-    pageHeightPx -= bottomMargin;
-    return maxHeaderSize(pageWidthPx, pageHeightPx/4);
-  }
-
-  public int maxHeaderSize(int widthPx, int heightPx) {
-    FormattedTextBlock textBlock;
-    FormattedTextBlock.FormattedText[] headerLines = new FormattedTextBlock.FormattedText[1];
+  public int getMaxHeadingSize() {
+    int allowedHeadingHeight = contentHeightPx/4;
     PFont font = loadFont("bold-print.vlw");
-    int currHeight = heightPx;
-    for (int i = 0; i < pageData.length; i++) {
-      while (currHeight > 1) {
-        headerLines[0] = new FormattedTextBlock.FormattedText(pageData[i].heading, font, currHeight);
-        textBlock = new FormattedTextBlock(headerLines, widthPx, pg);
-        if (textBlock.totalHeight <= heightPx) {
-          break;
-        } else {
-          int lastHeight = currHeight;
-          currHeight /= textBlock.totalHeight / (float)heightPx;
-          if (currHeight == lastHeight){
-            currHeight--;
-          }
-        }
+    int headingSize = allowedHeadingHeight;
+    for(int i = 0; i < pageData.length; i++){
+      if (pageData[i].heading != null && pageData[i].heading.length() > 0){
+        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].heading, font, headingSize)};
+        FormattedTextBlock textBlock = new FormattedTextBlock(text, contentWidthPx[i], pg);
+        textBlock.constrainHeight(allowedHeadingHeight, pg);
+        headingSize = textBlock.text[0].fontSize;
       }
     }
-    return currHeight;
+    return headingSize;
   }
 
   public void setHeadingSize(int size) {
@@ -192,7 +195,7 @@ class Spread {
     //println(cover);
 
     int numPages = pages.length;
-    int pageWidthPx = spreadWidthPx;
+    pageWidthPx = spreadWidthPx;
     if (numPages > 0) {
       pageWidthPx /= numPages;
     }
@@ -301,53 +304,27 @@ class Spread {
     int intraI = (int)random(0, interI);
     PFont regular = loadFont("reg-print.vlw");
     PFont bold = loadFont("bold-print.vlw");
-    int size = 80;
+    int size = regular.getSize();
     FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[pd.content.length*2];
     for (int i = 0; i < pd.content.length; i++) {
       fText[i*2] = new FormattedTextBlock.FormattedText(pd.content[i].page, bold, size);
       fText[i*2+1] = new FormattedTextBlock.FormattedText(
         separators[intraI] + pd.content[i].text + separators[interI], regular, size);
     }
-    int contentWidth = pageWidthPx - insideRightMargin - rightOutsideMargin;
-    FormattedTextBlock textBlock = new FormattedTextBlock(fText, contentWidth, pg);
-    int pageWidthPx = spreadWidthPx/2;
-    int contentHeight = spreadHeightPx - topMargin - bottomMargin;
-    while (textBlock.totalHeight > contentHeight){
-      float overby = textBlock.totalHeight / (float)contentHeight;
-      int lastSize = size;
-      size /= overby;
-      if (size == lastSize){
-        size--;
-      }
-      for(int i = 0; i < fText.length; i++){
-        fText[i].fontSize = size;
-      }
-      textBlock = new FormattedTextBlock(fText, contentWidth, pg);
-    }
+    FormattedTextBlock textBlock = new FormattedTextBlock(fText, contentWidthPx[0], pg);
+    textBlock.constrainHeight(contentHeightPx, pg);
 
     //now draw the text
     drawBlockedText(textBlock, pg);
   }
 
   void drawBlockedText(FormattedTextBlock bt, PGraphics pg) {
-    FormattedTextBlock.FormattedLine currLine;
-    pg.noFill();
-    pg.stroke(100);
     pg.pushMatrix();
     pg.translate(insideRightMargin, topMargin);
-    pg.rect(0, 0, bt.maxWidth, bt.totalHeight);
     pg.fill(0);
     pg.noStroke();
-    ArrayList<FormattedTextBlock.FormattedLine> lines = bt.lines;
-    for (int i = 0; i < lines.size(); i++) {
-      currLine = bt.lines.get(i);
-      for (int w = 0; w < currLine.texts.size(); w++) {
-        FormattedTextBlock.FormattedText currContig = currLine.texts.get(w);
-        pg.textFont(currContig.font);
-        //pg.text(currContig.text, currX, currY);
-        pg.text(currContig.text, currContig.startX, currContig.startY);
-      }
-    }
+    bt.render(pg);
+    pg.popMatrix();
   }
 
   public void clickbait(String _heading, String _subheading, String _body, String _footer) {
