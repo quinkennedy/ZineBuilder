@@ -145,6 +145,23 @@ class Spread {
   public void setHeadingSize(int size){
     headingSize = size;
     subheadingSize = size/2;
+    for(int i = 0; i < pageData.length; i++){
+      if (pageData[i].hasHeading() || pageData[i].hasSubheading()){
+        FormattedTextBlock.FormattedText[] hText;
+        if (pageData[i].hasHeading() && pageData[i].hasSubheading()){
+          hText = new FormattedTextBlock.FormattedText[]{
+            new FormattedTextBlock.FormattedText(pageData[i].heading + "\n", headingFont, headingSize),
+            new FormattedTextBlock.FormattedText(pageData[i].subheading, headingFont, subheadingSize)};
+        } else {
+          hText = new FormattedTextBlock.FormattedText[]{
+            new FormattedTextBlock.FormattedText(
+              pageData[i].hasHeading() ? pageData[i].heading : pageData[i].subheading, 
+              headingFont, 
+              pageData[i].hasHeading() ? headingSize : subheadingSize)};
+        }
+        pageData[i].headingBlock = new FormattedTextBlock(hText, pageData[i].contentWidthPx, pg);
+      }
+    }
   }
 
   public int getMaxHeadingSize() {
@@ -153,7 +170,9 @@ class Spread {
     int headingSize = allowedHeadingHeight;
     for(int i = 0; i < pageData.length; i++){
       if (pageData[i].heading != null && pageData[i].heading.length() > 0){
-        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].heading, headingFont, headingSize)};
+        FormattedTextBlock.FormattedText[] text = 
+          {new FormattedTextBlock.FormattedText(pageData[i].heading + "\n", headingFont, headingSize),
+           new FormattedTextBlock.FormattedText(pageData[i].subheading, headingFont, subheadingSize)};
         FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx, pg);
         textBlock.constrainHeight(allowedHeadingHeight, pg);
         headingSize = textBlock.text[0].fontSize;
@@ -341,7 +360,7 @@ class Spread {
         renderHeading(pageData[i]);
       }
       renderPageNum(pageData[i]);
-
+/*
       if (pageData[i].type == null) {
         base(pageData[i]);
       } else if (pageData[i].type.equals("quote")) {
@@ -352,7 +371,7 @@ class Spread {
         photo(pageData[i]);
       } else if (pageData[i].type.equals("code")) {
         code(pageData[i]);
-      }
+      }*/
       pg.popMatrix();
       //quote = pages[i].getChild("quote");
     }
@@ -474,17 +493,15 @@ class Spread {
   }
   
   private void renderHeading(PageData pd){
-    if (pd.heading != null && pd.heading.length() > 0){
-      pg.pushStyle();
-      pg.textFont(headingFont);
-      pg.textSize(headingSize);
-      pg.text(pd.heading, 0, 0, pd.contentWidthPx, pd.contentHeightPx);
+    if (pd.headingBlock != null){
       if (debug){
+        pg.pushStyle();
         pg.noFill();
-        pg.stroke(100);
+        pg.stroke(200);
         pg.rect(0, 0, pd.contentWidthPx, pd.contentHeightPx/4);
+        pg.popStyle();
       }
-      pg.popStyle();
+      pd.headingBlock.render(pg, debug);
     }
   }
   
@@ -568,6 +585,13 @@ class Spread {
     Content[] content;
     int contentWidthPx, contentHeightPx, rightMarginPx, leftMarginPx, topMarginPx, bottomMarginPx;
     Side outsideEdge;
+    FormattedTextBlock headingBlock;
+    boolean hasHeading(){
+      return heading != null && heading.length() > 0;
+    }
+    boolean hasSubheading(){
+      return subheading != null && subheading.length() > 0;
+    }
   }
 }
 
