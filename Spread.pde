@@ -370,7 +370,16 @@ class Spread {
     if (pd.contentImages.length > 0) {
       //PImage img = loadImage(pd.contentImages[0].getString("src"));
       println("loaded "+pd.contentImages[0]);
-      pg.image(pd.contentImages[0], (pageWidthPx - pd.contentImages[0].width - rightOutsideMargin-leftOutsideMargin ), baseLine-(topMargin/2)-pd.contentImages[0].height);
+      // make sure the image can fit the width
+      
+      float tX = pageWidthPx - pd.contentImages[0].width - rightOutsideMargin - leftOutsideMargin;
+      pd.contentImages[0].filter(GRAY);
+      if (tX > leftOutsideMargin) {
+        pg.image(pd.contentImages[0], tX, baseLine-(topMargin/2)-pd.contentImages[0].height);
+      } else {
+        pd.contentImages[0].resize(pageWidthPx - rightOutsideMargin, 0);
+        pg.image(pd.contentImages[0], leftOutsideMargin, baseLine-(topMargin/2)-pd.contentImages[0].height);
+      }
       pg.noFill();
       //pg.rect((pageWidthPx - pd.contentImages[0].width), 200, pd.contentImages[0].width, pd.contentImages[0].height);
     }
