@@ -241,6 +241,7 @@ void draw() {
     println("assembling spread " + k);
     spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
     spreads[k-1].setMargins(100,100,100,100,50,50);
+    //spreads[k-1].setMargins(200,200,200,200,100,100);
     currHeadingSize = spreads[k-1].getMaxHeadingSize();
     if (minHeadingSize == -1){
       minHeadingSize = currHeadingSize;

@@ -14,6 +14,7 @@ class Spread {
   PFont headingFont;
   PFont bodyFont;
   PFont monoFont;
+  PFont footerFont;
   XML xml;
   private int topMargin = 200;
   private int bottomMargin = 200;
@@ -23,6 +24,7 @@ class Spread {
   private int insideRightMargin = 200;
   private int headingSize = 120;
   private int subheadingSize = 80;
+  private int footerSize = 30;
   private int bodySize = 30;
   private int quoteSize = 120;
   private int footerHeight = 0;
@@ -78,7 +80,8 @@ class Spread {
     headingFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48);
     bodyFont = createFont("fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48);
     monoFont = createFont("fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf", 48);
-      
+    footerFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48);
+    
     if (isCover == true) {
       createCover();
       println("laying out cover "+spreadNum);
@@ -161,10 +164,12 @@ class Spread {
   
   public int getMaxFooterHeight(){
     //PFont font = loadFont("footer-print.vlw");
+    pg.textFont(footerFont);
+    pg.textSize(footerSize);
     int maxFooterHeight = 0;
     for(int i = 0; i < pageData.length; i++){
       if (pageData[i].footer != null && pageData[i].footer.length() > 0){
-        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].footer, bodyFont)};
+        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].footer, footerFont, footerSize)};
         FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx - pageNumWidth, pg);
         maxFooterHeight = Math.max(textBlock.totalHeight, maxFooterHeight);
       }
@@ -356,7 +361,7 @@ class Spread {
     //pg.textSize(500);
     //pg.line(random(0, _spreadWidthPx), random(0, _spreadHeightPx), random(0, _spreadWidthPx), random(0, _spreadHeightPx));
     pg.fill(0);
-    pg.rect(0, 0, 100, 100);
+    pg.rect(0, 0, leftOutsideMargin, topMargin);
     //pg.text(String.format("%02d", spreadNum), _spreadWidthPx/3, _spreadHeightPx/2);
     if (debug){
       pg.stroke(0);
@@ -444,7 +449,11 @@ class Spread {
     if (pd.body != null) {
       pg.textFont(bodyFont);
       pg.textSize(bodySize);
-      pg.text(pd.body, leftOutsideMargin, baseLine, pageWidthPx-rightOutsideMargin-leftOutsideMargin, pageHeightPx-bottomMargin);
+      pg.text(pd.body, 0, baseLine, pd.contentWidthPx, pd.contentHeightPx);
+      if (debug) {
+        pg.noFill();
+        pg.rect(0, baseLine, pd.contentWidthPx, pd.contentHeightPx - footerHeight - baseLine);
+      }
     }
     if (pd.contentImages.length > 0) {
       //PImage img = loadImage(pd.contentImages[0].getString("src"));
@@ -483,12 +492,13 @@ class Spread {
     if (pd.footer != null && pd.footer.length() > 0){
       //PFont fFont = loadFont("footer-print.vlw");
       pg.pushStyle();
-      pg.textFont(bodyFont);
+      pg.textFont(footerFont);
+      pg.textSize(footerSize);
       pg.text(
         pd.footer, 
-        (pd.outsideEdge == Side.LEFT ? pageNumWidth : 0), 
+        0, 
         pd.contentHeightPx - footerHeight, 
-        pd.contentWidthPx - pageNumWidth, 
+        pd.contentWidthPx, 
         footerHeight);
       pg.popStyle();
     }
@@ -497,9 +507,9 @@ class Spread {
       pg.noFill();
       pg.stroke(100);
       pg.rect(
-        (pd.outsideEdge == Side.LEFT ? pageNumWidth : 0), 
+        0, 
         pd.contentHeightPx - footerHeight, 
-        pd.contentWidthPx - pageNumWidth, 
+        pd.contentWidthPx, 
         footerHeight);
       pg.popStyle();
     }
@@ -510,11 +520,13 @@ class Spread {
       //PFont fFont = loadFont("footer-print.vlw");
       pg.pushStyle();
       pg.textFont(bodyFont);
+      int currWidth = (int)pg.textWidth(pd.pageID);
+      int currHeight = bodySize; //(int)pg.lineHeight(pd.pageID);
       if (pd.outsideEdge == Side.LEFT){
-        pg.text(pd.pageID, 0, pd.contentHeightPx);
+        pg.text(pd.pageID, 0-currWidth, pd.contentHeightPx);
       } else {
-        int currWidth = (int)pg.textWidth(pd.pageID);
-        pg.text(pd.pageID, pd.contentWidthPx - currWidth, pd.contentHeightPx);
+        //int currWidth = (int)pg.textWidth(pd.pageID);
+        pg.text(pd.pageID, pd.contentWidthPx + currWidth, pd.contentHeightPx);
       }
       pg.popStyle();
     }
