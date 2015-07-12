@@ -75,9 +75,9 @@ class Spread {
     // load content
     xml = loadXML("zine.xml");
 
-    headingFont = createFont("SourceSansPro-Bold", 48);
-    bodyFont = createFont("SourceSerifPro-Regular", 48);
-    monoFont = createFont("SourceCodePro-ExtraLight", 48);
+    headingFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48);
+    bodyFont = createFont("fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48);
+    monoFont = createFont("fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf", 48);
       
     if (isCover == true) {
       createCover();
@@ -146,11 +146,11 @@ class Spread {
 
   public int getMaxHeadingSize() {
     int allowedHeadingHeight = contentHeightPx/4;
-    PFont font = loadFont("bold-print.vlw");
+    //PFont font = loadFont("bold-print.vlw");
     int headingSize = allowedHeadingHeight;
     for(int i = 0; i < pageData.length; i++){
       if (pageData[i].heading != null && pageData[i].heading.length() > 0){
-        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].heading, font, headingSize)};
+        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].heading, headingFont, headingSize)};
         FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx, pg);
         textBlock.constrainHeight(allowedHeadingHeight, pg);
         headingSize = textBlock.text[0].fontSize;
@@ -160,11 +160,11 @@ class Spread {
   }
   
   public int getMaxFooterHeight(){
-    PFont font = loadFont("footer-print.vlw");
+    //PFont font = loadFont("footer-print.vlw");
     int maxFooterHeight = 0;
     for(int i = 0; i < pageData.length; i++){
       if (pageData[i].footer != null && pageData[i].footer.length() > 0){
-        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].footer, font)};
+        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].footer, bodyFont)};
         FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx - pageNumWidth, pg);
         maxFooterHeight = Math.max(textBlock.totalHeight, maxFooterHeight);
       }
@@ -173,9 +173,9 @@ class Spread {
   }
   
   private void calculatePageNumDims(){
-    PFont fFont = loadFont("footer-print.vlw");
+    //PFont fFont = loadFont("footer-print.vlw");
     pg.pushStyle();
-    pg.textFont(fFont);
+    pg.textFont(bodyFont);
     pageNumWidth = (int)pg.textWidth("99");
     pageNumHeight = (int)pg.textAscent();
     pg.popStyle();
@@ -399,14 +399,14 @@ class Spread {
     String[] separators = {" ", "|", "   ", " | ", " /**/ ", "\n"};
     int interI = (int)random(1, separators.length);
     int intraI = (int)random(0, interI);
-    PFont regular = loadFont("reg-print.vlw");
-    PFont bold = loadFont("bold-print.vlw");
-    int size = regular.getSize();
+    //PFont regular = loadFont("reg-print.vlw");
+    //PFont bold = loadFont("bold-print.vlw");
+    int size = headingFont.getSize();
     FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[pd.content.length*2];
     for (int i = 0; i < pd.content.length; i++) {
-      fText[i*2] = new FormattedTextBlock.FormattedText(pd.content[i].page, bold, size);
+      fText[i*2] = new FormattedTextBlock.FormattedText(pd.content[i].page, headingFont, size);
       fText[i*2+1] = new FormattedTextBlock.FormattedText(
-        separators[intraI] + pd.content[i].text + separators[interI], regular, size);
+        separators[intraI] + pd.content[i].text + separators[interI], bodyFont, size);
     }
     FormattedTextBlock textBlock = new FormattedTextBlock(fText, contentWidthPx[0], pg);
     textBlock.constrainHeight(contentHeightPx, pg);
@@ -467,6 +467,7 @@ class Spread {
   private void renderHeading(PageData pd){
     if (pd.heading != null && pd.heading.length() > 0){
       pg.pushStyle();
+      pg.textFont(headingFont);
       pg.textSize(headingSize);
       pg.text(pd.heading, 0, 0, pd.contentWidthPx, pd.contentHeightPx);
       if (debug){
@@ -480,9 +481,9 @@ class Spread {
   
   private void renderFooter(PageData pd){
     if (pd.footer != null && pd.footer.length() > 0){
-      PFont fFont = loadFont("footer-print.vlw");
+      //PFont fFont = loadFont("footer-print.vlw");
       pg.pushStyle();
-      pg.textFont(fFont);
+      pg.textFont(bodyFont);
       pg.text(
         pd.footer, 
         (pd.outsideEdge == Side.LEFT ? pageNumWidth : 0), 
@@ -506,9 +507,9 @@ class Spread {
   
   private void renderPageNum(PageData pd){
     if (pd.pageID != null && pd.pageID.length() > 0){
-      PFont fFont = loadFont("footer-print.vlw");
+      //PFont fFont = loadFont("footer-print.vlw");
       pg.pushStyle();
-      pg.textFont(fFont);
+      pg.textFont(bodyFont);
       if (pd.outsideEdge == Side.LEFT){
         pg.text(pd.pageID, 0, pd.contentHeightPx);
       } else {
