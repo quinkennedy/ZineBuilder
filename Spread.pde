@@ -360,7 +360,7 @@ class Spread {
         renderHeading(pageData[i]);
       }
       renderPageNum(pageData[i]);
-/*
+
       if (pageData[i].type == null) {
         base(pageData[i]);
       } else if (pageData[i].type.equals("quote")) {
@@ -371,7 +371,7 @@ class Spread {
         photo(pageData[i]);
       } else if (pageData[i].type.equals("code")) {
         code(pageData[i]);
-      }*/
+      }
       pg.popMatrix();
       //quote = pages[i].getChild("quote");
     }
