@@ -274,6 +274,8 @@ class Spread {
         toc(pageData[i]);
       } else if (pageData[i].type.equals("photo")) {
         photo(pageData[i]);
+      } else if (pageData[i].type.equals("code")) {
+        code(pageData[i]);
       }
       pg.popMatrix();
       //quote = pages[i].getChild("quote");
@@ -282,6 +284,7 @@ class Spread {
     //draw spread-general content for debugging purposes
     //pg.textSize(500);
     //pg.line(random(0, _spreadWidthPx), random(0, _spreadHeightPx), random(0, _spreadWidthPx), random(0, _spreadHeightPx));
+    pg.fill(0);
     pg.rect(0, 0, 100, 100);
     //pg.text(String.format("%02d", spreadNum), _spreadWidthPx/3, _spreadHeightPx/2);
 
@@ -296,6 +299,18 @@ class Spread {
     pg.textSize(headingSize);
     pg.text(pd.author, leftOutsideMargin, pageHeightPx-bottomMargin);
   }
+
+  public void code(PageData pd) {
+    // For code samples
+    PFont myCodeFont = createFont("Courier", 48);
+
+    pg.textFont(myCodeFont);
+    pg.fill(primaryColor);
+    pg.textSize(bodySize-10);
+    pg.text(pd.body, topMargin, leftOutsideMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
+    pg.textSize(headingSize);
+  }
+
 
   public void toc(PageData pd) {
     //parse the data into FormattedTextBlock;
@@ -355,7 +370,9 @@ class Spread {
     if (pd.contentImages.length > 0) {
       //PImage img = loadImage(pd.contentImages[0].getString("src"));
       println("loaded "+pd.contentImages[0]);
-      pg.image(pd.contentImages[0], (pageWidthPx)/2, (pageHeightPx)/2);
+      pg.image(pd.contentImages[0], (pageWidthPx - pd.contentImages[0].width - rightOutsideMargin-leftOutsideMargin ), baseLine-(topMargin/2)-pd.contentImages[0].height);
+      pg.noFill();
+      //pg.rect((pageWidthPx - pd.contentImages[0].width), 200, pd.contentImages[0].width, pd.contentImages[0].height);
     }
     if (pd.footer != null) {
       pg.textSize(footerSize);

@@ -2,7 +2,7 @@
 <zine>
 <cover id="1">
 	<page id="2">
-		<heading>Until next time.</heading>
+		<heading>Bye.</heading>
 	</page>
 	<page id="1">
 		<heading>Sensory Aesthetics</heading>
@@ -11,17 +11,10 @@
 </cover>
 <cover id="2">
 	<page id="3">
-	   <heading>Hello World.</heading>
-	   <subheading></subheading>
-	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics zine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run additions but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please contact us @sensoryixd with questions or comments.
-
-Talk soon,
-Joshua and James
-	   </body>
-	   <footer>This zine technology would not have been possible without a partnership with Quin Kennedy (@quinkennedy). Please find out more info at our Github page. </footer>
+	   <image src="images/U_2_694819491672_archigram.jpg"></image>
 	</page>
 		<page id="4">
-	   <heading>Thanks for reading. #sensoryaesthetics</heading>
+	   <heading>Thanks for reading. Reach us at @sensoryixd #sensoryaesthetics</heading>
 	   <subheading></subheading>
 	</page>
 </cover>
@@ -48,10 +41,71 @@ __ yes  __no __not sure)</footer>
 </spread>
 <spread id="2">
 	<page id="2">
-		<heading>About this Zine.</heading>
+		<heading>Hello World.</heading>
+	   <subheading></subheading>
+	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics zine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run additions but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensoryixd with questions or comments.
+
+Talk soon,
+Joshua and James
+	   </body>
+	   <image src="images/jj.jpg"></image>
+	   <footer>This generative zine technology would not have been possible without a partnership with Quin Kennedy (@quinkennedy). Please find out more info at our Github page https://github.com/adenine/SensoryAestheticsZine001 </footer>
 	</page>
-	<page id="3">
-	   <image src="images/U_2_694819491672_archigram.jpg"></image>
+	<page id="3" type="code">
+	   <body>
+	   	/**
+	   	* Below you will find an excerpt from the generative zine code:
+	   	*
+	    *    ,         ,      ,   ,  
+	    *    |\\\\ ////|     /////|  
+	    *    | \\\V/// |    ///// |  
+	    *    |  |~~~|  |   |~~~|  |  
+	    *    |  |=z=|  |   |=z=|  |  
+	    *    |  | i |  |   | i |  |  
+	    *    |  | n |  |   | n |  |  
+	    *     \ | e | /    | e | /   
+	    *      \|===|/     |===|/    
+	    *       '---'      '---'     
+	    * 
+	   	* How it works:
+	   	* 
+	   	* 1. Write some code that will fill an xml template with content using various 
+	   	* content types popularized by Robert Horn in Mapping Hypertext. You can also 
+	   	* just replace the contents in zine.xml by hand.
+	   	* 2. Pick the parameters of your zine.
+	   	* 3. Hit Run, Wait, Open the generated zine pdf, print, and assemble.
+	   	* 
+	   	*/
+		for(int row = 0; row &lt; zpl[0].length; row++){
+      for(int cell = 0; cell &lt; zpl[0][0].length; cell++){
+        println(&quot;placing cell &quot; + (++progress));
+        ZinePageLayout cpg = zpl[page][row][cell];
+        int spreadI = ((cpg.getNumber() / 2) % numSpreads);
+        boolean leftPage = cpg.getNumber()%2 == 0;
+        Spread comp = spreads[spreadI];
+        if (cpg.getHFlip()){
+          paperg.copy(comp.getPage(),
+            leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
+            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
+        } else {
+          paperg.copy(comp.getPage(), 
+            leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
+            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
+        }
+      }
+    }
+    	/**
+	   	* Todo list for the zine for brave souls...
+	   	*
+	   	* - Fillout more content types
+	   	* - Create more content creators
+	   	* - Look at dynamic type combinations
+	   	* 
+	   	* Get started with your own zine at...
+	   	* https://github.com/adenine/SensoryAestheticsZine001
+	   	* 
+	   	*/
+	   </body>
 	</page>
 </spread>
 <spread id="3">
@@ -62,7 +116,7 @@ __ yes  __no __not sure)</footer>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="5">
-	   <heading>Lil B and Listening</heading>
+	   <image src="images/lilb.jpg"></image>
 	   <subheading></subheading>
 	   <body>On November 28th 2014 rapper Lil B crossed the threshold of following a million people. Inverting the usual paradigm of how celebrities use social media, Lil B celebrates not how many people follow him but rather how many people he follows.  In his own words: “HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”
 Personally i find it mind boggling to even understand what that might mean. Imagine we suspend disbelief for a few minutes and really imagine that he actually reads for one day all the tweets of all the people he follows. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input.
@@ -118,8 +172,10 @@ Biomass is biological material derived from living, or recently living organisms
 <spread id="7">
 	<page id="12">
 	   <heading>Trending towards Empathy</heading>
-	   <subheading></subheading>
+	   <subheading>2015 The Pace of Social Change</subheading>
+	   <!-- http://www.bloomberg.com/graphics/2015-pace-of-social-change/ -->
 	   <body>“Everything is deeply intertwingled" -Ted Nelson</body>
+	   <image src="images/change.png"></image>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="13" type="photo">
