@@ -3,6 +3,7 @@ import processing.pdf.*;
 PGraphics pdf;
 PFont myFont;
 boolean testLayout = false;
+boolean debug = true;
 float margin = 50;
 float paperWidthIn = 8.5; //inches
 float paperHeightIn = 11; //inches
@@ -234,6 +235,7 @@ void draw() {
 
   int minHeadingSize = -1;
   int currHeadingSize;
+  int maxFooterHeight = 0;
   // Create a set of Compositions
   for (int k=1; k <= numSpreads; k++) {
     println("assembling spread " + k);
@@ -245,9 +247,11 @@ void draw() {
     } else if (minHeadingSize > currHeadingSize){
       minHeadingSize = currHeadingSize;
     }
+    maxFooterHeight = Math.max(maxFooterHeight, spreads[k-1].getMaxFooterHeight());
   }
   for(int i = 0; i < numSpreads; i++){
     spreads[i].setHeadingSize(minHeadingSize);
+    spreads[i].footerHeight = maxFooterHeight;
   }
   println("Creating cover");
   

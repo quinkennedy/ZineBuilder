@@ -23,7 +23,9 @@ class Spread {
   private int subheadingSize = 80;
   private int bodySize = 30;
   private int quoteSize = 120;
-  private int footerSize = 30;
+  private int footerHeight = 0;
+  private int pageNumWidth;
+  private int pageNumHeight;
   private int baseLine = 700;
   private color bgColor = color(255);
   private color primaryColor = color(0);
@@ -42,8 +44,8 @@ class Spread {
   /       ^ ^-insideRightMargin
   /       ^-insideLeftMargin
   /*/
-  private int rightOfPageMargin[] = {insideRightMargin, rightOutsideMargin};
-  private int leftOfPageMargin[] = {leftOutsideMargin, insideLeftMargin};
+  private int rightOfPageMargin[];
+  private int leftOfPageMargin[];
   private int contentWidthPx[];
   private int contentHeightPx;
   private int pageWidthPx;
@@ -73,11 +75,6 @@ class Spread {
       if (numPages > 0) {
         pageWidthPx /= numPages;
       }
-      contentWidthPx = new int[numPages];
-      for(int i = 0; i < numPages; i++){
-        contentWidthPx[i] = pageWidthPx - rightOfPageMargin[i] - leftOfPageMargin[i];
-      }
-      contentHeightPx = spreadHeightPx - topMargin - bottomMargin;
       //String page = children[spreadNum-1].getChildren("page")[0].getContent();
       //heading = children[pageNum-1].getChild("heading").getContent();
       //body = children[pageNum-1].getChild("body").getContent();
@@ -101,6 +98,7 @@ class Spread {
         pageData[i].body = extractString(pages[i], "body");
         //body = pages[i].getChild("body");
         pageData[i].footer = extractString(pages[i], "footer");
+        pageData[i].pageID = pages[i].getString("id");
         //footer = pages[i].getChild("footer");
         pageData[i].contentImages = extractImages(pages[i]);
 
@@ -118,6 +116,15 @@ class Spread {
 
       pg.endDraw();
     }
+    calculatePageNumDims();
+    setMargins(topMargin, bottomMargin, 
+      leftOutsideMargin, rightOutsideMargin, 
+      insideLeftMargin, insideRightMargin);
+  }
+  
+  public void setHeadingSize(int size){
+    headingSize = size;
+    subheadingSize = size/2;
   }
 
   public int getMaxHeadingSize() {
@@ -127,17 +134,34 @@ class Spread {
     for(int i = 0; i < pageData.length; i++){
       if (pageData[i].heading != null && pageData[i].heading.length() > 0){
         FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].heading, font, headingSize)};
-        FormattedTextBlock textBlock = new FormattedTextBlock(text, contentWidthPx[i], pg);
+        FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx, pg);
         textBlock.constrainHeight(allowedHeadingHeight, pg);
         headingSize = textBlock.text[0].fontSize;
       }
     }
     return headingSize;
   }
-
-  public void setHeadingSize(int size) {
-    headingSize = size;
-    subheadingSize = size/2;
+  
+  public int getMaxFooterHeight(){
+    PFont font = loadFont("footer-print.vlw");
+    int maxFooterHeight = 0;
+    for(int i = 0; i < pageData.length; i++){
+      if (pageData[i].footer != null && pageData[i].footer.length() > 0){
+        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].footer, font)};
+        FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx - pageNumWidth, pg);
+        maxFooterHeight = Math.max(textBlock.totalHeight, maxFooterHeight);
+      }
+    }
+    return maxFooterHeight;
+  }
+  
+  private void calculatePageNumDims(){
+    PFont fFont = loadFont("footer-print.vlw");
+    pg.pushStyle();
+    pg.textFont(fFont);
+    pageNumWidth = (int)pg.textWidth("99");
+    pageNumHeight = (int)pg.textAscent();
+    pg.popStyle();
   }
 
   public String extractString(XML _page, String _tag) {
@@ -187,6 +211,28 @@ class Spread {
     rightOutsideMargin = _rightOutsideMargin;
     insideLeftMargin = _insideLeftMargin;
     insideRightMargin = _insideRightMargin;
+    
+    
+    rightOfPageMargin = new int[]{insideLeftMargin, rightOutsideMargin};
+    leftOfPageMargin = new int[]{leftOutsideMargin, insideRightMargin};
+    contentHeightPx = spreadHeightPx - topMargin - bottomMargin;
+    contentWidthPx = new int[pageData.length];
+    for(int i = 0; i < contentWidthPx.length; i++){
+      contentWidthPx[i] = pageWidthPx - rightOfPageMargin[i] - leftOfPageMargin[i];
+      pageData[i].contentWidthPx = contentWidthPx[i];
+      pageData[i].contentHeightPx = contentHeightPx;
+      pageData[i].topMarginPx = topMargin;
+      pageData[i].bottomMarginPx = bottomMargin;
+      if (i == 0){
+        pageData[i].outsideEdge = Side.LEFT;
+        pageData[i].leftMarginPx = leftOutsideMargin;
+        pageData[i].rightMarginPx = insideLeftMargin;
+      } else {
+        pageData[i].outsideEdge = Side.RIGHT;
+        pageData[i].leftMarginPx = insideRightMargin;
+        pageData[i].rightMarginPx = rightOutsideMargin;
+      }
+    }
   }
 
   public void createCover() {
@@ -265,6 +311,14 @@ class Spread {
     for (int i = 0; i < pageData.length; i++) {
       pg.pushMatrix();
       pg.translate(pageWidthPx * i, 0);
+      pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
+      if (pageData[i].footer != null) {
+        renderFooter(pageData[i]);
+      }
+      if (pageData[i].heading != null){
+        renderHeading(pageData[i]);
+      }
+      renderPageNum(pageData[i]);
 
       if (pageData[i].type == null) {
         base(pageData[i]);
@@ -287,7 +341,18 @@ class Spread {
     pg.fill(0);
     pg.rect(0, 0, 100, 100);
     //pg.text(String.format("%02d", spreadNum), _spreadWidthPx/3, _spreadHeightPx/2);
-
+    if (debug){
+      pg.stroke(0);
+      pg.strokeWeight(4);
+      pg.line(0, topMargin, spreadWidthPx, topMargin);
+      pg.line(0, spreadHeightPx - bottomMargin, spreadWidthPx, spreadHeightPx - bottomMargin);
+      pg.line(leftOutsideMargin, 0, leftOutsideMargin, spreadHeightPx);
+      pg.line(spreadWidthPx / 2 - insideLeftMargin, 0, spreadWidthPx / 2 - insideLeftMargin, spreadHeightPx);
+      pg.line(spreadWidthPx / 2 + insideRightMargin, 0, spreadWidthPx / 2 + insideRightMargin, spreadHeightPx);
+      pg.line(spreadWidthPx - rightOutsideMargin, 0, spreadWidthPx - rightOutsideMargin, spreadHeightPx);
+      pg.strokeWeight(6);
+      pg.line(spreadWidthPx / 2, 0, spreadWidthPx / 2, spreadHeightPx);
+    }
     pg.endDraw();
   }
 
@@ -359,10 +424,6 @@ class Spread {
   }
 
   public void base(PageData pd) {
-    if (pd.heading != null) {
-      pg.textSize(headingSize);
-      pg.text(pd.heading, leftOutsideMargin, topMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
-    }
     if (pd.body != null) {
       pg.textSize(bodySize);
       pg.text(pd.body, leftOutsideMargin, baseLine, pageWidthPx-rightOutsideMargin-leftOutsideMargin, pageHeightPx-bottomMargin);
@@ -383,9 +444,60 @@ class Spread {
       pg.noFill();
       //pg.rect((pageWidthPx - pd.contentImages[0].width), 200, pd.contentImages[0].width, pd.contentImages[0].height);
     }
-    if (pd.footer != null) {
-      pg.textSize(footerSize);
-      pg.text(pd.footer, leftOutsideMargin, pageHeightPx-300, pageWidthPx-rightOutsideMargin, pageHeightPx-bottomMargin);
+  }
+  
+  private void renderHeading(PageData pd){
+    if (pd.heading != null && pd.heading.length() > 0){
+      pg.pushStyle();
+      pg.textSize(headingSize);
+      pg.text(pd.heading, 0, 0, pd.contentWidthPx, pd.contentHeightPx);
+      if (debug){
+        pg.noFill();
+        pg.stroke(100);
+        pg.rect(0, 0, pd.contentWidthPx, pd.contentHeightPx/4);
+      }
+      pg.popStyle();
+    }
+  }
+  
+  private void renderFooter(PageData pd){
+    if (pd.footer != null && pd.footer.length() > 0){
+      PFont fFont = loadFont("footer-print.vlw");
+      pg.pushStyle();
+      pg.textFont(fFont);
+      pg.text(
+        pd.footer, 
+        (pd.outsideEdge == Side.LEFT ? pageNumWidth : 0), 
+        pd.contentHeightPx - footerHeight, 
+        pd.contentWidthPx - pageNumWidth, 
+        footerHeight);
+      pg.popStyle();
+    }
+    if (debug){
+      pg.pushStyle();
+      pg.noFill();
+      pg.stroke(100);
+      pg.rect(
+        (pd.outsideEdge == Side.LEFT ? pageNumWidth : 0), 
+        pd.contentHeightPx - footerHeight, 
+        pd.contentWidthPx - pageNumWidth, 
+        footerHeight);
+      pg.popStyle();
+    }
+  }
+  
+  private void renderPageNum(PageData pd){
+    if (pd.pageID != null && pd.pageID.length() > 0){
+      PFont fFont = loadFont("footer-print.vlw");
+      pg.pushStyle();
+      pg.textFont(fFont);
+      if (pd.outsideEdge == Side.LEFT){
+        pg.text(pd.pageID, 0, pd.contentHeightPx);
+      } else {
+        int currWidth = (int)pg.textWidth(pd.pageID);
+        pg.text(pd.pageID, pd.contentWidthPx - currWidth, pd.contentHeightPx);
+      }
+      pg.popStyle();
     }
   }
 
@@ -419,9 +531,15 @@ class Spread {
   }
 
   class PageData {
-    String heading, subheading, body, footer, quote, author;
+    String heading, subheading, body, footer, quote, author, pageID;
     String type;
     PImage[] contentImages;
     Content[] content;
+    int contentWidthPx, contentHeightPx, rightMarginPx, leftMarginPx, topMarginPx, bottomMarginPx;
+    Side outsideEdge;
   }
+}
+
+enum Side{
+  RIGHT, LEFT, NONE
 }
