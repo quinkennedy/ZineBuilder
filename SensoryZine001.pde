@@ -3,7 +3,7 @@ import processing.pdf.*;
 PGraphics pdf;
 PFont myFont;
 boolean testLayout = false;
-boolean debug = false;
+boolean debug = true;
 float margin = 50;
 float paperWidthIn = 8.5; //inches
 float paperHeightIn = 11; //inches
