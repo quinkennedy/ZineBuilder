@@ -1,7 +1,7 @@
 import controlP5.*; //<>//
 import processing.pdf.*;
 PGraphics pdf;
-PFont myFont;
+PFont screenFont;
 boolean testLayout = false;
 boolean debug = true;
 float margin = 50;
@@ -164,17 +164,17 @@ void setup() {
   //// CHECK WHAT FONTS ARE ON THE SYSTEM
   //String[] fontList = PFont.list();
   //println(fontList);
-  
+  screenFont = createFont("SourceSansPro-Bold", 48);
+
   
 
 }
 
-void infoPage() {
+public void infoPage() {
   // Create the cover page
   println("creating info page");
   pdf.background(255);
-  myFont = createFont("DINPro-Black", 48);
-  pdf.textFont(myFont);
+  pdf.textFont(screenFont);
   textAlign(CENTER, CENTER);
   pdf.fill(0);
   pdf.textSize(48);
@@ -307,8 +307,7 @@ void draw() {
     pdf.image(paperg, 0, 0);
   }
   
-  myFont = createFont("DINPro-Black", 48);
-  textFont(myFont);
+  textFont(screenFont);
   textAlign(CENTER, CENTER);
   
   pdf.dispose();

@@ -11,7 +11,9 @@ class Spread {
   PGraphics pg;
   private int spreadWidthPx;
   private int spreadHeightPx;
-  PFont myPGFont;
+  PFont headingFont;
+  PFont bodyFont;
+  PFont monoFont;
   XML xml;
   private int topMargin = 200;
   private int bottomMargin = 200;
@@ -44,6 +46,17 @@ class Spread {
   /       ^ ^-insideRightMargin
   /       ^-insideLeftMargin
   /*/
+  
+  /* Font Information
+  /  This project uses the open source fonts available from Adobe.
+  /  Specifically:
+  /    * Source Sans Pro: https://github.com/adobe-fonts/source-sans-pro
+  /    * Source Code Pro (monospaced): https://github.com/adobe-fonts/source-code-pro
+  /    * Source Serif Pro: https://github.com/adobe-fonts/source-serif-pro
+  /  
+  /  These typeface were designed for UI. What could be more UI than a zine?!?
+  */
+  
   private int rightOfPageMargin[];
   private int leftOfPageMargin[];
   private int contentWidthPx[];
@@ -62,6 +75,10 @@ class Spread {
     // load content
     xml = loadXML("zine.xml");
 
+    headingFont = createFont("SourceSansPro-Bold", 48);
+    bodyFont = createFont("SourceSerifPro-Regular", 48);
+    monoFont = createFont("SourceCodePro-ExtraLight", 48);
+      
     if (isCover == true) {
       createCover();
       println("laying out cover "+spreadNum);
@@ -80,7 +97,7 @@ class Spread {
       //body = children[pageNum-1].getChild("body").getContent();
       //println("Created Page: "+pageNum);
 
-      myPGFont = createFont("DINPro-Black", 48);
+
       pg = createGraphics(_spreadWidthPx, _spreadHeightPx);  
 
 
@@ -246,7 +263,7 @@ class Spread {
       pageWidthPx /= numPages;
     }
 
-    myPGFont = createFont("DINPro-Black", 48);
+    //myPGFont = createFont("SourceSansPro-Bold", 48);
     pg = createGraphics(spreadWidthPx, spreadHeightPx);  
 
     ////pg.textAlign(CENTER, CENTER);
@@ -298,7 +315,7 @@ class Spread {
     //pg.textAlign(CENTER, CENTER);
     pg.beginDraw();
     pg.background(bgColor);
-    pg.textFont(myPGFont);
+    pg.textFont(bodyFont);
     pg.fill(primaryColor);
     if (isCover) {
       pg.fill(255, 122, 255);
@@ -343,7 +360,7 @@ class Spread {
     //pg.text(String.format("%02d", spreadNum), _spreadWidthPx/3, _spreadHeightPx/2);
     if (debug){
       pg.stroke(0);
-      pg.strokeWeight(4);
+      pg.strokeWeight(1);
       pg.line(0, topMargin, spreadWidthPx, topMargin);
       pg.line(0, spreadHeightPx - bottomMargin, spreadWidthPx, spreadHeightPx - bottomMargin);
       pg.line(leftOutsideMargin, 0, leftOutsideMargin, spreadHeightPx);
@@ -367,9 +384,9 @@ class Spread {
 
   public void code(PageData pd) {
     // For code samples
-    PFont myCodeFont = createFont("Courier", 48);
+    //PFont myCodeFont = createFont("SourceCodePro-ExtraLight", 48);
 
-    pg.textFont(myCodeFont);
+    pg.textFont(monoFont);
     pg.fill(primaryColor);
     pg.textSize(bodySize-10);
     pg.text(pd.body, topMargin, leftOutsideMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
@@ -425,6 +442,7 @@ class Spread {
 
   public void base(PageData pd) {
     if (pd.body != null) {
+      pg.textFont(bodyFont);
       pg.textSize(bodySize);
       pg.text(pd.body, leftOutsideMargin, baseLine, pageWidthPx-rightOutsideMargin-leftOutsideMargin, pageHeightPx-bottomMargin);
     }
