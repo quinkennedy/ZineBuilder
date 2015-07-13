@@ -39,26 +39,26 @@ class Spread {
   private boolean isCover;
   /*
   / v-leftOutsideMargin
-  / v     rightOutsideMargin
-  / v______ ______v
-  / |      |      |<-topMargin
-  / |      |      |
-  / |      |      |
-  / |______|______|<-bottomMargin
-  /       ^ ^-insideRightMargin
-  /       ^-insideLeftMargin
+   / v     rightOutsideMargin
+   / v______ ______v
+   / |      |      |<-topMargin
+   / |      |      |
+   / |      |      |
+   / |______|______|<-bottomMargin
+   /       ^ ^-insideRightMargin
+   /       ^-insideLeftMargin
   /*/
-  
+
   /* Font Information
-  /  This project uses the open source fonts available from Adobe.
-  /  Specifically:
-  /    * Source Sans Pro: https://github.com/adobe-fonts/source-sans-pro
-  /    * Source Code Pro (monospaced): https://github.com/adobe-fonts/source-code-pro
-  /    * Source Serif Pro: https://github.com/adobe-fonts/source-serif-pro
-  /  
-  /  These typeface were designed for UI. What could be more UI than a zine?!?
-  */
-  
+   /  This project uses the open source fonts available from Adobe.
+   /  Specifically:
+   /    * Source Sans Pro: https://github.com/adobe-fonts/source-sans-pro
+   /    * Source Code Pro (monospaced): https://github.com/adobe-fonts/source-code-pro
+   /    * Source Serif Pro: https://github.com/adobe-fonts/source-serif-pro
+   /  
+   /  These typeface were designed for UI. What could be more UI than a zine?!?
+   */
+
   private int rightOfPageMargin[];
   private int leftOfPageMargin[];
   private int contentWidthPx[];
@@ -81,7 +81,7 @@ class Spread {
     bodyFont = createFont("fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48);
     monoFont = createFont("fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf", 48);
     footerFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48);
-    
+
     if (isCover == true) {
       createCover();
       println("laying out cover "+spreadNum);
@@ -141,23 +141,23 @@ class Spread {
       leftOutsideMargin, rightOutsideMargin, 
       insideLeftMargin, insideRightMargin);
   }
-  
-  public void setHeadingSize(int size){
+
+  public void setHeadingSize(int size) {
     headingSize = size;
     subheadingSize = size/2;
-    for(int i = 0; i < pageData.length; i++){
-      if (pageData[i].hasHeading() || pageData[i].hasSubheading()){
+    for (int i = 0; i < pageData.length; i++) {
+      if (pageData[i].hasHeading() || pageData[i].hasSubheading()) {
         FormattedTextBlock.FormattedText[] hText;
-        if (pageData[i].hasHeading() && pageData[i].hasSubheading()){
+        if (pageData[i].hasHeading() && pageData[i].hasSubheading()) {
           hText = new FormattedTextBlock.FormattedText[]{
-            new FormattedTextBlock.FormattedText(pageData[i].heading + "\n", headingFont, headingSize),
+            new FormattedTextBlock.FormattedText(pageData[i].heading + "\n", headingFont, headingSize), 
             new FormattedTextBlock.FormattedText(pageData[i].subheading, headingFont, subheadingSize)};
         } else {
           hText = new FormattedTextBlock.FormattedText[]{
             new FormattedTextBlock.FormattedText(
-              pageData[i].hasHeading() ? pageData[i].heading : pageData[i].subheading, 
-              headingFont, 
-              pageData[i].hasHeading() ? headingSize : subheadingSize)};
+            pageData[i].hasHeading() ? pageData[i].heading : pageData[i].subheading, 
+            headingFont, 
+            pageData[i].hasHeading() ? headingSize : subheadingSize)};
         }
         pageData[i].headingBlock = new FormattedTextBlock(hText, pageData[i].contentWidthPx, pg);
       }
@@ -168,11 +168,11 @@ class Spread {
     int allowedHeadingHeight = contentHeightPx/4;
     //PFont font = loadFont("bold-print.vlw");
     int headingSize = allowedHeadingHeight;
-    for(int i = 0; i < pageData.length; i++){
-      if (pageData[i].heading != null && pageData[i].heading.length() > 0){
+    for (int i = 0; i < pageData.length; i++) {
+      if (pageData[i].heading != null && pageData[i].heading.length() > 0) {
         FormattedTextBlock.FormattedText[] text = 
-          {new FormattedTextBlock.FormattedText(pageData[i].heading + "\n", headingFont, headingSize),
-           new FormattedTextBlock.FormattedText(pageData[i].subheading, headingFont, subheadingSize)};
+          {new FormattedTextBlock.FormattedText(pageData[i].heading + "\n", headingFont, headingSize), 
+          new FormattedTextBlock.FormattedText(pageData[i].subheading, headingFont, subheadingSize)};
         FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx, pg);
         textBlock.constrainHeight(allowedHeadingHeight, pg);
         headingSize = textBlock.text[0].fontSize;
@@ -180,14 +180,14 @@ class Spread {
     }
     return headingSize;
   }
-  
-  public int getMaxFooterHeight(){
+
+  public int getMaxFooterHeight() {
     //PFont font = loadFont("footer-print.vlw");
     pg.textFont(footerFont);
     pg.textSize(footerSize);
     int maxFooterHeight = 0;
-    for(int i = 0; i < pageData.length; i++){
-      if (pageData[i].footer != null && pageData[i].footer.length() > 0){
+    for (int i = 0; i < pageData.length; i++) {
+      if (pageData[i].footer != null && pageData[i].footer.length() > 0) {
         FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].footer, footerFont, footerSize)};
         FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx - pageNumWidth, pg);
         maxFooterHeight = Math.max(textBlock.totalHeight, maxFooterHeight);
@@ -195,8 +195,8 @@ class Spread {
     }
     return maxFooterHeight;
   }
-  
-  private void calculatePageNumDims(){
+
+  private void calculatePageNumDims() {
     //PFont fFont = loadFont("footer-print.vlw");
     pg.pushStyle();
     pg.textFont(bodyFont);
@@ -227,16 +227,16 @@ class Spread {
   public Content[] extractContents(XML[] _spreads) {
     ArrayList<XML> pages = new ArrayList<XML>();
     ArrayList<Content> contents = new ArrayList<Content>();
-    for(int i = 0; i < _spreads.length; i++){
+    for (int i = 0; i < _spreads.length; i++) {
       XML[] temp = _spreads[i].getChildren("page");
-      for(int j = 0; j < temp.length; j++){
+      for (int j = 0; j < temp.length; j++) {
         pages.add(temp[j]);
       }
     }
-    for(int i = 0; i < pages.size(); i++){
+    for (int i = 0; i < pages.size(); i++) {
       String heading = extractString(pages.get(i), "heading");
       String pageno = pages.get(i).getString("id");
-      if (heading != null && heading.length() > 0){
+      if (heading != null && heading.length() > 0) {
         contents.add(new Content(pageno, heading));
       }
     }
@@ -252,19 +252,19 @@ class Spread {
     rightOutsideMargin = _rightOutsideMargin;
     insideLeftMargin = _insideLeftMargin;
     insideRightMargin = _insideRightMargin;
-    
-    
+
+
     rightOfPageMargin = new int[]{insideLeftMargin, rightOutsideMargin};
     leftOfPageMargin = new int[]{leftOutsideMargin, insideRightMargin};
     contentHeightPx = spreadHeightPx - topMargin - bottomMargin;
     contentWidthPx = new int[pageData.length];
-    for(int i = 0; i < contentWidthPx.length; i++){
+    for (int i = 0; i < contentWidthPx.length; i++) {
       contentWidthPx[i] = pageWidthPx - rightOfPageMargin[i] - leftOfPageMargin[i];
       pageData[i].contentWidthPx = contentWidthPx[i];
       pageData[i].contentHeightPx = contentHeightPx;
       pageData[i].topMarginPx = topMargin;
       pageData[i].bottomMarginPx = bottomMargin;
-      if (i == 0){
+      if (i == 0) {
         pageData[i].outsideEdge = Side.LEFT;
         pageData[i].leftMarginPx = leftOutsideMargin;
         pageData[i].rightMarginPx = insideLeftMargin;
@@ -356,7 +356,7 @@ class Spread {
       if (pageData[i].footer != null) {
         renderFooter(pageData[i]);
       }
-      if (pageData[i].heading != null){
+      if (pageData[i].heading != null) {
         renderHeading(pageData[i]);
       }
       renderPageNum(pageData[i]);
@@ -382,7 +382,7 @@ class Spread {
     pg.fill(0);
     pg.rect(0, 0, leftOutsideMargin, topMargin);
     //pg.text(String.format("%02d", spreadNum), _spreadWidthPx/3, _spreadHeightPx/2);
-    if (debug){
+    if (debug) {
       pg.stroke(0);
       pg.strokeWeight(1);
       pg.line(0, topMargin, spreadWidthPx, topMargin);
@@ -458,88 +458,48 @@ class Spread {
 
   public void photo(PageData pd) {
     if (pd.contentImages != null && pd.contentImages.length > 0) {
-      //PImage img = loadImage(pd.contentImages[0].getString("src"));
-      println("loaded "+pd.contentImages[0]);
-      pg.image(pd.contentImages[0], 0, 0, pageWidthPx, pageHeightPx);
+      ImageBox iBox = new ImageBox(pd.contentImages[0]);
+      float startY = (pd.hasHeading() || pd.hasSubheading()) ? pd.contentHeightPx / 4 : 0;
+      iBox.render(new IContentBox.Rectangle(0, startY, pd.contentWidthPx, pd.contentHeightPx - startY - footerHeight), pg, debug);
     }
   }
 
   public void base(PageData pd) {
-    if (pd.body != null) {
-      pg.textFont(bodyFont);
-      pg.textSize(bodySize);
-      pg.text(pd.body, 0, baseLine, pd.contentWidthPx, pd.contentHeightPx);
-      if (debug) {
-        pg.noFill();
-        pg.rect(0, baseLine, pd.contentWidthPx, pd.contentHeightPx - footerHeight - baseLine);
-      }
+    float startY = 0;
+    if (pd.hasHeading() || pd.hasSubheading()) {
+      startY += pd.contentHeightPx / 4;
     }
-    if (pd.contentImages.length > 0) {
-      //PImage img = loadImage(pd.contentImages[0].getString("src"));
-      println("loaded "+pd.contentImages[0]);
-      // make sure the image can fit the width
-      
-      float tX = pageWidthPx - pd.contentImages[0].width - rightOutsideMargin - leftOutsideMargin;
-      pd.contentImages[0].filter(GRAY);
-      if (tX > leftOutsideMargin) {
-        pg.image(pd.contentImages[0], tX, baseLine-(topMargin/2)-pd.contentImages[0].height);
-      } else {
-        pd.contentImages[0].resize(pageWidthPx - rightOutsideMargin, 0);
-        pg.image(pd.contentImages[0], leftOutsideMargin, baseLine-(topMargin/2)-pd.contentImages[0].height);
-      }
-      pg.noFill();
-      //pg.rect((pageWidthPx - pd.contentImages[0].width), 200, pd.contentImages[0].width, pd.contentImages[0].height);
+    if (pd.contentImages != null && pd.contentImages.length > 0) {
+      ImageBox iBox = new ImageBox(pd.contentImages[0]);
+      float imageHeight = ((pd.contentHeightPx - startY) / 3);
+      iBox.render(new IContentBox.Rectangle(0, startY, pd.contentWidthPx, imageHeight), pg, debug);
+      startY += imageHeight;
+    }
+    if (pd.body != null && pd.body.length() > 0) {
+      TextBox tBox = new TextBox(pd.body, bodyFont, bodySize);
+      float textHeight = pd.contentHeightPx - startY - footerHeight;
+      tBox.render(new IContentBox.Rectangle(0, startY, pd.contentWidthPx, textHeight), pg, debug);
     }
   }
-  
-  private void renderHeading(PageData pd){
-    if (pd.headingBlock != null){
-      if (debug){
-        pg.pushStyle();
-        pg.noFill();
-        pg.stroke(200);
-        pg.rect(0, 0, pd.contentWidthPx, pd.contentHeightPx/4);
-        pg.popStyle();
-      }
-      pd.headingBlock.render(pg, debug);
-    }
+
+  private void renderHeading(PageData pd) {
+    HeadingBox box = new HeadingBox(pd.heading, pd.subheading, headingFont, headingSize, subheadingSize);
+    box.render(new IContentBox.Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx/4), pg, debug);
   }
-  
-  private void renderFooter(PageData pd){
-    if (pd.footer != null && pd.footer.length() > 0){
-      //PFont fFont = loadFont("footer-print.vlw");
-      pg.pushStyle();
-      pg.textFont(footerFont);
-      pg.textSize(footerSize);
-      pg.text(
-        pd.footer, 
-        0, 
-        pd.contentHeightPx - footerHeight, 
-        pd.contentWidthPx, 
-        footerHeight);
-      pg.popStyle();
-    }
-    if (debug){
-      pg.pushStyle();
-      pg.noFill();
-      pg.stroke(100);
-      pg.rect(
-        0, 
-        pd.contentHeightPx - footerHeight, 
-        pd.contentWidthPx, 
-        footerHeight);
-      pg.popStyle();
-    }
+
+  private void renderFooter(PageData pd) {
+    TextBox tBox = new TextBox(pd.footer == null ? "" : pd.footer, footerFont, footerSize);
+    tBox.render(new IContentBox.Rectangle(0, pd.contentHeightPx - footerHeight, pd.contentWidthPx, footerHeight), pg, debug);
   }
-  
-  private void renderPageNum(PageData pd){
-    if (pd.pageID != null && pd.pageID.length() > 0){
+
+  private void renderPageNum(PageData pd) {
+    if (pd.pageID != null && pd.pageID.length() > 0) {
       //PFont fFont = loadFont("footer-print.vlw");
       pg.pushStyle();
       pg.textFont(bodyFont);
       int currWidth = (int)pg.textWidth(pd.pageID);
       int currHeight = bodySize; //(int)pg.lineHeight(pd.pageID);
-      if (pd.outsideEdge == Side.LEFT){
+      if (pd.outsideEdge == Side.LEFT) {
         pg.text(pd.pageID, 0-currWidth, pd.contentHeightPx);
       } else {
         //int currWidth = (int)pg.textWidth(pd.pageID);
@@ -586,15 +546,15 @@ class Spread {
     int contentWidthPx, contentHeightPx, rightMarginPx, leftMarginPx, topMarginPx, bottomMarginPx;
     Side outsideEdge;
     FormattedTextBlock headingBlock;
-    boolean hasHeading(){
+    boolean hasHeading() {
       return heading != null && heading.length() > 0;
     }
-    boolean hasSubheading(){
+    boolean hasSubheading() {
       return subheading != null && subheading.length() > 0;
     }
   }
 }
 
-enum Side{
+enum Side {
   RIGHT, LEFT, NONE
 }

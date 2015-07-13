@@ -1,7 +1,7 @@
 import processing.core.PGraphics;
 
 interface IContentBox{
-  public abstract Rectangle render(Rectangle area, PGraphics pg);
+  public abstract Rectangle render(Rectangle area, PGraphics pg, boolean debug);
   
   public static class Rectangle{
     float x, y, w, h;
