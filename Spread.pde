@@ -412,7 +412,7 @@ class Spread {
 
     pg.textFont(monoFont);
     pg.fill(primaryColor);
-    pg.textSize(bodySize-10);
+    pg.textSize(bodySize-15);
     pg.text(pd.body, topMargin, leftOutsideMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
     pg.textSize(headingSize);
   }
@@ -479,14 +479,24 @@ class Spread {
       println("loaded "+pd.contentImages[0]);
       // make sure the image can fit the width
       
-      float tX = pageWidthPx - pd.contentImages[0].width - rightOutsideMargin - leftOutsideMargin;
+      float tX;
+      if (pd.outsideEdge == Side.LEFT){
+        tX = pageWidthPx - pd.contentImages[0].width - insideLeftMargin - leftOutsideMargin;
+      } else {
+        tX = pageWidthPx - pd.contentImages[0].width - insideRightMargin - rightOutsideMargin;
+      }
+      float tY = baseLine-(topMargin/2)-pd.contentImages[0].height;
+      
       pd.contentImages[0].filter(GRAY);
       if (tX > leftOutsideMargin) {
-        pg.image(pd.contentImages[0], tX, baseLine-(topMargin/2)-pd.contentImages[0].height);
+        pg.image(pd.contentImages[0], tX, tY);
       } else {
-        pd.contentImages[0].resize(pageWidthPx - rightOutsideMargin, 0);
-        pg.image(pd.contentImages[0], leftOutsideMargin, baseLine-(topMargin/2)-pd.contentImages[0].height);
+        pd.contentImages[0].resize(pageWidthPx - insideLeftMargin - leftOutsideMargin, 0);
+        pg.image(pd.contentImages[0], tX, tY);
       }
+      if (debug) {
+         pg.rect(tX,tY,pd.contentImages[0].width,pd.contentImages[0].height);
+       }
       pg.noFill();
       //pg.rect((pageWidthPx - pd.contentImages[0].width), 200, pd.contentImages[0].width, pd.contentImages[0].height);
     }
@@ -537,13 +547,14 @@ class Spread {
       //PFont fFont = loadFont("footer-print.vlw");
       pg.pushStyle();
       pg.textFont(bodyFont);
+      pg.textSize(bodySize*0.7);
       int currWidth = (int)pg.textWidth(pd.pageID);
       int currHeight = bodySize; //(int)pg.lineHeight(pd.pageID);
       if (pd.outsideEdge == Side.LEFT){
-        pg.text(pd.pageID, 0-currWidth, pd.contentHeightPx);
+        pg.text(pd.pageID, 0-currWidth, pd.contentHeightPx + bodySize );
       } else {
         //int currWidth = (int)pg.textWidth(pd.pageID);
-        pg.text(pd.pageID, pd.contentWidthPx + currWidth, pd.contentHeightPx);
+        pg.text(pd.pageID, pd.contentWidthPx, pd.contentHeightPx + bodySize);
       }
       pg.popStyle();
     }
