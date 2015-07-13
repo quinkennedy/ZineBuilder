@@ -412,7 +412,7 @@ class Spread {
 
     pg.textFont(monoFont);
     pg.fill(primaryColor);
-    pg.textSize(bodySize-10);
+    pg.textSize(bodySize-15);
     pg.text(pd.body, topMargin, leftOutsideMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
     pg.textSize(headingSize);
   }
@@ -497,13 +497,14 @@ class Spread {
       //PFont fFont = loadFont("footer-print.vlw");
       pg.pushStyle();
       pg.textFont(bodyFont);
+      pg.textSize(bodySize*0.7);
       int currWidth = (int)pg.textWidth(pd.pageID);
       int currHeight = bodySize; //(int)pg.lineHeight(pd.pageID);
-      if (pd.outsideEdge == Side.LEFT) {
-        pg.text(pd.pageID, 0-currWidth, pd.contentHeightPx);
+      if (pd.outsideEdge == Side.LEFT){
+        pg.text(pd.pageID, 0-currWidth, pd.contentHeightPx + bodySize );
       } else {
         //int currWidth = (int)pg.textWidth(pd.pageID);
-        pg.text(pd.pageID, pd.contentWidthPx + currWidth, pd.contentHeightPx);
+        pg.text(pd.pageID, pd.contentWidthPx, pd.contentHeightPx + bodySize);
       }
       pg.popStyle();
     }

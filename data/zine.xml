@@ -117,51 +117,7 @@ To me this makes him a hero of sensing, someone who is pushing the envelope on i
 	</page>
 </spread>
 <spread id="4">
-	<page id="6" type="photo">
-	   <image src="images/PbHNwg4.jpg"></image>
-	</page>
-	<page id="7">
-	   <heading>Connecting the Biomass</heading>
-	   <subheading></subheading>
-	   <body>http://interspecies-internet.org/
-“When Bob and I did this design, we thought we were building a system to connect computers together. What we very quickly discovered is that this was a system for connecting people together. And what you’ve seen tonight tells you that we should not restrict this network to one species, that these other intelligent, sentient species should be part of the system too. “
-Biomass is biological material derived from living, or recently living organisms.
-</body>
-	   <footer>Sensory Aesthetics</footer>
-	</page>
-</spread>
-<spread id="5">
-	<page id="8" type="quote">
-	   <heading>Personal Computing</heading>
-	   <subheading></subheading>
-	   <quote author="Mark Weiser">“My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.”</quote>
-	   <footer>Sensory Aesthetics</footer>
-	</page>
-	<page id="9">
-	   <heading>Communal Computing</heading>
-	   <subheading></subheading>
-	   <body>Communal Computing: The room, the house, the city, the nation. The table, couch, piazza, court square, bus stop, fountain, spectacle, party. If the 1968 goal was… “Extending and Augmenting human capability” then we need to augment with object and environments to achieve the next stage. We just scratched the surface with computing so far.
-	   </body>
-	   <footer>Sensory Aesthetics</footer>
-	</page>
-</spread>
-<spread id="6">
-	<page id="10">
-	   <heading>Reality TV as Computing Simulation</heading>
-	   <subheading></subheading>
-	   <body>A computer simulation is a simulation, run on a single computer, or a network of computers, to reproduce behavior of a system. The simulation uses an abstract model (a computer model, or a computational model) to simulate the system. Reality TV is a simulation run on a group of participants and observers to model and reproduce behavior of a system. The Reality show uses an abstract model of reality to simulate reality.</body>
-	   <footer>Sensory Aesthetics</footer>
-	</page>
-	<page id="11" type="photo">
-	   <heading>Ut tortor lacus, tempor nec pharetra in.</heading>
-	   <subheading></subheading>
-	   <body>Praesent malesuada tincidunt risus, a fringilla ex auctor vel. Phasellus sollicitudin sapien in nisl consectetur ornare. Quisque facilisis risus eu nisi congue tristique. Donec in pulvinar mauris. Cras venenatis turpis sed tempus condimentum. Mauris suscipit convallis condimentum. Ut tortor lacus, tempor nec pharetra in, efficitur vel ex. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean semper nisi quis lacus mattis, et rutrum elit imperdiet. Pellentesque vitae metus aliquam, euismod massa vel, tristique nisl.</body>
-	   <footer>Sensory Aesthetics</footer>
-	   <image src="images/drawing2.jpg"></image>
-	</page>
-</spread>
-<spread id="7">
-	<page id="12">
+	<page id="6">
 	   <heading>Trending towards Empathy</heading>
 	   <subheading>2015 The Pace of Social Change</subheading>
 	   <!-- http://www.bloomberg.com/graphics/2015-pace-of-social-change/ -->
@@ -169,15 +125,56 @@ Biomass is biological material derived from living, or recently living organisms
 	   <image src="images/change.png"></image>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
+	<page id="7">
+
+	</page>
+</spread>
+<spread id="5">
+	<page id="8">
+	 <heading>Expanded Mind</heading>
+	   <subheading></subheading>
+	   <body>So many of the “tools to think with” that we create are so blunt and straightforward. I am interested in better understanding how environments are tools to think with. Why do we change the way we think when we change where we go, we know this intuitively but not so clearly with rigor. </body>
+	   <footer>Sensory Aesthetics</footer>
+	</page>
+	<page id="9">
+		<heading>Nothing is Static</heading>
+		<subheading>Ever? Ever! Ever?!</subheading>
+		<body>So how do we escape the illusion?</body>
+		<image src="images/drawing2.jpg"></image>
+	</page>
+</spread>
+<spread id="6">
+	<page id="10">
+		<heading>Personal Computing</heading>
+	   <subheading></subheading>
+	   <quote author="Mark Weiser">“My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.”</quote>
+	   <footer>Sensory Aesthetics</footer>
+	</page>
+	<page id="11">
+		<heading>Communal Computing</heading>
+	   <subheading></subheading>
+	   <body>Communal Computing: The room, the house, the city, the nation. The table, couch, piazza, court square, bus stop, fountain, spectacle, party. If the 1968 goal was… “Extending and Augmenting human capability” then we need to augment with object and environments to achieve the next stage. We just scratched the surface with computing so far.
+	   </body>
+	   <footer>Sensory Aesthetics</footer>	   
+	</page>
+</spread>
+<spread id="7">
+	<page id="12">
+		<heading>10 Things we can't sense</heading>
+		<image src="images/PbHNwg4.jpg"></image>
+	</page>
 	<page id="13" type="photo">
 		<image src="images/drawing4.jpg"></image>
 	</page>
 </spread>
 <spread id="8">
 	<page id="14">
-	   <heading>Expanded Mind</heading>
+		<heading>Connecting the Biomass</heading>
 	   <subheading></subheading>
-	   <body>So many of the “tools to think with” that we create are so blunt and straightforward. I am interested in better understanding how environments are tools to think with. Why do we change the way we think when we change where we go, we know this intuitively but not so clearly with rigor. </body>
+	   <body>http://interspecies-internet.org/
+“When Bob and I did this design, we thought we were building a system to connect computers together. What we very quickly discovered is that this was a system for connecting people together. And what you’ve seen tonight tells you that we should not restrict this network to one species, that these other intelligent, sentient species should be part of the system too. “
+Biomass is biological material derived from living, or recently living organisms.
+</body>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="15">
@@ -185,6 +182,7 @@ Biomass is biological material derived from living, or recently living organisms
 	   <subheading></subheading>
 	   <body>What will it mean to record 1 acre of information. How do we start?</body>
 	   <footer>Sensory Aesthetics</footer>
+	   <image src="images/biomass.gif"></image>
 	</page>
 </spread>
 </zine>
