@@ -13,6 +13,7 @@ class ImageBox implements IContentBox{
       scale = Math.min(scale, area.w / Math.max(image.width, 1));
       float sWidth = image.width * scale;
       float sHeight = image.height * scale;
+      image.filter(GRAY);
       pg.image(image, area.x + area.w - sWidth, area.y, sWidth, sHeight);
       return new Rectangle(area.x + area.w - sWidth, area.y, sWidth, sHeight);
     }
