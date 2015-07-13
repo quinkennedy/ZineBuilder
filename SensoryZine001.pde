@@ -1,5 +1,4 @@
-import controlP5.*; //<>// //<>//
-import processing.pdf.*;
+import processing.pdf.*; //<>//
 PGraphics pdf;
 PFont screenFont;
 boolean testLayout = false;
