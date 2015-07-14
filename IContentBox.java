@@ -1,16 +1,17 @@
 import processing.core.PGraphics;
 
-interface IContentBox{
+abstract class ContentBox{
+  // all the work, none of the drawing
+  public Rectangle layout(Rectangle area, PGraphics pg){
+    pg.pushMatrix();
+    pg.translate(pg.width, pg.height);
+    Rectangle output = render(area, pg, false);
+    pg.popMatrix();
+    return output;
+  }
+  // all the work, and draw it too!
   public abstract Rectangle render(Rectangle area, PGraphics pg, boolean debug);
-  
-  public static class Rectangle{
-    float x, y, w, h;
-    
-    public Rectangle(float x, float y, float width, float height){
-      this.x = x;
-      this.y = y;
-      this.w = width;
-      this.h = height;
-    }
+  public Rectangle render(Rectangle area, PGraphics pg){
+    return render(area, pg, false);
   }
 }

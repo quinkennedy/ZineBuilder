@@ -251,7 +251,7 @@ void draw() {
   }
   for(int i = 0; i < numSpreads; i++){
     spreads[i].setHeadingSize(minHeadingSize);
-    spreads[i].footerHeight = maxFooterHeight;
+    spreads[i].setFooterHeight(maxFooterHeight);
   }
   println("Creating cover");
   
