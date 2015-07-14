@@ -1,4 +1,4 @@
-class ImageBox implements IContentBox{
+class ImageBox extends ContentBox{
   PImage image;
   public ImageBox(PImage img){
     image = img;
@@ -20,25 +20,32 @@ class ImageBox implements IContentBox{
   }
 }
 
-class TextBox implements IContentBox{
+class TextBox extends ContentBox{
   String text;
   PFont font;
   float fontSize;
+  boolean adjustFontSize = false;
+  
   public TextBox(String txt, PFont fnt){
     text = txt;
     font = fnt;
     fontSize = font.getSize();
   }
-  public TextBox(String txt, PFont fnt, float size){
+  
+  public TextBox(String txt, PFont fnt, float size, boolean adjustSize){
     text = txt;
     font = fnt;
     fontSize = size;
+    adjustFontSize = adjustSize;
   }
-    
+  
   public Rectangle render(Rectangle area, PGraphics pg, boolean debug){
     FormattedTextBlock.FormattedText[] fText = 
       {new FormattedTextBlock.FormattedText(text, font, (int)fontSize)};
     FormattedTextBlock block = new FormattedTextBlock(fText, (int)area.w, pg);
+    if (block.totalHeight > area.h && adjustFontSize){
+      block.constrainHeight((int)area.h, pg);
+    }
     pg.pushMatrix();
     pg.translate(area.x, area.y);
     block.render(pg, debug);
@@ -48,7 +55,7 @@ class TextBox implements IContentBox{
   }
 }
 
-class HeadingBox implements IContentBox{
+class HeadingBox extends ContentBox{
   String heading, subheading;
   PFont font;
   float headingSize, subheadingSize;

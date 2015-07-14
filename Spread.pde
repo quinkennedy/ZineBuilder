@@ -28,6 +28,7 @@ class Spread {
   private int bodySize = 30;
   private int quoteSize = 120;
   private int footerHeight = 0;
+  private int headingHeight = 0;
   private int pageNumWidth;
   private int pageNumHeight;
   private int baseLine = 700;
@@ -112,14 +113,11 @@ class Spread {
       for (int i = 0; i < pages.length; i++) {
         pageData[i] = new PageData();
         pageData[i].heading = extractString(pages[i], "heading");
-        //heading = pages[i].getChild("heading");
         pageData[i].subheading = extractString(pages[i], "subheading");
-        //subheading = pages[i].getChild("subheading");
+        pageData[i].setBodyHeight();
         pageData[i].body = extractString(pages[i], "body");
-        //body = pages[i].getChild("body");
         pageData[i].footer = extractString(pages[i], "footer");
         pageData[i].pageID = pages[i].getString("id");
-        //footer = pages[i].getChild("footer");
         pageData[i].contentImages = extractImages(pages[i]);
 
         pageData[i].type = pages[i].getString("type");
@@ -131,7 +129,6 @@ class Spread {
           pageData[i].content = extractContents(spreads);
         } else if (pageData[i].type.equals("photo")) {
         }
-        //quote = pages[i].getChild("quote");
       }
 
       pg.endDraw();
@@ -160,6 +157,7 @@ class Spread {
             pageData[i].hasHeading() ? headingSize : subheadingSize)};
         }
         pageData[i].headingBlock = new FormattedTextBlock(hText, pageData[i].contentWidthPx, pg);
+        pageData[i].setBodyHeight();
       }
     }
   }
@@ -194,6 +192,13 @@ class Spread {
       }
     }
     return maxFooterHeight;
+  }
+  
+  public void setFooterHeight(int h){
+    footerHeight = h;
+    for(int i = 0; i < pageData.length; i++){
+      pageData[i].setBodyHeight();
+    }
   }
 
   private void calculatePageNumDims() {
@@ -258,6 +263,7 @@ class Spread {
     leftOfPageMargin = new int[]{leftOutsideMargin, insideRightMargin};
     contentHeightPx = spreadHeightPx - topMargin - bottomMargin;
     contentWidthPx = new int[pageData.length];
+    headingHeight = contentHeightPx / 4;
     for (int i = 0; i < contentWidthPx.length; i++) {
       contentWidthPx[i] = pageWidthPx - rightOfPageMargin[i] - leftOfPageMargin[i];
       pageData[i].contentWidthPx = contentWidthPx[i];
@@ -351,12 +357,14 @@ class Spread {
     //parse page-specific content
     for (int i = 0; i < pageData.length; i++) {
       pg.pushMatrix();
+      //locate to correct 1/2 of spread
       pg.translate(pageWidthPx * i, 0);
+      //adjust for margins
       pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
       if (pageData[i].footer != null) {
         renderFooter(pageData[i]);
       }
-      if (pageData[i].heading != null) {
+      if (pageData[i].hasHeading() || pageData[i].hasSubheading()) {
         renderHeading(pageData[i]);
       }
       renderPageNum(pageData[i]);
@@ -398,12 +406,21 @@ class Spread {
   }
 
   public void quote(PageData pd) {
-    // TODO: Check to see if the quote will fit and shrink to fit.
-    pg.fill(primaryColor);
-    pg.textSize(quoteSize);
-    pg.text(pd.quote, 0, 0, pd.contentWidthPx, pd.contentHeightPx - footerHeight);
-    pg.textSize(headingSize);
-    pg.text(pd.author, 0, pd.contentHeightPx - footerHeight - (pd.contentHeightPx / 5));
+    TextBox author = new TextBox(pd.author, bodyFont, headingSize, true);
+    Rectangle aRect = author.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.bodyHeightPx/3), pg);
+    TextBox quote = new TextBox(pd.quote, bodyFont, quoteSize, true);
+    quote.render(
+      new Rectangle(0, pd.hasHeading() || pd.hasSubheading() ? headingHeight : 0, pd.contentWidthPx, pd.bodyHeightPx - aRect.h),
+      pg,
+      debug);
+    author.render(
+      new Rectangle(
+        pd.contentWidthPx - aRect.w, 
+        pd.contentHeightPx - footerHeight - aRect.h, 
+        aRect.w, 
+        aRect.h),
+      pg,
+      debug);
   }
 
   public void code(PageData pd) {
@@ -423,8 +440,6 @@ class Spread {
     String[] separators = {" ", "|", "   ", " | ", " /**/ ", "\n"};
     int interI = (int)random(1, separators.length);
     int intraI = (int)random(0, interI);
-    //PFont regular = loadFont("reg-print.vlw");
-    //PFont bold = loadFont("bold-print.vlw");
     int size = headingFont.getSize();
     FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[pd.content.length*2];
     for (int i = 0; i < pd.content.length; i++) {
@@ -462,7 +477,7 @@ class Spread {
     if (pd.contentImages != null && pd.contentImages.length > 0) {
       ImageBox iBox = new ImageBox(pd.contentImages[0]);
       float startY = (pd.hasHeading() || pd.hasSubheading()) ? pd.contentHeightPx / 4 : 0;
-      iBox.render(new IContentBox.Rectangle(0, startY, pd.contentWidthPx, pd.contentHeightPx - startY - footerHeight), pg, debug);
+      iBox.render(new Rectangle(0, startY, pd.contentWidthPx, pd.contentHeightPx - startY - footerHeight), pg, debug);
     }
   }
 
@@ -474,24 +489,24 @@ class Spread {
     if (pd.contentImages != null && pd.contentImages.length > 0) {
       ImageBox iBox = new ImageBox(pd.contentImages[0]);
       float imageHeight = ((pd.contentHeightPx - startY) / 3);
-      iBox.render(new IContentBox.Rectangle(0, startY, pd.contentWidthPx, imageHeight), pg, debug);
+      iBox.render(new Rectangle(0, startY, pd.contentWidthPx, imageHeight), pg, debug);
       startY += imageHeight;
     }
     if (pd.body != null && pd.body.length() > 0) {
-      TextBox tBox = new TextBox(pd.body, bodyFont, bodySize);
+      TextBox tBox = new TextBox(pd.body, bodyFont, bodySize, false);
       float textHeight = pd.contentHeightPx - startY - footerHeight;
-      tBox.render(new IContentBox.Rectangle(0, startY, pd.contentWidthPx, textHeight), pg, debug);
+      tBox.render(new Rectangle(0, startY, pd.contentWidthPx, textHeight), pg, debug);
     }
   }
 
   private void renderHeading(PageData pd) {
     HeadingBox box = new HeadingBox(pd.heading, pd.subheading, headingFont, headingSize, subheadingSize);
-    box.render(new IContentBox.Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx/4), pg, debug);
+    box.render(new Rectangle(0, 0, pd.contentWidthPx, headingHeight), pg, debug);
   }
 
   private void renderFooter(PageData pd) {
-    TextBox tBox = new TextBox(pd.footer == null ? "" : pd.footer, footerFont, footerSize);
-    tBox.render(new IContentBox.Rectangle(0, pd.contentHeightPx - footerHeight, pd.contentWidthPx, footerHeight), pg, debug);
+    TextBox tBox = new TextBox(pd.footer == null ? "" : pd.footer, footerFont, footerSize, false);
+    tBox.render(new Rectangle(0, pd.contentHeightPx - footerHeight, pd.contentWidthPx, footerHeight), pg, debug);
   }
 
   private void renderPageNum(PageData pd) {
@@ -547,6 +562,7 @@ class Spread {
     PImage[] contentImages;
     Content[] content;
     int contentWidthPx, contentHeightPx, rightMarginPx, leftMarginPx, topMarginPx, bottomMarginPx;
+    int bodyHeightPx;
     Side outsideEdge;
     FormattedTextBlock headingBlock;
     boolean hasHeading() {
@@ -554,6 +570,12 @@ class Spread {
     }
     boolean hasSubheading() {
       return subheading != null && subheading.length() > 0;
+    }
+    void setBodyHeight(){
+      bodyHeightPx = contentHeightPx - footerHeight;
+      if (hasHeading() || hasSubheading()){
+        bodyHeightPx -= headingHeight;
+      }
     }
   }
 }
