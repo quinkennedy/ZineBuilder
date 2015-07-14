@@ -37,7 +37,7 @@ class TextBox implements IContentBox{
     
   public Rectangle render(Rectangle area, PGraphics pg, boolean debug){
     FormattedTextBlock.FormattedText[] fText = 
-      {new FormattedTextBlock.FormattedText(text, font)};
+      {new FormattedTextBlock.FormattedText(text, font, (int)fontSize)};
     FormattedTextBlock block = new FormattedTextBlock(fText, (int)area.w, pg);
     pg.pushMatrix();
     pg.translate(area.x, area.y);

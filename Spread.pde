@@ -401,9 +401,9 @@ class Spread {
     // TODO: Check to see if the quote will fit and shrink to fit.
     pg.fill(primaryColor);
     pg.textSize(quoteSize);
-    pg.text(pd.quote, topMargin, leftOutsideMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
+    pg.text(pd.quote, 0, 0, pd.contentWidthPx, pd.contentHeightPx - footerHeight);
     pg.textSize(headingSize);
-    pg.text(pd.author, leftOutsideMargin, pageHeightPx-bottomMargin);
+    pg.text(pd.author, 0, pd.contentHeightPx - footerHeight - (pd.contentHeightPx / 5));
   }
 
   public void code(PageData pd) {
@@ -413,7 +413,7 @@ class Spread {
     pg.textFont(monoFont);
     pg.fill(primaryColor);
     pg.textSize(bodySize-15);
-    pg.text(pd.body, topMargin, leftOutsideMargin, pageWidthPx-insideLeftMargin, pageHeightPx-bottomMargin);
+    pg.text(pd.body, 0, 0, pd.contentWidthPx, pd.contentHeightPx - footerHeight);
     pg.textSize(headingSize);
   }
 
@@ -436,16 +436,18 @@ class Spread {
     textBlock.constrainHeight(contentHeightPx, pg);
 
     //now draw the text
+    pg.pushMatrix();
+    if (pd.hasHeading() || pd.hasSubheading()){
+      pg.translate(0, pd.contentHeightPx/4);
+    }
     drawBlockedText(textBlock, pg);
+    pg.popMatrix();
   }
 
   void drawBlockedText(FormattedTextBlock bt, PGraphics pg) {
-    pg.pushMatrix();
-    pg.translate(insideRightMargin, topMargin);
     pg.fill(0);
     pg.noStroke();
     bt.render(pg);
-    pg.popMatrix();
   }
 
   public void clickbait(String _heading, String _subheading, String _body, String _footer) {
