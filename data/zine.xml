@@ -6,7 +6,8 @@
 	</page>
 	<page id="1">
 		<heading>Sensory Aesthetics</heading>
-		<subheading>A dialogue about the future of Computation</subheading>
+		<subheading>A generative fanzine about the future of Computing.</subheading>
+		<footer>Issue 001: Compiled and rendered for Foocamp 2015 (n/200)</footer>
 	</page>
 </cover>
 <cover id="2">
@@ -14,7 +15,12 @@
 	   <image src="images/U_2_694819491672_archigram.jpg"></image>
 	</page>
 		<page id="4">
-	   <heading>Thanks for reading. Reach us at @sensoryixd #sensoryaesthetics</heading>
+	   <heading>Thank you for taking the time to read this zine. We had a few goals when we set out to write it and would love feedback.  Our goal were to discuss:
+Why should we invent computing to extend and augment humans? How will it teach us more deeply about ourselves?
+How can we extend our technologies to the objects and environments which help define who we are and how we live? What new sensing will need to be created?
+What if we understood an acre of land? What if the biomass of the earth were networked? 
+
+Thanks for reading. Reach us at @sensoryixd #sensoryaesthetics</heading>
 	   <subheading></subheading>
 	</page>
 </cover>
@@ -32,12 +38,13 @@ __ yes  __no __not sure)</footer>
 </spread>
 <spread id="2">
 	<page id="2">
-		<heading>Hello World.</heading>
+		<heading>About / Hello World</heading>
 	   <subheading></subheading>
-	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics zine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run additions but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensoryixd with questions or comments.
+	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics fanzine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run editions (you are holding n/200) but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of as a generative fanzine by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensoryixd with questions or comments. We look forward to meeting you.
 
-Talk soon,
-Joshua and James
+Warm Regards, 
+James and Joshua
+
 	   </body>
 	   <image src="images/jj.jpg"></image>
 	   <footer>This generative zine technology would not have been possible without a partnership with Quin Kennedy (@quinkennedy). Please find out more info at our Github page https://github.com/adenine/SensoryAestheticsZine001 </footer>
@@ -101,19 +108,25 @@ Joshua and James
 </spread>
 <spread id="3">
 	<page id="4">
-	   <heading>Human Attention</heading>
+	   <heading>Compute Thyself</heading>
 	   <subheading></subheading>
-	   <body>As humans we often move our input senses to the background of our brain to focus more on our thoughts. This activity ranges from staring into space when lost in thought or sticking your tounge out of your mouth when you are trying to concentrate, or turning down the radio when you need to focus on driving. How often do we use this technique with machines. How often do we need to turn off one mode of input to put more energy towards calculations. As we do this more will this lead to machines ignoring us more when they are tired. Will machines begin to develop attention spans. As much as we try and create this illusion with our digital assistants can a machine truly have any attention to give?</body>
-	   <footer>Sensory Aesthetics</footer>
+	   <body>The history of computing can follow a line of augmenting and extending human capability. Through this pursuit we have learned a great deal about what it means to be human. For instance in the pursuit of language translation we have come to deeper understanding of the complexity and dynamism of human language. As humans we often move the conscious interpretation of our senses to the ‘background’ of our brain to focus more on our thoughts. From staring into space when lost in thought, sticking your tongue out of your mouth when you are trying to concentrate, or to turning down the radio when you need to focus on driving we intuitively arrange our sense ratios. We see complex cloud configurations beginning to work this way, but how often do we use this technique with machines? How often do we need to turn off one mode of input to put more energy towards calculations? How can we create interactions in the periphery? Which technologies support the subconscious computation, the nuanced reaction, the laissez faire commitment? Do our machines choose to ignore us when they are tired? What is the attention span of the machine? Do they ever really give us their attention?
+	   </body>
+	   <footer>By pursuing these technologies we create a mirror for humanity and learn about ourselves through constructivist / constructionist practice. 
+Circle One: TRUE  /  FALSE  / UNDECIDED</footer>
 	</page>
 	<page id="5">
 	   <image src="images/lilb.jpg"></image>
-	   <subheading></subheading>
-	   <body>On November 28th 2014 rapper Lil B crossed the threshold of following a million people. Inverting the usual paradigm of how celebrities use social media, Lil B celebrates not how many people follow him but rather how many people he follows.  In his own words: “HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”
-Personally i find it mind boggling to even understand what that might mean. Imagine we suspend disbelief for a few minutes and really imagine that he actually reads for one day all the tweets of all the people he follows. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input.
-To me this makes him a hero of sensing, someone who is pushing the envelope on input,
+	   <subheading>Unlikely Hero of Sensing: Lil B</subheading>
+	   <body>On November 28th, 2014 rapper Lil B crossed the threshold of following a million people on twitter. Inverting the usual paradigm of how celebrities use social media, Lil B celebrates not how many people follow him but rather how many people he follows.  In his own words: 
+“HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”
+Imagine we suspend our disbelief and that he reads for one day all of the tweets of all the people he follows. The mind boggles. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input. That is why Lil B is today’s hero of sensing.
+Who are your heroes of sensing?
+__________________________
+__________________________
+__________________________
 </body>
-	   <footer>Sensory Aesthetics</footer>
+	   <footer>TYBG</footer>
 	</page>
 </spread>
 <spread id="4">
@@ -121,33 +134,46 @@ To me this makes him a hero of sensing, someone who is pushing the envelope on i
 	   <heading>Trending towards Empathy</heading>
 	   <subheading>2015 The Pace of Social Change</subheading>
 	   <!-- http://www.bloomberg.com/graphics/2015-pace-of-social-change/ -->
-	   <body>“Everything is deeply intertwingled" -Ted Nelson</body>
+	   <body>
+1. Listen boldly.
+2. Be curious about others and the world.
+3. When you see two ways, look for a third. 
+4. Wonder like a child.
+5. Take the other side.
+</body>
 	   <image src="images/change.png"></image>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
-	<page id="7">
-
+	<page id="7" type="photo">
+		<image src="images/PbHNwg4.jpg"></image>
 	</page>
 </spread>
 <spread id="5">
 	<page id="8">
-	 <heading>Expanded Mind</heading>
+	 <heading>Spacemind</heading>
 	   <subheading></subheading>
-	   <body>So many of the “tools to think with” that we create are so blunt and straightforward. I am interested in better understanding how environments are tools to think with. Why do we change the way we think when we change where we go, we know this intuitively but not so clearly with rigor. </body>
-	   <footer>Sensory Aesthetics</footer>
+	   <body>Current computers as tools to extend the powers of humans minds based on the assumption that the best tools to think with are text.  Now as we enter a world where the threshold between bits and atoms becomes ever more fluid why might we want our environments to change. How and when are the environments we inhabit tools to think with? We can all relate to the need to go to a different space to change how you are working, but cannot put a fine point onto the specific environmental criteria that drive this change. We need to better understand within the physical world what differences make a difference.</body>
+	   <footer>(How can we think of our spaces as part of our mind?)</footer>
+	   <image src="images/drawing2.jpg"></image>
 	</page>
 	<page id="9">
 		<heading>Nothing is Static</heading>
 		<subheading>Ever? Ever! Ever?!</subheading>
-		<body>So how do we escape the illusion?</body>
-		<image src="images/drawing2.jpg"></image>
+		<body>“Human sense organs can receive only news of difference, and the differences must be coded into events in time (i.e., into changes) in order to be perceptible. Ordinary static differences that remain constant for more than a few seconds become perceptible, only by scanning. Similarly, very slow changes become perceptible only by a combination of scanning and bringing together observations from separated moments in the continuum of time.” 
+-Gregory Bateson
+
+Where we see the static phenomenon we need to only look closer or further to understand that it is not static at all. How can we develop new types of sensing to look not at the state, but at the transition? When should state and when should you look for transition? When we examine the phenomenon of the universe how do we find the difference that makes a difference?
+
+"I am not investigating in the objective world, I am investigating sensitivity."
+- Felix Hess
+In the Felix Hess piece ‘It’s in the Air’ the artist has created three hundred small and lightweight flags which move to the fluctuations present in the environment. A human entering the space will create a change in air which will alter the flags. If the human remains ‘still’ the flags will move in accordance with the heat tunnel forming the air around the human. </body>
 	</page>
 </spread>
 <spread id="6">
 	<page id="10">
 		<heading>Personal Computing</heading>
 	   <subheading></subheading>
-	   <quote author="Mark Weiser">“My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.”</quote>
+	   <body>Personal: Many of the types of personal computing devices we have can be traced to one of the descriptions used by Mark Weiser “My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.” </body>
 	   <footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="11">
@@ -160,8 +186,19 @@ To me this makes him a hero of sensing, someone who is pushing the envelope on i
 </spread>
 <spread id="7">
 	<page id="12">
-		<heading>10 Things we can't sense</heading>
-		<image src="images/PbHNwg4.jpg"></image>
+		<heading>10 Things we can't measure:</heading>
+		<body>
+1. Reality
+2. Intention
+3. Success
+4. Godzilla’s Impact on Humanity
+5. True love
+6. The Future
+7. Why we fight
+8. The ringing in my ears
+9. Missed calls
+10. Polygons
+</body>
 	</page>
 	<page id="13" type="photo">
 		<image src="images/drawing4.jpg"></image>
@@ -171,17 +208,21 @@ To me this makes him a hero of sensing, someone who is pushing the envelope on i
 	<page id="14">
 		<heading>Connecting the Biomass</heading>
 	   <subheading></subheading>
-	   <body>http://interspecies-internet.org/
-“When Bob and I did this design, we thought we were building a system to connect computers together. What we very quickly discovered is that this was a system for connecting people together. And what you’ve seen tonight tells you that we should not restrict this network to one species, that these other intelligent, sentient species should be part of the system too. “
-Biomass is biological material derived from living, or recently living organisms.
+	   <body>The Information Acre project is a small step towards the audacious goal set forth by the the founders of the interspecies internet project. In their own words, 
+“When Bob and I did this design, we thought we were building a system to connect computers together. What we very quickly discovered is that this was a system for connecting people together. And what you’ve seen tonight tells you that we should not restrict this network to one species, that these other intelligent, sentient species should be part of the system too. “ -Vint Cerf 
+What will it mean to be this deeply interconnected to our world? Aren't we already?
+
 </body>
-	   <footer>Sensory Aesthetics</footer>
+	   <footer>Learn more at http://interspecies-internet.org/</footer>
 	</page>
 	<page id="15">
 	   <heading>Information Acre</heading>
 	   <subheading></subheading>
-	   <body>What will it mean to record 1 acre of information. How do we start?</body>
-	   <footer>Sensory Aesthetics</footer>
+	   <body>Claude Shannon defined the bit as the result of a coin flip. Heads or tails, true or false. According to SOURCE there may be a limit to the amount of information that can be contained within a square acre of information space. It is staggeringly large at 2^36, but not infinite.
+Our proposal: Dedicate 1 square acre of land to the deep pursuit of sensing. Bring scientists, artists, hardware and software designers together to try to make a dent in that information space. Sense the biology, the chemistry, the conditions, and the human reaction to that one acre. Publish this material for the world. 
+We have tentatively named this project Information Acre and are currently looking for a suitable area in the Pacific Northwest for this to occur. 
+</body>
+	   <footer>Want to join us? Our contact info is on the back of the zine.</footer>
 	   <image src="images/biomass.gif"></image>
 	</page>
 </spread>
