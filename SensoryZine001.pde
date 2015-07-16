@@ -29,7 +29,7 @@ int printerPages = 2; // double sided
 int numPages = (int)Math.pow(2, widthFolds) * (int)Math.pow(2, heightFolds) * 2 * printerPages;
 int numSpreads = numPages/2;//front and back covers share the first spread
 int coverPages = 2;
-int totalCopies = 3;
+int totalCopies = 1;
 
 int topMargin = 200;
 int bottomMargin = 300;
@@ -279,18 +279,19 @@ void draw() {
       cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
       zineState.progress++;
       if (zineState.progress > zineState.limit){
-        infoPage(zineState.pdf); //start with an info page with spread thumbnails
-        pdfg.nextPage();
-        
-        // layout cover
-        zineState.pdf.image(cover[0].getPage(), 0, 0);
-        zineState.pdf.image(cover[0].getPage(), 0, paperHeightPx/2);
-        pdfg.nextPage();
-        
-        // layout inside cover 
-        zineState.pdf.image(cover[1].getPage(), 0, 0);
-        zineState.pdf.image(cover[1].getPage(), 0, paperHeightPx/2);
-        
+        zineState.state = ConstructionState.CreateInfo;
+      }
+      break;
+    case CreateInfo:
+      infoPage(zineState.pdf); //start with an info page with spread thumbnails
+      zineState.state = ConstructionState.RenderCover;
+    case RenderCover:
+      int p = zineState.progress;
+      pdfg.nextPage();
+      zineState.pdf.image(cover[p-1].getPage(), 0, 0);
+      zineState.pdf.image(cover[p-1].getPage(), 0, paperHeightPx/2);
+      zineState.progress++;
+      if (zineState.progress > zineState.limit){
         zineState.state = ConstructionState.LayoutPaper;
       }
       break;
@@ -339,6 +340,11 @@ void draw() {
     case Done:
       if (zineState.copyNum >= totalCopies){
         noLoop();
+        pushStyle();
+        textAlign(CENTER, CENTER);
+        textSize(100);
+        text("FIN", width/2, height/2);
+        popStyle();
       } else {
         zineState.copyNum++;
         zineState.state = ConstructionState.Init;
@@ -358,7 +364,12 @@ void draw() {
         zineState.minHeadingSize = -1;
         zineState.maxFooterHeight = 0;
         break;
+      case CreateInfo:
+        zineState.progress = 1;
+        zineState.limit = 1;
+        break;
       case CreateCover:
+      case RenderCover:
         zineState.progress = 1;
         zineState.limit = coverPages;
         break;
@@ -518,6 +529,8 @@ public enum ConstructionState{
   Init,
   GenSpreads,
   CreateCover,
+  CreateInfo,
+  RenderCover,
   LayoutPaper,
   Done
 }
