@@ -32,8 +32,9 @@ Thanks for reading. Reach us at @sensoryixd #sensoryaesthetics</heading>
 	</page>
 	<page id="1" type="toc">
 		<heading>Table of Contents</heading>
-		<footer>(do you remember learning how to use a table of contents? 
-__ yes  __no __not sure)</footer>
+		<footer>Do you remember learning how to use a table of contents? 
+
+__ yes  __no __not sure</footer>
 	</page>
 </spread>
 <spread id="2">
@@ -52,57 +53,32 @@ James and Joshua
 	<page id="3" type="code">
 	   <body>
 	   	/**
-	   	* Below you will find an excerpt from the generative zine code:
-	   	*
-	    *    ,         ,      ,   ,  
-	    *    |\\\\ ////|     /////|  
-	    *    | \\\V/// |    ///// |  
-	    *    |  |~~~|  |   |~~~|  |  
-	    *    |  |=z=|  |   |=z=|  |  
-	    *    |  | i |  |   | i |  |  
-	    *    |  | n |  |   | n |  |  
-	    *     \ | e | /    | e | /   
-	    *      \|===|/     |===|/    
-	    *       '---'      '---'     
-	    * 
-	   	* How it works:
-	   	* 
-	   	* 1. Write some code that will fill an xml template with content using various 
-	   	* content types popularized by Robert Horn in Mapping Hypertext. You can also 
-	   	* just replace the contents in zine.xml by hand.
-	   	* 2. Pick the parameters of your zine.
-	   	* 3. Hit Run, Wait, Open the generated zine pdf, print, and assemble.
+	   	* James, Joshua, and Quin wrote this  
+	   	* generative zine code available at 
+	   	* https://github.com/adenine/SensoryAestheticsZine001 
 	   	* 
 	   	*/
-		for(int row = 0; row &lt; zpl[0].length; row++){
-      for(int cell = 0; cell &lt; zpl[0][0].length; cell++){
-        println(&quot;placing cell &quot; + (++progress));
-        ZinePageLayout cpg = zpl[page][row][cell];
-        int spreadI = ((cpg.getNumber() / 2) % numSpreads);
-        boolean leftPage = cpg.getNumber()%2 == 0;
-        Spread comp = spreads[spreadI];
-        if (cpg.getHFlip()){
-          paperg.copy(comp.getPage(),
-            leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
-            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
-        } else {
-          paperg.copy(comp.getPage(), 
-            leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
-            pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
-        }
-      }
-    }
-    	/**
-	   	* Todo list for the zine for brave souls...
-	   	*
-	   	* - Fillout more content types
-	   	* - Create more content creators
-	   	* - Look at dynamic type combinations
-	   	* 
-	   	* Get started with your own zine at...
-	   	* https://github.com/adenine/SensoryAestheticsZine001
-	   	* 
-	   	*/
+    	for(int row = 0; row &lt; zpl[0].length; row++){
+      		for(int cell = 0; cell &lt; zpl[0][0].length; cell++){
+        		println(&quot;placing cell &quot; + (++progress));
+        		ZinePageLayout cpg = zpl[page][row][cell];
+        		int spreadI = ((cpg.getNumber() / 2) % numSpreads);
+        		boolean leftPage = cpg.getNumber()%2 == 0;
+        		Spread comp = spreads[spreadI];
+        		if (cpg.getHFlip()){
+         	 		paperg.copy(comp.getPage(),
+            		leftPage ? pageWidthPx : (pageWidthPx*2), 
+            		pageHeightPx, -pageWidthPx, -pageHeightPx,
+            		pageWidthPx * cell, pageHeightPx * row, 
+            		pageWidthPx, pageHeightPx);
+        		} else {
+          			paperg.copy(comp.getPage(), 
+            		leftPage ? 0 : pageWidthPx, 0, pageWidthPx, 
+            		pageHeightPx, pageWidthPx * cell, pageHeightPx * row, 
+            		pageWidthPx, pageHeightPx);
+        		}
+      		}
+    	}
 	   </body>
 	</page>
 </spread>
@@ -113,7 +89,8 @@ James and Joshua
 	   <body>The history of computing can follow a line of augmenting and extending human capability. Through this pursuit we have learned a great deal about what it means to be human. For instance in the pursuit of language translation we have come to deeper understanding of the complexity and dynamism of human language. As humans we often move the conscious interpretation of our senses to the ‘background’ of our brain to focus more on our thoughts. From staring into space when lost in thought, sticking your tongue out of your mouth when you are trying to concentrate, or to turning down the radio when you need to focus on driving we intuitively arrange our sense ratios. We see complex cloud configurations beginning to work this way, but how often do we use this technique with machines? How often do we need to turn off one mode of input to put more energy towards calculations? How can we create interactions in the periphery? Which technologies support the subconscious computation, the nuanced reaction, the laissez faire commitment? Do our machines choose to ignore us when they are tired? What is the attention span of the machine? Do they ever really give us their attention?
 	   </body>
 	   <footer>By pursuing these technologies we create a mirror for humanity and learn about ourselves through constructivist / constructionist practice. 
-Circle One: TRUE  /  FALSE  / UNDECIDED</footer>
+
+Circle One:    TRUE  /  FALSE  / UNDECIDED</footer>
 	</page>
 	<page id="5">
 	   <image src="images/lilb.jpg"></image>

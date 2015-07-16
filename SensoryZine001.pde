@@ -42,131 +42,128 @@ Spread[] cover = new Spread[coverPages];
  */
 
 /* NOTES AND TODO
-
-Define the data model and then it puts itself together right? right?!? ;-(
-  paper width 8.5
-  paper height 11 
-  desired dpi 300
-  size 0.5 (half size), 0.25 (quarter size), 0.0833 (one twelfth), 0.0625 (one sixteenth)
-  top margin
-  bottom margin
-  centerleft margin
-  centerright margin
-  number of pages (dependent on size)
-
-Take the parameters and generate the first page which 
-is just some summary info and each of the spreads.
-
-Then paginate and layout the book for printing in the subsequent pages.
-
-Eventually we can use the processing window to show the controls
-
-Lets special case the cover
-
-Content Block Types (Information Blocks):
-  * Quote
-    * Quotation
-    * Author
-  * Table of Contents
-    * Table (Page number, title)
-  * Information Block
-  * Photo 
-  * Drawing (Generative)
-  
-Potential Block Types: (Also the idea of maps for navigation and summary vs content blocks)
-  * Analogy 
-  * Metaphor / Simile
-  * Checklist
-  * Classification List / Table
-  * Classification Tree
-  * Comment
-  * Cycle Chart
-  * Decision Table
-  * Definition
-  * Description
-  * Diagram
-  * Discourse (Horn pg. 187)
-  * Infographic / Data Vis
-  * Meme
-  * Example / Non-example
-  * Fact
-  * Flow Chart
-  * Flow Diagram
-  * Formula
-  * Input - Procedure - Output
-  * Propaganda
-  * Notation
-  * Goals / Objectives
-  * Outline
-  * Parts-Function table
-  * Parts table
-  * Prerequisites
-  * Principle
-  * Review
-  * Rant
-  * Interview
-  * Case Study
-  * Parable
-  * Zinger
-  * Comic
-  * Message Exchange (IM, SMS, etc.)
-  * User Generated Content
-  * Testimonial
-  * Newsjacking
-  * Puzzle / Game
-  * Background
-  * FAQ
-  * Map
-  * Bio
-  * Procedure
-  * Purpose
-  * Rule(s)
-  * Synonym
-  * When to Use
-  * Theorem
-  * Who does what / Org chart
-  * Worksheet
-  * Overview
-  * Compare and Contrast
-  * Advice
-  * Summary
-  * Test / Practice
-  * Clickbait
-  * Listicle
-  * Structure
-  * Concept
-  * Process
-  * Table of Contents
-  * Index
-  
-  
-
-Base Class 
-  * heading
-  * subheading
-  * body
-  * footer
-  * image
-*/
+ 
+ Define the data model and then it puts itself together right? right?!? ;-(
+ paper width 8.5
+ paper height 11 
+ desired dpi 300
+ size 0.5 (half size), 0.25 (quarter size), 0.0833 (one twelfth), 0.0625 (one sixteenth)
+ top margin
+ bottom margin
+ centerleft margin
+ centerright margin
+ number of pages (dependent on size)
+ 
+ Take the parameters and generate the first page which 
+ is just some summary info and each of the spreads.
+ 
+ Then paginate and layout the book for printing in the subsequent pages.
+ 
+ Eventually we can use the processing window to show the controls
+ 
+ Lets special case the cover
+ 
+ Content Block Types (Information Blocks):
+ * Quote
+ * Quotation
+ * Author
+ * Table of Contents
+ * Table (Page number, title)
+ * Information Block
+ * Photo 
+ * Drawing (Generative)
+ 
+ Potential Block Types: (Also the idea of maps for navigation and summary vs content blocks)
+ * Analogy 
+ * Metaphor / Simile
+ * Checklist
+ * Classification List / Table
+ * Classification Tree
+ * Comment
+ * Cycle Chart
+ * Decision Table
+ * Definition
+ * Description
+ * Diagram
+ * Discourse (Horn pg. 187)
+ * Infographic / Data Vis
+ * Meme
+ * Example / Non-example
+ * Fact
+ * Flow Chart
+ * Flow Diagram
+ * Formula
+ * Input - Procedure - Output
+ * Propaganda
+ * Notation
+ * Goals / Objectives
+ * Outline
+ * Parts-Function table
+ * Parts table
+ * Prerequisites
+ * Principle
+ * Review
+ * Rant
+ * Interview
+ * Case Study
+ * Parable
+ * Zinger
+ * Comic
+ * Message Exchange (IM, SMS, etc.)
+ * User Generated Content
+ * Testimonial
+ * Newsjacking
+ * Puzzle / Game
+ * Background
+ * FAQ
+ * Map
+ * Bio
+ * Procedure
+ * Purpose
+ * Rule(s)
+ * Synonym
+ * When to Use
+ * Theorem
+ * Who does what / Org chart
+ * Worksheet
+ * Overview
+ * Compare and Contrast
+ * Advice
+ * Summary
+ * Test / Practice
+ * Clickbait
+ * Listicle
+ * Structure
+ * Concept
+ * Process
+ * Table of Contents
+ * Index
+ 
+ 
+ 
+ Base Class 
+ * heading
+ * subheading
+ * body
+ * footer
+ * image
+ */
 
 
 void setup() {
   size(400, 400);
   noLoop();
-  if (testLayout){
+  if (testLayout) {
     testLayout();
     return;
   }
   pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "sensory.pdf");
-  
+
   println ("Your zine will have "+numPages+" pages");
   //// CHECK WHAT FONTS ARE ON THE SYSTEM
   //String[] fontList = PFont.list();
   //println(fontList);
   screenFont = createFont("SourceSansPro-Bold", 48);
-
-  
-
 }
 
 public void infoPage() {
@@ -194,38 +191,36 @@ public void infoPage() {
   pdf.text("It should be folded "+widthFolds+" time on the width and "+heightFolds+" on the height.", reportX, reportHeight, column2, pageHeightPx);
   reportHeight += reportSpace;
   pdf.text("In order to bind the "+numPages+" pages using "+printerPages+" printer pages.", reportX, reportHeight, column2, pageHeightPx);
-  
+
   pdf.noFill();
-  
+
 
   float tXPos = 0;
   float tYPos = 50;
   // print covers
   for (int p=0; p<cover.length; p++) {
-   tXPos = column3;
-    
-   pdf.image(cover[p].getPage(), 
-             tXPos, tYPos, 
-             cover[p].getWidth()/10, cover[p].getHeight()/10);
-   pdf.rect(tXPos, tYPos, cover[p].getWidth()/10, cover[p].getHeight()/10);
-   tYPos += 300;
+    tXPos = column3;
+
+    pdf.image(cover[p].getPage(), 
+      tXPos, tYPos, 
+      cover[p].getWidth()/10, cover[p].getHeight()/10);
+    pdf.rect(tXPos, tYPos, cover[p].getWidth()/10, cover[p].getHeight()/10);
+    tYPos += 300;
   }
-  
+
   tXPos = 0;
   tYPos = 50;
-  
+
   for (int k=0; k<numSpreads; k++) { // this repeats for each spread
-    
+
     tXPos = column2;
-    
+
     pdf.image(spreads[k].getPage(), 
-              tXPos, tYPos, 
-              spreads[k].getWidth()/10, spreads[k].getHeight()/10);
+      tXPos, tYPos, 
+      spreads[k].getWidth()/10, spreads[k].getHeight()/10);
     pdf.rect(tXPos, tYPos, spreads[k].getWidth()/10, spreads[k].getHeight()/10);
     tYPos += 300;
-    
   }
-  
 }
 
 void draw() {
@@ -239,32 +234,33 @@ void draw() {
   for (int k=1; k <= numSpreads; k++) {
     println("assembling spread " + k);
     spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
-    spreads[k-1].setMargins(100,100,100,100,50,50);
+    //setMargins(_topMargin, _bottomMargin, _leftOutsideMargin, _rightOutsideMargin, _insideLeftMargin, _insideRightMargin
+    spreads[k-1].setMargins(40, 150, 50, 50, 120, 120);
     //spreads[k-1].setMargins(200,200,200,200,100,100);
     currHeadingSize = spreads[k-1].getMaxHeadingSize();
-    if (minHeadingSize == -1){
+    if (minHeadingSize == -1) {
       minHeadingSize = currHeadingSize;
-    } else if (minHeadingSize > currHeadingSize){
+    } else if (minHeadingSize > currHeadingSize) {
       minHeadingSize = currHeadingSize;
     }
     maxFooterHeight = Math.max(maxFooterHeight, spreads[k-1].getMaxFooterHeight());
   }
-  for(int i = 0; i < numSpreads; i++){
+  for (int i = 0; i < numSpreads; i++) {
     spreads[i].setHeadingSize(minHeadingSize);
     spreads[i].setFooterHeight(maxFooterHeight);
   }
   println("Creating cover");
-  
+
   for (int q=1; q <= coverPages; q++) {
     println("beginning cover " + q);
     cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
   }
 
   println("---------------------");
-  
-  
+
+
   infoPage(); //start with an info page with spread thumbnails
-  
+
   pdfg.nextPage(); 
   // layout cover
 
@@ -275,25 +271,25 @@ void draw() {
   // layout inside cover 
   pdf.image(cover[1].getPage(), 0, 0);
   pdf.image(cover[1].getPage(), 0, paperHeightPx/2);
-  
+
   println("calculating layout");
   ZinePageLayout[][][] zpl = getLayout(heightFolds, widthFolds, printerPages*2);
   int progress = 0;
-  for(int page = 0; page < zpl.length; page++){
+  for (int page = 0; page < zpl.length; page++) {
     pdfg.nextPage();  // Tell it to go to the next page
     pdfg.endDraw();
     PGraphics paperg = createGraphics(paperWidthPx, paperHeightPx);
     paperg.beginDraw();
-    for(int row = 0; row < zpl[0].length; row++){
-      for(int cell = 0; cell < zpl[0][0].length; cell++){
+    for (int row = 0; row < zpl[0].length; row++) {
+      for (int cell = 0; cell < zpl[0][0].length; cell++) {
         println("placing cell " + (++progress));
         ZinePageLayout cpg = zpl[page][row][cell];
         int spreadI = ((cpg.getNumber() / 2) % numSpreads);
         boolean leftPage = cpg.getNumber()%2 == 0;
         Spread comp = spreads[spreadI];
-        if (cpg.getHFlip()){
-          paperg.copy(comp.getPage(),
-            leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
+        if (cpg.getHFlip()) {
+          paperg.copy(comp.getPage(), 
+            leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx, 
             pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
         } else {
           paperg.copy(comp.getPage(), 
@@ -306,12 +302,12 @@ void draw() {
     pdf.beginDraw();
     pdf.image(paperg, 0, 0);
   }
-  
+
   textFont(screenFont);
   textAlign(CENTER, CENTER);
-  
+
   pdf.dispose();
   pdf.endDraw();
-  
+
   println("PDF output");
 }

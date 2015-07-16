@@ -387,8 +387,8 @@ class Spread {
     //draw spread-general content for debugging purposes
     //pg.textSize(500);
     //pg.line(random(0, _spreadWidthPx), random(0, _spreadHeightPx), random(0, _spreadWidthPx), random(0, _spreadHeightPx));
-    pg.fill(0);
-    pg.rect(0, 0, leftOutsideMargin, topMargin);
+    //pg.fill(0);
+    //pg.rect(0, 0, leftOutsideMargin, topMargin);
     //pg.text(String.format("%02d", spreadNum), _spreadWidthPx/3, _spreadHeightPx/2);
     if (debug) {
       pg.stroke(0);
@@ -429,7 +429,7 @@ class Spread {
 
     pg.textFont(monoFont);
     pg.fill(primaryColor);
-    pg.textSize(bodySize-15);
+    pg.textSize(bodySize-5);
     pg.text(pd.body, 0, 0, pd.contentWidthPx, pd.contentHeightPx - footerHeight);
     pg.textSize(headingSize);
   }
@@ -517,12 +517,37 @@ class Spread {
       pg.textSize(bodySize*0.7);
       int currWidth = (int)pg.textWidth(pd.pageID);
       int currHeight = bodySize; //(int)pg.lineHeight(pd.pageID);
+      float myTempX;
       if (pd.outsideEdge == Side.LEFT){
-        pg.text(pd.pageID, 0-currWidth, pd.contentHeightPx + bodySize );
+        myTempX = 0-currWidth-20;
+        //pg.text(pd.pageID, , pd.contentHeightPx + bodySize );
       } else {
         //int currWidth = (int)pg.textWidth(pd.pageID);
-        pg.text(pd.pageID, pd.contentWidthPx, pd.contentHeightPx + bodySize);
+        myTempX = pd.contentWidthPx+20;
+        //pg.text(pd.pageID, pd.contentWidthPx+20, pd.contentHeightPx + bodySize);
       }
+      pg.text(pd.pageID, myTempX, pd.contentHeightPx + bodySize);
+      pg.pushMatrix();
+      float tmpSize = 50;
+      pg.translate(myTempX - tmpSize/2, pd.contentHeightPx + bodySize);
+      PShape pageBox = createShape();
+      pageBox.beginShape();
+      float[] tmpStart = new float[4];
+      tmpStart[0] = random(tmpSize);
+      tmpStart[1] = random(tmpSize);
+      tmpStart[2] = random(tmpSize);
+      tmpStart[3] = random(tmpSize);
+      //println(tmpStart[0], tmpStart[1], tmpStart[2], tmpStart[3]);
+      pageBox.vertex(tmpStart[0], tmpStart[2]);
+      pageBox.quadraticVertex(tmpStart[0], tmpStart[1], tmpStart[2], tmpStart[3]);
+      pageBox.quadraticVertex(random(tmpSize), random(tmpSize), random(tmpSize), random(tmpSize));
+      pageBox.quadraticVertex(random(tmpSize), random(tmpSize), random(tmpSize), random(tmpSize));
+      pageBox.quadraticVertex(tmpStart[0], tmpStart[1], tmpStart[2], tmpStart[3]);
+      pageBox.vertex(tmpStart[0], tmpStart[2]);
+      pageBox.endShape();
+      pg.shape(pageBox);
+      pg.popMatrix();
+
       pg.popStyle();
     }
   }
