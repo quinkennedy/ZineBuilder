@@ -7,7 +7,7 @@
 	<page id="1">
 		<heading>Sensory Aesthetics</heading>
 		<subheading>A generative fanzine about the future of Computing.</subheading>
-		<footer>Issue 001: Compiled and rendered for Foocamp 2015 (n/200)</footer>
+		<footer>Issue 001: Compiled and rendered for Foocamp 2015 (<var key="num"></var>/200)</footer>
 	</page>
 </cover>
 <cover id="2">
@@ -41,7 +41,7 @@ __ yes  __no __not sure</footer>
 	<page id="2">
 		<heading>About / Hello World</heading>
 	   <subheading></subheading>
-	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics fanzine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run editions (you are holding n/200) but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of as a generative fanzine by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensoryixd with questions or comments. We look forward to meeting you.
+	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics fanzine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run editions (you are holding <var key="num"></var>/200) but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of as a generative fanzine by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensoryixd with questions or comments. We look forward to meeting you.
 
 Warm Regards, 
 James and Joshua

@@ -215,7 +215,23 @@ class Spread {
     if (tXML == null) {
       return null;
     } else {
-      return tXML.getContent();
+      String output = "";
+      XML[] pieces = tXML.getChildren();
+      for(int i = 0; i < pieces.length; i++){
+        XML piece = pieces[i];
+        String name = piece.getName();
+        if (name.equals("#text")){
+          output += piece.getContent();
+        } else if (name.equals("var")){
+          String key = piece.getString("key");
+          if (key != null && vars.containsKey(key)){
+            output += vars.get(key);
+          } else {
+            output += piece.format(-1);
+          }
+        }
+      }
+      return output;
     }
   }
 
