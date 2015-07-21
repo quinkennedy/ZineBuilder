@@ -14,4 +14,5 @@ abstract class ContentBox{
   public Rectangle render(Rectangle area, PGraphics pg){
     return render(area, pg, false);
   }
+  public abstract boolean isResizable();
 }
