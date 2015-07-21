@@ -26,21 +26,16 @@ class ImageBox extends ContentBox{
 }
 
 class TextBox extends ContentBox{
-  String text;
-  PFont font;
+  FormattedTextBlock text;
+  FontFamily font;
   float fontSize;
   boolean adjustFontSize = false;
   
-  public TextBox(String txt, PFont fnt){
-    text = txt;
-    font = fnt;
-    fontSize = font.getSize();
-  }
-  
-  public TextBox(String txt, PFont fnt, float size, boolean adjustSize){
-    text = txt;
+  public TextBox(XML txt, FontFamily fnt, float size, PGraphics pg, Map<String, String> vars, boolean adjustSize){
     font = fnt;
     fontSize = size;
+    text = new FormattedTextBlock(pg);
+    parse(txt, fnt, FontWeight.REGULAR, FontEm.REGULAR, size, vars, text);
     adjustFontSize = adjustSize;
   }
   
@@ -61,6 +56,34 @@ class TextBox extends ContentBox{
     pg.popMatrix();
     Rectangle used = new Rectangle(area.x, area.y, block.maxWidth, block.totalHeight);
     return used;
+  }
+  
+  //so what I want is a recursive function which edits a list and returns a string.
+  //if it gets a string back, then it concatinates that string to it's own string, if there
+  //  were nodes added to the List after this function was entered, add this function's text to the List
+  private void parse(XML txt, FontFamily fnt, FontWeight weight, FontEm em, float size, Map<String, String> vars, FormattedTextBlock block){
+    String currName = txt.getName();
+    if (currName.equals("#text")){
+      block.add(txt.getContent(), fnt.get(weight).get(em), size);
+    } else if (currName.equals("bold")){
+      weight = FontWeight.BOLD;
+    } else if (currName.equals("italic")){
+      weight = FontEm.ITALIC;
+    } else if (currName.equals("var")){
+      if (vars.containsKey(txt.getString("key"))){
+        block.add(vars.get(txt.getString("key")), fnt.get(weight).get(em));
+      } else {
+        block.add(txt.format(-1), fnt.get(weight).get(em))
+    }
+    XML[] children = txt.getChildren();
+    for(XML node : nodes){
+    }
+  }
+  
+  private Object parse(
+      FormattedTextBlock block, XML node, FontFamily fnt, float size, 
+      FontWeight weight, FontEm em, Map<String, String> vars){
+    
   }
 }
 

@@ -1,9 +1,5 @@
-//for PDF //<>// //<>//
+//for PDF //<>// //<>// //<>//
 import processing.pdf.*;
-//for XML
-import org.w3c.dom.*;
-import javax.xml.parsers.*;
-import java.io.*;
 //for Map
 import java.util.*;
 

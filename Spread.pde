@@ -11,10 +11,7 @@ class Spread {
   PGraphics pg;
   private int spreadWidthPx;
   private int spreadHeightPx;
-  PFont headingFont;
-  PFont bodyFont;
-  PFont monoFont;
-  PFont footerFont;
+  FontFamily headingFamily, bodyFamily, monoFamily, footerFamily;
   XML xml;
   private int topMargin = 200;
   private int bottomMargin = 200;
@@ -78,10 +75,10 @@ class Spread {
     // load content
     xml = loadXML("zine.xml");
 
-    headingFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48);
-    bodyFont = createFont("fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48);
-    monoFont = createFont("fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf", 48);
-    footerFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48);
+    headingFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48);
+    bodyFamily = FontFamily.loadBody();
+    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf", 48);
+    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48);
 
     if (isCover == true) {
       createCover();
@@ -647,4 +644,52 @@ class Spread {
 
 enum Side {
   RIGHT, LEFT, NONE
+
+class FontFamily{
+  Map<FontWeight, Map<FontEm, PFont>> fonts;
+  private FontFamily(){
+    fam.fonts = new Map<FontWeight, Map<FontEm, PFont>>();
+  }
+  
+  public loadFont(FontWeight w, FontEm e, String path, float size){
+    PFont f = createFont(path, size);
+    if (!fonts.hasKey(w)){
+      fonts.put(w, new Map<FontEm, PFont>());
+    }
+    Map<FontEm, PFont> currWeight = fonts.get(w);
+    currWeight.put(e, f);
+  }
+  
+  public PFont getReg(){
+    return get(FontWeight.REGULAR, FontEm.REGULAR);
+  }
+  
+  public PFont get(FontWeight w, FontEm e){
+    if (fonts.hasKey(w) && fonts.get(w).hasKey(e)){
+      return fonts.get(w).get(e);
+    } else {
+      return null;
+    }
+  }
+  
+  public static FontFamily loadBody(){
+    FontFamily fam = new FontFamily();
+    fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48);
+    fam.loadFont(FontWeight.BOLD, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Bold.ttf", 48);
+    return fam;
+  }
+  
+  public static FontFamily loadSingle(String path, float size){
+    FontFamily fam = new FontFamily();
+    fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, path, size);
+    return fam;
+  }
+}
+
+enum FontWeight{
+  EXTRA_LIGHT, LIGHT, REGULAR, SEMI_BOLD, BOLD, BLACK;
+}
+
+enum FontEm{
+  REGULAR, ITALIC
 }
