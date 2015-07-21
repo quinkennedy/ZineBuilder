@@ -4,6 +4,10 @@ class ImageBox extends ContentBox{
     image = img;
   }
   
+  public boolean isResizable(){
+    return true;
+  }
+  
   public Rectangle render(Rectangle area, PGraphics pg, boolean debug){
     if (image == null){
       return new Rectangle(area.x, area.y, 0, 0);
@@ -14,8 +18,9 @@ class ImageBox extends ContentBox{
       float sWidth = image.width * scale;
       float sHeight = image.height * scale;
       image.filter(GRAY);
-      pg.image(image, area.x + area.w - sWidth, area.y, sWidth, sHeight);
-      return new Rectangle(area.x + area.w - sWidth, area.y, sWidth, sHeight);
+      Rectangle destination = new Rectangle(area.x + (area.w - sWidth) / 2, area.y, sWidth, sHeight);
+      pg.image(image, destination.x, destination.y, destination.w, destination.h);
+      return destination;
     }
   }
 }
@@ -37,6 +42,10 @@ class TextBox extends ContentBox{
     font = fnt;
     fontSize = size;
     adjustFontSize = adjustSize;
+  }
+  
+  public boolean isResizable(){
+    return adjustFontSize;
   }
   
   public Rectangle render(Rectangle area, PGraphics pg, boolean debug){
@@ -65,6 +74,9 @@ class HeadingBox extends ContentBox{
     font = _font;
     headingSize = _headingSize;
     subheadingSize = _subheadingSize;
+  }
+  public boolean isResizable(){
+    return false;
   }
   private boolean hasHeading(){
     return heading != null && heading.length() > 0;
@@ -99,7 +111,7 @@ class HeadingBox extends ContentBox{
         pg.rect(area.x, area.y, area.w, area.h);
         pg.popStyle();
       }
-      return area;
+      return new Rectangle(area.x, area.y, block.maxWidth, block.totalHeight);
     } else {
       return new Rectangle(area.x, area.y, 0, 0);
     }

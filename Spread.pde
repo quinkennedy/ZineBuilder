@@ -378,10 +378,10 @@ class Spread {
       //adjust for margins
       pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
       if (pageData[i].footer != null) {
-        renderFooter(pageData[i]);
+        pageData[i].footerRect = renderFooter(pageData[i]);
       }
       if (pageData[i].hasHeading() || pageData[i].hasSubheading()) {
-        renderHeading(pageData[i]);
+        pageData[i].headingRect = renderHeading(pageData[i]);
       }
       renderPageNum(pageData[i]);
 
@@ -499,30 +499,52 @@ class Spread {
 
   public void base(PageData pd) {
     float startY = 0;
-    if (pd.hasHeading() || pd.hasSubheading()) {
-      startY += pd.contentHeightPx / 4;
+    //lets see how much space the body text needs
+    TextBox tBox = null;
+    float bodyHeight = 0;
+    if (pd.body != null && pd.body.length() > 0) {
+      tBox = new TextBox(pd.body, bodyFont, bodySize, false);
+      pd.bodyRect = tBox.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx), pg);
+      bodyHeight = pd.bodyRect.h;
     }
+    println("body: " + bodyHeight);
+    float headingHeight = (pd.headingRect != null ? pd.headingRect.h : 0);
+    println("head: " + headingHeight);
+    
+    //lets see how tall the image needs to be
+    float targetImageHeight = 0;
+    float maxImageHeight = pd.contentHeightPx - bodyHeight - headingHeight - footerHeight;
+    float hopedImageHeight = pd.contentHeightPx - bodyHeight - this.headingHeight - footerHeight;
     if (pd.contentImages != null && pd.contentImages.length > 0) {
       ImageBox iBox = new ImageBox(pd.contentImages[0]);
-      float imageHeight = ((pd.contentHeightPx - startY) / 3);
-      iBox.render(new Rectangle(0, startY, pd.contentWidthPx, imageHeight), pg, debug);
-      startY += imageHeight;
-    }
-    if (pd.body != null && pd.body.length() > 0) {
-      TextBox tBox = new TextBox(pd.body, bodyFont, bodySize, false);
-      float textHeight = pd.contentHeightPx - startY - footerHeight;
-      tBox.render(new Rectangle(0, startY, pd.contentWidthPx, textHeight), pg, debug);
+      pd.imageRect = iBox.layout(new Rectangle(0, 0, pd.contentWidthPx, maxImageHeight), pg);
+      targetImageHeight = pd.imageRect.h;
+      
+      if (targetImageHeight <= hopedImageHeight){
+        println("img fits");
+        pd.imageRect = iBox.render(new Rectangle(0, this.headingHeight, pd.contentWidthPx, hopedImageHeight), pg); 
+      } else {
+        Rectangle imageDest = new Rectangle(0, headingHeight, pd.contentWidthPx, pd.contentHeightPx - footerHeight - bodyHeight - headingHeight);
+        println("img restricted: " + imageDest.toString());
+        pd.imageRect = iBox.render(imageDest, pg);
+      }
+      
+      if (bodyHeight > 0){
+        pd.bodyRect = tBox.render(new Rectangle(0, pd.imageRect.y + pd.imageRect.h, pd.contentWidthPx, bodyHeight), pg);
+      }
+    } else if (bodyHeight > 0){
+      pd.bodyRect = tBox.render(new Rectangle(0, this.headingHeight, pd.contentWidthPx, bodyHeight), pg);
     }
   }
 
-  private void renderHeading(PageData pd) {
+  private Rectangle renderHeading(PageData pd) {
     HeadingBox box = new HeadingBox(pd.heading, pd.subheading, headingFont, headingSize, subheadingSize);
-    box.render(new Rectangle(0, 0, pd.contentWidthPx, headingHeight), pg, debug);
+    return box.render(new Rectangle(0, 0, pd.contentWidthPx, headingHeight), pg, debug);
   }
 
-  private void renderFooter(PageData pd) {
+  private Rectangle renderFooter(PageData pd) {
     TextBox tBox = new TextBox(pd.footer == null ? "" : pd.footer, footerFont, footerSize, false);
-    tBox.render(new Rectangle(0, pd.contentHeightPx - footerHeight, pd.contentWidthPx, footerHeight), pg, debug);
+    return tBox.render(new Rectangle(0, pd.contentHeightPx - footerHeight, pd.contentWidthPx, footerHeight), pg, debug);
   }
 
   private void renderPageNum(PageData pd) {
@@ -543,6 +565,7 @@ class Spread {
         //pg.text(pd.pageID, pd.contentWidthPx+20, pd.contentHeightPx + bodySize);
       }
       pg.text(pd.pageID, myTempX, pd.contentHeightPx + bodySize);
+      println("rendering pg: " + pd.pageID);
       pg.pushMatrix();
       float tmpSize = 50;
       pg.translate(myTempX - tmpSize/2, pd.contentHeightPx + bodySize);
@@ -606,6 +629,7 @@ class Spread {
     int bodyHeightPx;
     Side outsideEdge;
     FormattedTextBlock headingBlock;
+    Rectangle footerRect, headingRect, bodyRect, imageRect;
     boolean hasHeading() {
       return heading != null && heading.length() > 0;
     }
