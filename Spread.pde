@@ -7,7 +7,7 @@
  */
 
 class Spread {
-  int spreadNum;
+  public int spreadNum;
   PGraphics pg;
   private int spreadWidthPx;
   private int spreadHeightPx;
@@ -38,6 +38,7 @@ class Spread {
   private PageData[] pageData;
   private boolean rendered = false;
   private boolean isCover;
+  private XML[] spreads;
   /*
   / v-leftOutsideMargin
    / v     rightOutsideMargin
@@ -74,7 +75,8 @@ class Spread {
     spreadWidthPx = _spreadWidthPx;
     spreadHeightPx = _spreadHeightPx;
     this.isCover = isCover;
-
+    
+    print(" I THINK MY SPREAD NUM IS "+spreadNum);
     // load content
     xml = loadXML("zine.xml");
 
@@ -83,12 +85,14 @@ class Spread {
     monoFont = createFont("fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf", 48);
     footerFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48);
 
+    spreads = xml.getChildren("spread");
+    
     if (isCover == true) {
       createCover();
       println("laying out cover "+spreadNum);
     } else {
       // parse spreads
-      XML[] spreads = xml.getChildren("spread");
+      
       //XML spread = children[spreadNum-1];
       XML[] pages = spreads[spreadNum-1].getChildren("page");
       int numPages = pages.length;
@@ -361,6 +365,24 @@ class Spread {
     //pg.textAlign(CENTER, CENTER);
     pg.beginDraw();
     pg.background(bgColor);
+    
+    // background
+    //if (spreads[spreadNum-1].getString("background")
+    // print(spreads[spreadNum-1]);
+    if (spreads[spreadNum-1].hasAttribute("background")) {
+      print(spreads[spreadNum-1].getString("background"));
+      String background = spreads[spreadNum-1].getString("background");
+      if (background != null && background.equals("dots")) {
+        for (int j=0; j<spreadWidthPx/10; j++) {
+          for (int k=0; k<spreadHeightPx/10; k++) {
+             //pg.rect(j*10, k*10, 5, 5); 
+             pg.point(j*10, k*10);
+          }
+        }
+      }
+    }
+
+    
     pg.textFont(bodyFont);
     pg.fill(primaryColor);
     if (isCover) {
@@ -446,6 +468,11 @@ class Spread {
     pg.textFont(monoFont);
     pg.fill(primaryColor);
     pg.textSize(bodySize-5);
+    pg.pushStyle();
+    pg.fill(255);
+    pg.noStroke();
+    pg.rect(0,0,pd.contentWidthPx, pd.contentHeightPx - footerHeight);
+    pg.popStyle();
     pg.text(pd.body, 0, 0, pd.contentWidthPx, pd.contentHeightPx - footerHeight);
     pg.textSize(headingSize);
   }
@@ -503,6 +530,12 @@ class Spread {
     TextBox tBox = null;
     float bodyHeight = 0;
     if (pd.body != null && pd.body.length() > 0) {
+      // We should add an optional background for the content boxes.
+      //pg.pushStyle();
+      //pg.fill(255);
+      //pg.noStroke();
+      //pg.rect(0,0,pd.contentWidthPx, pd.contentHeightPx - footerHeight);
+      //pg.popStyle();
       tBox = new TextBox(pd.body, bodyFont, bodySize, false);
       pd.bodyRect = tBox.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx), pg);
       bodyHeight = pd.bodyRect.h;
@@ -621,7 +654,7 @@ class Spread {
   }
 
   class PageData {
-    String heading, subheading, body, footer, quote, author, pageID;
+    String heading, subheading, body, footer, quote, author, pageID, background;
     String type;
     PImage[] contentImages;
     Content[] content;

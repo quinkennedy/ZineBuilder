@@ -1,7 +1,7 @@
-//for PDF //<>// //<>//
+//for PDF //<>// //<>// //<>//
 import processing.pdf.*;
 //for XML
-import org.w3c.dom.*;
+//import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import java.io.*;
 //for Map
@@ -9,7 +9,7 @@ import java.util.*;
 
 PFont screenFont;
 boolean testLayout = false;
-boolean debug = false;
+boolean debug = true;
 float margin = 50;
 float paperWidthIn = 8.5; //inches
 float paperHeightIn = 11; //inches

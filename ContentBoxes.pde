@@ -20,6 +20,8 @@ class ImageBox extends ContentBox{
       image.filter(GRAY);
       Rectangle destination = new Rectangle(area.x + (area.w - sWidth) / 2, area.y, sWidth, sHeight);
       pg.image(image, destination.x, destination.y, destination.w, destination.h);
+      // Really want to get this blend working, but I'm too tired to figure out the right coordinates...
+      //pg.blend(image, 0, 0, image.width, image.height, (int) destination.x, (int)destination.y, (int)destination.w, (int)destination.h, DARKEST); 
       return destination;
     }
   }

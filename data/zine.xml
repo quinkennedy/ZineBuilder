@@ -7,7 +7,7 @@
 	<page id="1">
 		<heading>Sensory Aesthetics</heading>
 		<subheading>A generative fanzine about the future of Computing.</subheading>
-		<footer>Issue 001: Compiled and rendered for Foocamp 2015 (<var key="num"></var>/200)</footer>
+		<footer>Issue 001: Compiled and rendered for Foocamp 02015 (<var key="num"></var>/200)</footer>
 	</page>
 </cover>
 <cover id="2">
@@ -26,29 +26,31 @@ Thanks for reading. Reach us at @sensoryixd #sensoryaesthetics</heading>
 </cover>
 <spread id="1">
 	<page id="16" type="quote">
-		<subheading>2015</subheading>
+		<subheading>02015</subheading>
 		<quote author="Quin Kennedy">Today's noise is tomorrow's information.</quote>
 		<footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="1" type="toc">
 		<heading>Table of Contents</heading>
-		<footer>Do you remember learning how to use a table of contents? 
+		<footer>Every year children are taught how to interpet a table of contents, an information structure which dates back at least 2000 years. Do you remember learning how to use a table of contents?  
 
 __ yes  __no __not sure</footer>
 	</page>
 </spread>
-<spread id="2">
+<spread id="2" background="dots">
 	<page id="2">
-		<heading>About / Hello World</heading>
+		<heading>hello, world</heading>
 	   <subheading></subheading>
-	   <body>Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics fanzine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 2015. It is printed in small run editions (you are holding <var key="num"></var>/200) but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of as a generative fanzine by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensoryixd with questions or comments. We look forward to meeting you.
+	   <body>
+
+		Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics fanzine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 02015. It is printed in small run editions (you are holding <var key="num"></var>/200) but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of as a generative fanzine by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensoryixd with questions or comments. We look forward to meeting you.
 
 Warm Regards, 
 James and Joshua
 
 	   </body>
-	   <image src="images/jj.jpg"></image>
-	   <footer>This generative zine technology would not have been possible without a partnership with Quin Kennedy (@quinkennedy). Please find out more info at our Github page https://github.com/adenine/SensoryAestheticsZine001 </footer>
+	   <image src="images/jj2.png"></image>
+	   <footer>This generative zine technology would not have been possible without a partnership with our friend Quin Kennedy (@quinkennedy) and the kind people who provide Processing and Processing libraries. </footer>
 	</page>
 	<page id="3" type="code">
 	   <body>
@@ -79,6 +81,8 @@ James and Joshua
         		}
       		}
     	}
+        /**
+        * This zine also uses StippleGen2, , 
 	   </body>
 	</page>
 </spread>
@@ -88,20 +92,24 @@ James and Joshua
 	   <subheading></subheading>
 	   <body>The history of computing can follow a line of augmenting and extending human capability. Through this pursuit we have learned a great deal about what it means to be human. For instance in the pursuit of language translation we have come to deeper understanding of the complexity and dynamism of human language. As humans we often move the conscious interpretation of our senses to the ‘background’ of our brain to focus more on our thoughts. From staring into space when lost in thought, sticking your tongue out of your mouth when you are trying to concentrate, or to turning down the radio when you need to focus on driving we intuitively arrange our sense ratios. We see complex cloud configurations beginning to work this way, but how often do we use this technique with machines? How often do we need to turn off one mode of input to put more energy towards calculations? How can we create interactions in the periphery? Which technologies support the subconscious computation, the nuanced reaction, the laissez faire commitment? Do our machines choose to ignore us when they are tired? What is the attention span of the machine? Do they ever really give us their attention?
 	   </body>
+	   <image src="images/eames.png"></image>
 	   <footer>By pursuing these technologies we create a mirror for humanity and learn about ourselves through constructivist / constructionist practice. 
 
 Circle One:    TRUE  /  FALSE  / UNDECIDED</footer>
 	</page>
 	<page id="5">
-	   <image src="images/lilb.jpg"></image>
+	   <image src="images/lilb2.jpg"></image>
 	   <subheading>Unlikely Hero of Sensing: Lil B</subheading>
 	   <body>On November 28th, 2014 rapper Lil B crossed the threshold of following a million people on twitter. Inverting the usual paradigm of how celebrities use social media, Lil B celebrates not how many people follow him but rather how many people he follows.  In his own words: 
+
 “HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”
+
 Imagine we suspend our disbelief and that he reads for one day all of the tweets of all the people he follows. The mind boggles. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input. That is why Lil B is today’s hero of sensing.
+
 Who are your heroes of sensing?
 __________________________
 __________________________
-__________________________
+
 </body>
 	   <footer>TYBG</footer>
 	</page>
@@ -112,53 +120,90 @@ __________________________
 	   <subheading>2015 The Pace of Social Change</subheading>
 	   <!-- http://www.bloomberg.com/graphics/2015-pace-of-social-change/ -->
 	   <body>
+We believe the rising pace of social change is related to an increasing trend towards empathy. Empathy and sensing share a close relationship. When we hear, see, and otherwise sense the people around us we can practice empathy. 
+
+Recently a study with suprising results: almost 75 percent of students today rate themselves as less empathic than the average student 30 years ago (Sara H. Konrath of the University of Michigan at Ann Arbor led the study and published it in Personality and Social Psychology Review).
+
+So what is the future of empathy? If we can teach each other empathy can we begin to encapsulate that behavior into our computation? Is technology to blame for this recent decline? Are we moving beyond the need for empathy? 
+
+Some ways to practice empathy:
 1. Listen boldly.
 2. Be curious about others and the world.
 3. When you see two ways, look for a third. 
 4. Wonder like a child.
 5. Take the other side.
+
 </body>
-	   <image src="images/change.png"></image>
-	   <footer>Sensory Aesthetics</footer>
+	  
+	<footer>Holden: The tortoise lays on its back, its belly baking in the hot sun, beating its legs trying to turn itself over, but it can’t. Not without your help. But you’re not helping.
+Leon: What do you mean, I’m not helping?
+Holden: I mean: you’re not helping! Why is that, Leon?</footer>
 	</page>
-	<page id="7" type="photo">
-		<image src="images/PbHNwg4.jpg"></image>
+	<page id="7">
+		<body>
+		"In Ridley Scott’s film Blade Runner, empathy-detection devices are employed to measure affiliative emotions. Despite recent neurocomputational advances, it is unknown whether brain signatures of affiliative emotions, such as tenderness/affection, can be decoded and voluntarily modulated. Here, we employed multivariate voxel pattern analysis and real-time fMRI to address this question. We found that participants were able to use visual feedback based on decoded fMRI patterns as a neurofeedback signal to increase brain activation characteristic of tenderness/affection relative to pride, an equally complex control emotion. Such improvement was not observed in a control group performing the same fMRI task without neurofeedback. Furthermore, the neurofeedback-driven enhancement of tenderness/affection-related distributed patterns was associated with local fMRI responses in the septohypothalamic area and frontopolar cortex, regions previously implicated in affiliative emotion. This demonstrates that humans can voluntarily enhance brain signatures of tenderness/affection, unlocking new possibilities for promoting prosocial emotions and countering antisocial behavior.""
+
+	Source: Voluntary Enhancement of Neural Signatures of Affiliative Emotion Using fMRI Neurofeedback
+Jorge Moll , Julie H. Weingartner, Patricia Bado, Rodrigo Basilio, João R. Sato, Bruno R. Melo, Ivanei E. Bramati, Ricardo de Oliveira-Souza, Roland Zahn
+</body>
+		<image src="images/change.png"></image>
 	</page>
 </spread>
 <spread id="5">
 	<page id="8">
 	 <heading>Spacemind</heading>
-	   <subheading></subheading>
-	   <body>Current computers as tools to extend the powers of humans minds based on the assumption that the best tools to think with are text.  Now as we enter a world where the threshold between bits and atoms becomes ever more fluid why might we want our environments to change. How and when are the environments we inhabit tools to think with? We can all relate to the need to go to a different space to change how you are working, but cannot put a fine point onto the specific environmental criteria that drive this change. We need to better understand within the physical world what differences make a difference.</body>
+	   <subheading>  </subheading>
+	   <body>
+
+Current computers as tools to extend the powers of humans minds based on the assumption that the best tools to think with are text.  Now as we enter a world where the threshold between bits and atoms becomes ever more fluid why might we want our environments to change. How and when are the environments we inhabit tools to think with? We can all relate to the need to go to a different space to change how you are working, but cannot put a fine point onto the specific environmental criteria that drive this change. We need to better understand within the physical world what differences make a difference.</body>
 	   <footer>(How can we think of our spaces as part of our mind?)</footer>
-	   <image src="images/drawing2.jpg"></image>
+	   <image src="images/drawing2b.jpg"></image>
 	</page>
 	<page id="9">
 		<heading>Nothing is Static</heading>
-		<subheading>Ever? Ever! Ever?!</subheading>
-		<body>“Human sense organs can receive only news of difference, and the differences must be coded into events in time (i.e., into changes) in order to be perceptible. Ordinary static differences that remain constant for more than a few seconds become perceptible, only by scanning. Similarly, very slow changes become perceptible only by a combination of scanning and bringing together observations from separated moments in the continuum of time.” 
--Gregory Bateson
+		<subheading>  </subheading>
+		<body>
+
+
+In the Felix Hess piece ‘It’s in the Air’ the artist has created three hundred small and lightweight flags which move to the fluctuations present in the environment. If the human remains ‘still’ the flags will move in accordance with the heat tunnel forming the air around the human.
+
+“Human sense organs can receive only news of difference, and the differences must be coded into events in time (i.e., into changes) in order to be perceptible. Ordinary static differences that remain constant for more than a few seconds become perceptible, only by scanning. Similarly, very slow changes become perceptible only by a combination of scanning and bringing together observations from separated moments in the continuum of time.”  -Gregory Bateson
 
 Where we see the static phenomenon we need to only look closer or further to understand that it is not static at all. How can we develop new types of sensing to look not at the state, but at the transition? When should state and when should you look for transition? When we examine the phenomenon of the universe how do we find the difference that makes a difference?
 
-"I am not investigating in the objective world, I am investigating sensitivity."
-- Felix Hess
-In the Felix Hess piece ‘It’s in the Air’ the artist has created three hundred small and lightweight flags which move to the fluctuations present in the environment. A human entering the space will create a change in air which will alter the flags. If the human remains ‘still’ the flags will move in accordance with the heat tunnel forming the air around the human. </body>
+ </body>
+ <footer>"I am not investigating in the objective world, I am investigating sensitivity." - Felix Hess</footer>
+<image src="images/felixhess2.jpg"></image>
 	</page>
 </spread>
 <spread id="6">
 	<page id="10">
 		<heading>Personal Computing</heading>
-	   <subheading></subheading>
-	   <body>Personal: Many of the types of personal computing devices we have can be traced to one of the descriptions used by Mark Weiser “My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.” </body>
+	   <subheading>Designed for the Individual</subheading>
+	   <body>Many of the types of personal computing devices we have can be linked to one of the descriptions used by Mark Weiser when he said “My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.” 
+
+Tabs
+Pads / Boards
+Sheet of Paper / Book
+Blackboard / Bulletin board
+
+	   </body>
 	   <footer>Sensory Aesthetics</footer>
+	   <image src="images/personal.png"></image>
 	</page>
 	<page id="11">
 		<heading>Communal Computing</heading>
-	   <subheading></subheading>
-	   <body>Communal Computing: The room, the house, the city, the nation. The table, couch, piazza, court square, bus stop, fountain, spectacle, party. If the 1968 goal was… “Extending and Augmenting human capability” then we need to augment with object and environments to achieve the next stage. We just scratched the surface with computing so far.
+	   <subheading>Designed for the Society</subheading>
+	   <body>We need to determine an additional set of computing device manifestations. We aren't sure what they will be, but our working list is the room, the house, the city, and the earth. As Mark Weiser said, "we are trying to conceive a new way of thinking about computers in the world, one that takes into account the natural human environment and allows the computers themselves to vanish into the background."
+
+
+Rooms
+Homes
+Cities
+Planets
 	   </body>
 	   <footer>Sensory Aesthetics</footer>	   
+	   <image src="images/communal.png"></image>
 	</page>
 </spread>
 <spread id="7">
@@ -178,7 +223,7 @@ In the Felix Hess piece ‘It’s in the Air’ the artist has created three hun
 </body>
 	</page>
 	<page id="13" type="photo">
-		<image src="images/drawing4.jpg"></image>
+		<image src="images/drawing4b.jpg"></image>
 	</page>
 </spread>
 <spread id="8">
