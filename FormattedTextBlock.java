@@ -3,7 +3,7 @@ import processing.core.PGraphics;
 import java.util.ArrayList;
 
 public class FormattedTextBlock{ //<>//
-  private ArrayList<FormattedText> text;
+  public ArrayList<FormattedText> text;
   PGraphics pg;
   private ArrayList<FormattedLine> lines;
   private float totalHeight, totalWidth;
@@ -77,6 +77,7 @@ public class FormattedTextBlock{ //<>//
     String lastSep = "";
     int prevDescent = 0, currDescent = 0, currAscent = 0, currY = 0;
     FormattedText tempText;
+    boolean autoNewline = false;
     
     //for each formatted text element
     for(int ti = 0; ti < text.size(); ti++){
@@ -111,6 +112,7 @@ public class FormattedTextBlock{ //<>//
           }
           //create the new line to fill
           line = newLine(lines);
+          autoNewline = true;
           largestWidth = Math.max(currWidth, largestWidth);
           currWidth = 0;
           currAscent = (int)Math.ceil(pg.textAscent());
@@ -124,7 +126,7 @@ public class FormattedTextBlock{ //<>//
         contig += lastSep + currW.text;
         lastSep = currW.postSep;
         //if we have a newline character, and have content on this line
-        if (currW.postSep.equals("\n") && (contig.length() > 0 || line.texts.size() > 0)){
+        if (currW.postSep.equals("\n") && (!autoNewline || contig.length() > 0 || line.texts.size() > 0)){
           //force a newline (unless we just did a newline)
           
           //commit text
@@ -140,6 +142,7 @@ public class FormattedTextBlock{ //<>//
           lastSep = "";
           //start a new line
           line = newLine(lines);
+          autoNewline = false;
           largestWidth = Math.max(currWidth, largestWidth);
           currWidth = 0;
           currY += currDescent;
@@ -164,7 +167,7 @@ public class FormattedTextBlock{ //<>//
     totalWidth = largestWidth;
   }
   
-  private void constrain(){
+  public void constrain(){
     //TODO: constrain width as well
     calculateLines();
     if (totalHeight <= constrainHeight){
@@ -274,6 +277,14 @@ public class FormattedTextBlock{ //<>//
     return output;
   }
   
+  public String getString(){
+    String output = "";
+    for(int i = 0; i < text.size(); i++){
+      output += text.get(i).getString();
+    }
+    return output;
+  }
+  
   public static class FormattedText{
     String text;
     PFont font;
@@ -361,6 +372,10 @@ public class FormattedTextBlock{ //<>//
     public String toString(){
       String output =  font.getName() + ":" + text;
       return output;
+    }
+    
+    public String getString(){
+      return text;
     }
   }
   

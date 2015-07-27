@@ -1,11 +1,11 @@
-//for PDF //<>// //<>// //<>//
+//for PDF //<>//
 import processing.pdf.*;
 //for Map
 import java.util.*;
 
 PFont screenFont;
 boolean testLayout = false;
-boolean debug = false;
+boolean debug = true;
 float margin = 50;
 float paperWidthIn = 8.5; //inches
 float paperHeightIn = 11; //inches
