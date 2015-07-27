@@ -235,24 +235,28 @@ Where we see the static phenomenon we need to only look closer or further to und
 </spread>
 <spread id="8">
 	<page id="14">
-		<heading>Connecting the Biomass</heading>
-	   <subheading></subheading>
-	   <body>The Information Acre project is a small step towards the audacious goal set forth by the the founders of the interspecies internet project. In their own words, 
-“When Bob and I did this design, we thought we were building a system to connect computers together. What we very quickly discovered is that this was a system for connecting people together. And what you’ve seen tonight tells you that we should not restrict this network to one species, that these other intelligent, sentient species should be part of the system too. “ -Vint Cerf 
-What will it mean to be this deeply interconnected to our world? Aren't we already?
+ 	<heading>Information Acre</heading>
+	   <subheading>   </subheading>
+	   <body>
 
-</body>
-	   <footer>Learn more at http://interspecies-internet.org/</footer>
-	</page>
-	<page id="15">
-	   <heading>Information Acre</heading>
-	   <subheading></subheading>
-	   <body>Claude Shannon defined the bit as the result of a coin flip. Heads or tails, true or false. According to SOURCE there may be a limit to the amount of information that can be contained within a square acre of information space. It is staggeringly large at 2^36, but not infinite.
+	   	Imagine the bit as the toss of a fair coin. The result is either heads or tails. The "holographic principle" would suggest that there is a limit to the number of bits which physics can support. This amount is placed at 10^69 bits per square meter before the point in which adding more information would collapse into a black hole. This is approximately 1, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 bits per square meter of two dimensional space.
+
 Our proposal: Dedicate 1 square acre of land to the deep pursuit of sensing. Bring scientists, artists, hardware and software designers together to try to make a dent in that information space. Sense the biology, the chemistry, the conditions, and the human reaction to that one acre. Publish this material for the world. 
+
 We have tentatively named this project Information Acre and are currently looking for a suitable area in the Pacific Northwest for this to occur. 
 </body>
 	   <footer>Want to join us? Our contact info is on the back of the zine.</footer>
 	   <image src="images/biomass.gif"></image>
+	</page>
+	<page id="15">
+		<heading>Connecting the Biomass</heading>
+	   <subheading></subheading>
+	   <body>
+
+	   	The Information Acre project is a small step inspired by the audacious goal set forth by the the founders of the interspecies internet project. Neil Gershenfeld, one of the founding members, describes that part of the goal is "starting to think about how you integrate the rest of the biomass of the planet into the internet".   	
+</body>
+<image src="images/logo2.png"></image>	  
+	   <footer>Learn more at http://interspecies-internet.org/</footer>
 	</page>
 </spread>
 </zine>
