@@ -155,7 +155,9 @@ Jorge Moll , Julie H. Weingartner, Patricia Bado, Rodrigo Basilio, João R. Sato
 	   <subheading>  </subheading>
 	   <body>
 
-Current computers as tools to extend the powers of humans minds based on the assumption that the best tools to think with are text.  Now as we enter a world where the threshold between bits and atoms becomes ever more fluid why might we want our environments to change. How and when are the environments we inhabit tools to think with? We can all relate to the need to go to a different space to change how you are working, but cannot put a fine point onto the specific environmental criteria that drive this change. We need to better understand within the physical world what differences make a difference.</body>
+We can all relate to the need to alter our environment to inhabit changes to our thinking. But how much do we really understand this phenomenon? Current computers act as tools to extend the powers of humans minds, using primarily text and two dimensional media. Spacemind proposes that the true value of the internet of things is that the things are already part of our mind. The objects in our environment and the environment itself are going through a bits to atoms and atoms to bits transformation. We need to understand what differences make a difference in our environments and how that augments our thoughts. As object and environments become digital how will they transform? 
+
+</body>
 	   <footer>(How can we think of our spaces as part of our mind?)</footer>
 	   <image src="images/drawing2b.jpg"></image>
 	</page>
@@ -180,12 +182,16 @@ Where we see the static phenomenon we need to only look closer or further to und
 	<page id="10">
 		<heading>Personal Computing</heading>
 	   <subheading>Designed for the Individual</subheading>
-	   <body>Many of the types of personal computing devices we have can be linked to one of the descriptions used by Mark Weiser when he said “My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.” 
+	   <body>
 
-Tabs
-Pads / Boards
-Sheet of Paper / Book
-Blackboard / Bulletin board
+
+		Many of the types of personal computing devices we have can be linked to one of the descriptions used by Mark Weiser when he said “My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.” 
+
+
+-> Tabs
+-> Pads / Boards
+-> Sheet of Paper / Book
+-> Blackboard / Bulletin board
 
 	   </body>
 	   <footer>Sensory Aesthetics</footer>
@@ -197,17 +203,17 @@ Blackboard / Bulletin board
 	   <body>We need to determine an additional set of computing device manifestations. We aren't sure what they will be, but our working list is the room, the house, the city, and the earth. As Mark Weiser said, "we are trying to conceive a new way of thinking about computers in the world, one that takes into account the natural human environment and allows the computers themselves to vanish into the background."
 
 
-Rooms
-Homes
-Cities
-Planets
+-> Rooms
+-> Homes
+-> Cities
+-> Planets
 	   </body>
 	   <footer>Sensory Aesthetics</footer>	   
 	   <image src="images/communal.png"></image>
 	</page>
 </spread>
 <spread id="7">
-	<page id="12">
+	<page id="12" type="toplist">
 		<heading>10 Things we can't measure:</heading>
 		<body>
 1. Reality
@@ -218,9 +224,10 @@ Planets
 6. The Future
 7. Why we fight
 8. The ringing in my ears
-9. Missed calls
-10. Polygons
+9. Missed calls (*)
+10. The moment
 </body>
+<footer>*Did you really miss that call?</footer>
 	</page>
 	<page id="13" type="photo">
 		<image src="images/drawing4b.jpg"></image>

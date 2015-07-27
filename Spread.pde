@@ -413,6 +413,8 @@ class Spread {
         quote(pageData[i]);
       } else if (pageData[i].type.equals("toc")) {
         toc(pageData[i]);
+      } else if (pageData[i].type.equals("toplist")) {
+        toplist(pageData[i]);
       } else if (pageData[i].type.equals("photo")) {
         photo(pageData[i]);
       } else if (pageData[i].type.equals("code")) {
@@ -477,7 +479,13 @@ class Spread {
     pg.textSize(headingSize);
   }
 
-
+  public void toplist(PageData pd) {
+    TextBox tBox = null;
+    tBox = new TextBox(pd.body, bodyFont, subheadingSize, false);
+    pd.bodyRect = tBox.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx), pg);
+    tBox.render(new Rectangle(0, this.headingHeight, pd.contentWidthPx, headingHeight), pg, debug);
+  }
+  
   public void toc(PageData pd) {
     //parse the data into FormattedTextBlock;
     String[] separators = {" ", "|", "   ", " | ", " /**/ ", "\n"};
