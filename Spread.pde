@@ -19,7 +19,7 @@ class Spread {
   private int rightOutsideMargin = 200;
   private int insideLeftMargin = 200;
   private int insideRightMargin = 200;
-  private int headingSize = 120;
+  private int headingSize = 100;
   private int subheadingSize = 80;
   private int footerSize = 30;
   private int bodySize = 30;
@@ -324,15 +324,19 @@ class Spread {
           }
         }
       }
+      if (background != null && background.equals("arch")) {
+        PImage tImg = loadImage("images/U_2_694819491672_archigram.jpg");
+        pg.image(tImg, 0,0,spreadWidthPx, spreadHeightPx);
+      }
     }
 
     
     pg.textFont(bodyFamily.getReg());
     pg.fill(primaryColor);
     if (isCover) {
-      pg.fill(255, 122, 255);
-      pg.rect(0, 0, spreadWidthPx, spreadHeightPx);
-      pg.fill(0);
+      //pg.fill(255, 122, 255);
+      //pg.rect(0, 0, spreadWidthPx, spreadHeightPx);
+      //pg.fill(0);
     } else {
     }
 

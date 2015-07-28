@@ -1,4 +1,4 @@
-//for PDF //<>//
+//for PDF //<>// //<>//
 import processing.pdf.*;
 //for Map
 import java.util.*;
@@ -249,7 +249,7 @@ void draw() {
     case GenSpreads:
       int k = zineState.progress;
       spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
-      spreads[k-1].setMargins(100,100,100,100,50,50);
+      spreads[k-1].setMargins(70,100,100,100,100,100);
       //spreads[k-1].setMargins(200,200,200,200,100,100);
       int currHeadingSize = spreads[k-1].getMaxHeadingSize();
       if (zineState.minHeadingSize == -1){
