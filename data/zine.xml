@@ -53,8 +53,7 @@ James and Joshua
 	   <footer>This generative zine technology would not have been possible without a partnership with our friend Quin Kennedy (@quinkennedy) and the kind people who provide Processing and Processing libraries. </footer>
 	</page>
 	<page id="3" type="code">
-	   <body>
-	   	/**
+	   <body>	   	/**
 	   	* James, Joshua, and Quin wrote this  
 	   	* generative zine code available at 
 	   	* https://github.com/adenine/SensoryAestheticsZine001 
@@ -83,7 +82,7 @@ James and Joshua
     	}
         /**
         * This zine also uses StippleGen2, , 
-	   </body>
+        */</body>
 	</page>
 </spread>
 <spread id="3">
@@ -105,11 +104,11 @@ Circle One:    TRUE  /  FALSE  / UNDECIDED</footer>
 “HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”
 
 Imagine we suspend our disbelief and that he reads for one day all of the tweets of all the people he follows. The mind boggles. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input. That is why Lil B is today’s hero of sensing.
-
+<bold>
 Who are your heroes of sensing?
 __________________________
 __________________________
-
+</bold>
 </body>
 	   <footer>TYBG</footer>
 	</page>
@@ -182,18 +181,13 @@ Where we see the static phenomenon we need to only look closer or further to und
 	<page id="10">
 		<heading>Personal Computing</heading>
 	   <subheading>Designed for the Individual</subheading>
-	   <body>
-
-
-		Many of the types of personal computing devices we have can be linked to one of the descriptions used by Mark Weiser when he said “My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.” 
+	   <body>Many of the types of personal computing devices we have can be linked to one of the descriptions used by Mark Weiser when he said “My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.” 
 
 
 -> Tabs
 -> Pads / Boards
 -> Sheet of Paper / Book
--> Blackboard / Bulletin board
-
-	   </body>
+-> Blackboard / Bulletin board</body>
 	   <footer>Sensory Aesthetics</footer>
 	   <image src="images/personal.png"></image>
 	</page>
@@ -206,8 +200,7 @@ Where we see the static phenomenon we need to only look closer or further to und
 -> Rooms
 -> Homes
 -> Cities
--> Planets
-	   </body>
+-> Planets</body>
 	   <footer>Sensory Aesthetics</footer>	   
 	   <image src="images/communal.png"></image>
 	</page>
@@ -215,8 +208,7 @@ Where we see the static phenomenon we need to only look closer or further to und
 <spread id="7">
 	<page id="12" type="toplist">
 		<heading>10 Things we can't measure:</heading>
-		<body>
-1. Reality
+		<body>1. Reality
 2. Intention
 3. Success
 4. Godzilla’s Impact on Humanity
