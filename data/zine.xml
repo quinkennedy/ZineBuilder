@@ -5,6 +5,7 @@
 		<heading>Bye.</heading>
 	</page>
 	<page id="1">
+		<image src="images/jj2.png"></image>
 		<heading>Sensory Aesthetics</heading>
 		<subheading>A generative fanzine about the future of Computing.</subheading>
 		<footer>Issue 001: Compiled and rendered for Foocamp 02015 (<var key="num"></var>/200)</footer>
@@ -27,7 +28,9 @@ Thanks for reading. Reach us at @sensoryixd #sensoryaesthetics</heading>
 <spread id="1">
 	<page id="16" type="quote">
 		<subheading>02015</subheading>
-		<quote author="Quin Kennedy">Today's noise is tomorrow's information.</quote>
+		<quote author="">Today's noise is tomorrow's information.
+			
+-Quin Kennedy</quote>
 		<footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="1" type="toc">
@@ -37,7 +40,7 @@ Thanks for reading. Reach us at @sensoryixd #sensoryaesthetics</heading>
 __ yes  __no __not sure</footer>
 	</page>
 </spread>
-<spread id="2" background="dots">
+<spread id="2">
 	<page id="2">
 		<heading>hello, world</heading>
 	   <subheading></subheading>
@@ -53,7 +56,17 @@ James and Joshua
 	   <footer>This generative zine technology would not have been possible without a partnership with our friend Quin Kennedy (@quinkennedy) and the kind people who provide Processing and Processing libraries. </footer>
 	</page>
 	<page id="3" type="code">
-	   <body>	   	/**
+	   <body>
+
+
+
+
+
+
+
+
+
+	   	/**
 	   	* James, Joshua, and Quin wrote this  
 	   	* generative zine code available at 
 	   	* https://github.com/adenine/SensoryAestheticsZine001 
@@ -80,9 +93,7 @@ James and Joshua
         		}
       		}
     	}
-        /**
-        * This zine also uses StippleGen2, , 
-        */</body>
+    </body>
 	</page>
 </spread>
 <spread id="3">
@@ -98,58 +109,29 @@ Circle One:    TRUE  /  FALSE  / UNDECIDED</footer>
 	</page>
 	<page id="5">
 	   <image src="images/lilb2.jpg"></image>
-	   <subheading>Unlikely Hero of Sensing: Lil B</subheading>
+	   <heading>Lil B</heading>
+	   <subheading>Unlikely Hero of Sensing</subheading>
 	   <body>On November 28th, 2014 rapper Lil B crossed the threshold of following a million people on twitter. Inverting the usual paradigm of how celebrities use social media, Lil B celebrates not how many people follow him but rather how many people he follows.  In his own words: 
 
 “HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”
 
-Imagine we suspend our disbelief and that he reads for one day all of the tweets of all the people he follows. The mind boggles. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input. That is why Lil B is today’s hero of sensing.
-<bold>
-Who are your heroes of sensing?
-__________________________
-__________________________
-</bold>
+Imagine we suspend our disbelief and that he reads for one day all of the tweets of all the people he follows. The mind boggles. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input. That is why Lil B is today’s hero of sensing. (TYBG)
 </body>
-	   <footer>TYBG</footer>
+	   <footer>Who are your heroes of sensing?
+__________________________
+__________________________
+</footer>
 	</page>
 </spread>
-<spread id="4">
-	<page id="6">
-	   <heading>Trending towards Empathy</heading>
-	   <subheading>2015 The Pace of Social Change</subheading>
-	   <!-- http://www.bloomberg.com/graphics/2015-pace-of-social-change/ -->
-	   <body>
-We believe the rising pace of social change is related to an increasing trend towards empathy. Empathy and sensing share a close relationship. When we hear, see, and otherwise sense the people around us we can practice empathy. 
-
-Recently a study with suprising results: almost 75 percent of students today rate themselves as less empathic than the average student 30 years ago (Sara H. Konrath of the University of Michigan at Ann Arbor led the study and published it in Personality and Social Psychology Review).
-
-So what is the future of empathy? If we can teach each other empathy can we begin to encapsulate that behavior into our computation? Is technology to blame for this recent decline? Are we moving beyond the need for empathy? 
-
-Some ways to practice empathy:
-1. Listen boldly.
-2. Be curious about others and the world.
-3. When you see two ways, look for a third. 
-4. Wonder like a child.
-5. Take the other side.
-
-</body>
-	  
-	<footer>Holden: The tortoise lays on its back, its belly baking in the hot sun, beating its legs trying to turn itself over, but it can’t. Not without your help. But you’re not helping.
-Leon: What do you mean, I’m not helping?
-Holden: I mean: you’re not helping! Why is that, Leon?</footer>
+<spread id="4" background="arch">
+	<page id="6" type="photo">
+	 	<footer>Archigram</footer>
 	</page>
-	<page id="7">
-		<body>
-		"In Ridley Scott’s film Blade Runner, empathy-detection devices are employed to measure affiliative emotions. Despite recent neurocomputational advances, it is unknown whether brain signatures of affiliative emotions, such as tenderness/affection, can be decoded and voluntarily modulated. Here, we employed multivariate voxel pattern analysis and real-time fMRI to address this question. We found that participants were able to use visual feedback based on decoded fMRI patterns as a neurofeedback signal to increase brain activation characteristic of tenderness/affection relative to pride, an equally complex control emotion. Such improvement was not observed in a control group performing the same fMRI task without neurofeedback. Furthermore, the neurofeedback-driven enhancement of tenderness/affection-related distributed patterns was associated with local fMRI responses in the septohypothalamic area and frontopolar cortex, regions previously implicated in affiliative emotion. This demonstrates that humans can voluntarily enhance brain signatures of tenderness/affection, unlocking new possibilities for promoting prosocial emotions and countering antisocial behavior.""
-
-	Source: Voluntary Enhancement of Neural Signatures of Affiliative Emotion Using fMRI Neurofeedback
-Jorge Moll , Julie H. Weingartner, Patricia Bado, Rodrigo Basilio, João R. Sato, Bruno R. Melo, Ivanei E. Bramati, Ricardo de Oliveira-Souza, Roland Zahn
-</body>
-		<image src="images/change.png"></image>
+	<page id="7" type="photo">
 	</page>
 </spread>
 <spread id="5">
-	<page id="8">
+	<page id="8"> 
 	 <heading>Spacemind</heading>
 	   <subheading>  </subheading>
 	   <body>
@@ -173,7 +155,8 @@ In the Felix Hess piece ‘It’s in the Air’ the artist has created three hun
 Where we see the static phenomenon we need to only look closer or further to understand that it is not static at all. How can we develop new types of sensing to look not at the state, but at the transition? When should state and when should you look for transition? When we examine the phenomenon of the universe how do we find the difference that makes a difference?
 
  </body>
- <footer>"I am not investigating in the objective world, I am investigating sensitivity." - Felix Hess</footer>
+ <footer>"I am not investigating in the objective world, I am investigating sensitivity." 
+ - Felix Hess</footer>
 <image src="images/felixhess2.jpg"></image>
 	</page>
 </spread>
@@ -188,7 +171,7 @@ Where we see the static phenomenon we need to only look closer or further to und
 -> Pads / Boards
 -> Sheet of Paper / Book
 -> Blackboard / Bulletin board</body>
-	   <footer>Sensory Aesthetics</footer>
+	   <footer>¯\_(ツ)_/¯</footer>
 	   <image src="images/personal.png"></image>
 	</page>
 	<page id="11">
@@ -201,13 +184,13 @@ Where we see the static phenomenon we need to only look closer or further to und
 -> Homes
 -> Cities
 -> Planets</body>
-	   <footer>Sensory Aesthetics</footer>	   
+	   <footer>¯\_(ツ)_/¯</footer>	   
 	   <image src="images/communal.png"></image>
 	</page>
 </spread>
 <spread id="7">
 	<page id="12" type="toplist">
-		<heading>10 Things we can't measure:</heading>
+		<heading>10 Things we can't Measure</heading>
 		<body>1. Reality
 2. Intention
 3. Success
@@ -237,18 +220,13 @@ Our proposal: Dedicate 1 square acre of land to the deep pursuit of sensing. Bri
 
 We have tentatively named this project Information Acre and are currently looking for a suitable area in the Pacific Northwest for this to occur. 
 </body>
-	   <footer>Want to join us? Our contact info is on the back of the zine.</footer>
 	   <image src="images/biomass.gif"></image>
 	</page>
 	<page id="15">
-		<heading>Connecting the Biomass</heading>
-	   <subheading></subheading>
-	   <body>
-
-	   	The Information Acre project is a small step inspired by the audacious goal set forth by the the founders of the interspecies internet project. Neil Gershenfeld, one of the founding members, describes that part of the goal is "starting to think about how you integrate the rest of the biomass of the planet into the internet".   	
-</body>
-<image src="images/logo2.png"></image>	  
-	   <footer>Learn more at http://interspecies-internet.org/</footer>
+		<heading></heading>
+		<subheading></subheading>
+		<image src="images/archigram14.gif"></image>
+		 <footer>Want to join us on Information Acre? Contact: @brunchstorm or @jamestichenor.</footer>
 	</page>
 </spread>
 </zine>
