@@ -176,7 +176,6 @@ void setup() {
 
 public void infoPage(PGraphics pdf) {
   // Create the cover page
-  println("creating info page");
   pdf.background(255);
   pdf.textFont(screenFont);
   //textAlign(CENTER, CENTER);
@@ -249,7 +248,6 @@ void draw() {
       break;
     case GenSpreads:
       int k = zineState.progress;
-      println("assembling spread " + k);
       spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
       spreads[k-1].setMargins(100,100,100,100,50,50);
       //spreads[k-1].setMargins(200,200,200,200,100,100);
@@ -271,7 +269,6 @@ void draw() {
       break;
     case CreateCover:
       int q = zineState.progress;
-      println("beginning cover " + q);
       cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
       zineState.progress++;
       if (zineState.progress > zineState.limit){
@@ -308,7 +305,6 @@ void draw() {
         paperg = zineState.paperg;
       }
       paperg.beginDraw();
-      println("placing cell " + (zineState.progress));
       ZinePageLayout cpg = zpl[page][row][cell];
       int spreadI = ((cpg.getNumber() / 2) % numSpreads);
       boolean leftPage = cpg.getNumber()%2 == 0;
@@ -384,101 +380,6 @@ void draw() {
     }
   }
   zineState.draw();
-  //for(int m = 1; m <= totalCopies; m++){
-    ////####### NOW LIVES IN Init STATE ######
-    //vars.put("num", str(m));
-    //String sm = "0000"+m;
-    //sm = sm.substring(sm.length()-5);
-    //pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "sensory_"+sm+".pdf");
-    //pdf.beginDraw();
-    //PGraphicsPDF pdfg = (PGraphicsPDF) pdf; // Get the renderer
-  
-    ////####### NOW LIVES IN GenSpreads STATE ######
-    //int minHeadingSize = -1;
-    //int currHeadingSize;
-    //int maxFooterHeight = 0;
-    // Create a set of Compositions
-    //for (int k=1; k <= numSpreads; k++) {
-    //  println("assembling spread " + k);
-    //  spreads[k-1] = new Spread(k, pageWidthPx * 2, pageHeightPx, false); 
-    //  spreads[k-1].setMargins(100,100,100,100,50,50);
-    //  //spreads[k-1].setMargins(200,200,200,200,100,100);
-    //  currHeadingSize = spreads[k-1].getMaxHeadingSize();
-    //  if (minHeadingSize == -1){
-    //    minHeadingSize = currHeadingSize;
-    //  } else if (minHeadingSize > currHeadingSize){
-    //    minHeadingSize = currHeadingSize;
-    //  }
-    //  maxFooterHeight = Math.max(maxFooterHeight, spreads[k-1].getMaxFooterHeight());
-    //}
-    //for(int i = 0; i < numSpreads; i++){
-    //  spreads[i].setHeadingSize(minHeadingSize);
-    //  spreads[i].setFooterHeight(maxFooterHeight);
-    //}
-    
-    ////####### NOW LIVES IN CreateCover STATE ######
-    //println("Creating cover");
-    
-    //for (int q=1; q <= coverPages; q++) {
-    //  println("beginning cover " + q);
-    //  cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
-    //}
-  
-    //println("---------------------");
-    
-    
-    //infoPage(); //start with an info page with spread thumbnails
-    
-    //pdfg.nextPage(); 
-    //// layout cover
-  
-    //pdf.image(cover[0].getPage(), 0, 0);
-    //pdf.image(cover[0].getPage(), 0, paperHeightPx/2);
-  
-    //pdfg.nextPage(); 
-    //// layout inside cover 
-    //pdf.image(cover[1].getPage(), 0, 0);
-    //pdf.image(cover[1].getPage(), 0, paperHeightPx/2);
-    
-    ////####### NOW LIVES IN LayoutPaper STATE ######
-    //int progress = 0;
-    //for(int page = 0; page < zpl.length; page++){
-    //  pdfg.nextPage();  // Tell it to go to the next page
-    //  pdfg.endDraw();
-    //  PGraphics paperg = createGraphics(paperWidthPx, paperHeightPx);
-    //  paperg.beginDraw();
-    //  for(int row = 0; row < zpl[0].length; row++){
-    //    for(int cell = 0; cell < zpl[0][0].length; cell++){
-    //      println("placing cell " + (++progress));
-    //      ZinePageLayout cpg = zpl[page][row][cell];
-    //      int spreadI = ((cpg.getNumber() / 2) % numSpreads);
-    //      boolean leftPage = cpg.getNumber()%2 == 0;
-    //      Spread comp = spreads[spreadI];
-    //      if (cpg.getHFlip()){
-    //        paperg.copy(comp.getPage(),
-    //          leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
-    //          pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
-    //      } else {
-    //        paperg.copy(comp.getPage(), 
-    //          leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
-    //          pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
-    //      }
-    //    }
-    //  }
-    //  paperg.endDraw();
-    //  pdf.beginDraw();
-    //  pdf.image(paperg, 0, 0);
-    //}
-    
-    /////////////// nowhere?? //////
-    //textFont(screenFont);
-    //textAlign(CENTER, CENTER);
-    
-    //pdf.dispose();
-    //pdf.endDraw();
-    
-    //println("PDF output");
-  //}
 }
 
 ZineState zineState;

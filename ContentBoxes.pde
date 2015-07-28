@@ -121,7 +121,10 @@ class TextBox extends ContentBox{
         myText += childText;
       }
     }
-    return myText;
+    if (myText.length() > 0){
+      bits.add(new FormattedTextBlock.FormattedText(myText, fnt.get(myWeight, myEm), size));
+    }
+    return null;
   }
 }
 

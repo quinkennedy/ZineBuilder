@@ -100,7 +100,6 @@ class Spread {
       //String page = children[spreadNum-1].getChildren("page")[0].getContent();
       //heading = children[pageNum-1].getChild("heading").getContent();
       //body = children[pageNum-1].getChild("body").getContent();
-      //println("Created Page: "+pageNum);
 
 
       pg = createGraphics(_spreadWidthPx, _spreadHeightPx);  
@@ -199,8 +198,7 @@ class Spread {
     XML [] tXML = _page.getChildren("image");
     PImage [] tImages = new PImage[tXML.length];
     for (int j=0; j<tXML.length; j++) {
-      tImages[j] = loadImage(tXML[j].getString("src")); 
-      println(tImages[j]);
+      tImages[j] = loadImage(tXML[j].getString("src"));
     }
     return tImages;
   }
@@ -256,7 +254,6 @@ class Spread {
   public void createCover() {
     XML[] cover = xml.getChildren("cover");
     XML[] pages = cover[spreadNum-1].getChildren("page");
-    //println(cover);
 
     int numPages = pages.length;
     pageWidthPx = spreadWidthPx;
@@ -493,9 +490,7 @@ class Spread {
       pd.bodyRect = tBox.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx), pg);
       bodyHeight = pd.bodyRect.h;
     }
-    println("body: " + bodyHeight);
     float headingHeight = (pd.headingRect != null ? pd.headingRect.h : 0);
-    println("head: " + headingHeight);
     
     //lets see how tall the image needs to be
     float targetImageHeight = 0;
@@ -507,11 +502,9 @@ class Spread {
       targetImageHeight = pd.imageRect.h;
       
       if (targetImageHeight <= hopedImageHeight){
-        println("img fits");
         pd.imageRect = iBox.render(new Rectangle(0, this.headingHeight, pd.contentWidthPx, hopedImageHeight), pg); 
       } else {
         Rectangle imageDest = new Rectangle(0, headingHeight, pd.contentWidthPx, pd.contentHeightPx - footerHeight - bodyHeight - headingHeight);
-        println("img restricted: " + imageDest.toString());
         pd.imageRect = iBox.render(imageDest, pg);
       }
       
@@ -562,7 +555,6 @@ class Spread {
       tmpStart[1] = random(tmpSize);
       tmpStart[2] = random(tmpSize);
       tmpStart[3] = random(tmpSize);
-      //println(tmpStart[0], tmpStart[1], tmpStart[2], tmpStart[3]);
       pageBox.vertex(tmpStart[0], tmpStart[2]);
       pageBox.quadraticVertex(tmpStart[0], tmpStart[1], tmpStart[2], tmpStart[3]);
       pageBox.quadraticVertex(random(tmpSize), random(tmpSize), random(tmpSize), random(tmpSize));
