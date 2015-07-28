@@ -3,6 +3,11 @@ import processing.pdf.*;
 //for Map
 import java.util.*;
 
+//Edit these for various PDF outputs for production
+int totalCopies = 1;
+boolean separateCopies = true;
+OutputType output = OutputType.All;
+
 PFont screenFont;
 boolean testLayout = false;
 boolean debug = false;
@@ -25,8 +30,6 @@ int printerPages = 2; // double sided
 int numPages = (int)Math.pow(2, widthFolds) * (int)Math.pow(2, heightFolds) * 2 * printerPages;
 int numSpreads = numPages/2;//front and back covers share the first spread
 int coverPages = 2;
-int totalCopies = 1;
-
 int topMargin = 200;
 int bottomMargin = 300;
 int centerLeft = 50;
@@ -36,6 +39,7 @@ Spread[] spreads = new Spread[numSpreads];
 Spread[] cover = new Spread[coverPages];
 Map<String, String> vars = new HashMap<String, String>();
 ZinePageLayout[][][] zpl;
+
 
 /*
  *  SensoryZine001.pde
@@ -230,6 +234,62 @@ public void infoPage(PGraphics pdf) {
   }
 }
 
+ConstructionState nextState(ConstructionState currState, OutputType outputType){
+  switch(currState){
+    case Init:
+      switch(outputType){
+        case All:
+        case Spreads:
+        case InnerPages:
+          return ConstructionState.GenSpreads;
+        case Cover:
+          return ConstructionState.CreateCover;
+      }
+    case GenSpreads:
+      switch(outputType){
+        case All:
+        case Cover:
+        case Spreads:
+          return ConstructionState.CreateCover;
+        case InnerPages:
+          return ConstructionState.LayoutPaper;
+      }
+    case CreateCover:
+      switch(outputType){
+        case All:
+          return ConstructionState.CreateInfo;
+        case Cover:
+        case Spreads:
+          return ConstructionState.RenderCover;
+        case InnerPages:
+          return ConstructionState.LayoutPaper;
+      }
+    case CreateInfo:
+      switch(outputType){
+        case All:
+        case Cover:
+        case Spreads:
+          return ConstructionState.RenderCover;
+        case InnerPages:
+          return ConstructionState.LayoutPaper;
+      }
+    case RenderCover:
+      switch(outputType){
+        case All:
+        case Spreads:
+        case InnerPages:
+          return ConstructionState.LayoutPaper;
+        case Cover:
+          return ConstructionState.Done;
+      }
+    case LayoutPaper:
+      return ConstructionState.Done;
+    case Done:
+      return ConstructionState.Init;
+  }
+  return ConstructionState.Init;
+}
+
 void draw() {
   background(0);
   ConstructionState entryState = zineState.state;
@@ -240,11 +300,18 @@ void draw() {
   switch(zineState.state){
     case Init:
       vars.put("num", str(zineState.copyNum));
-      String sn = "000" + zineState.copyNum;
-      sn = sn.substring(sn.length() - 4);
-      zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "sensory_"+sn+".pdf");
-      zineState.pdf.beginDraw();
-      zineState.state = ConstructionState.GenSpreads;
+      if (separateCopies || zineState.pdf == null){
+        String sn;
+        if (separateCopies){
+          sn = "000" + zineState.copyNum;
+          sn = sn.substring(sn.length() - 4);
+        } else {
+          sn = "all";
+        }
+        zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "sensory_"+sn+".pdf");
+        zineState.pdf.beginDraw();
+      }
+      zineState.state = nextState(zineState.state, output);// ConstructionState.GenSpreads;
       break;
     case GenSpreads:
       int k = zineState.progress;
@@ -264,7 +331,7 @@ void draw() {
           spreads[i].setHeadingSize(zineState.minHeadingSize);
           spreads[i].setFooterHeight(zineState.maxFooterHeight);
         }
-        zineState.state = ConstructionState.CreateCover;
+        zineState.state = nextState(zineState.state, output);// ConstructionState.CreateCover;
       }
       break;
     case CreateCover:
@@ -272,21 +339,22 @@ void draw() {
       cover[q-1] = new Spread(q, pageWidthPx * 2, pageHeightPx, true);
       zineState.progress++;
       if (zineState.progress > zineState.limit){
-        zineState.state = ConstructionState.CreateInfo;
+        zineState.state = nextState(zineState.state, output);// ConstructionState.CreateInfo;
       }
       break;
     case CreateInfo:
       infoPage(zineState.pdf); //start with an info page with spread thumbnails
-      zineState.state = ConstructionState.RenderCover;
+      pdfg.nextPage();
+      zineState.state = nextState(zineState.state, output);// ConstructionState.RenderCover;
       break;
     case RenderCover:
       int p = zineState.progress;
-      pdfg.nextPage();
       zineState.pdf.image(cover[p-1].getPage(), 0, 0);
       zineState.pdf.image(cover[p-1].getPage(), 0, paperHeightPx/2);
+      pdfg.nextPage();
       zineState.progress++;
       if (zineState.progress > zineState.limit){
-        zineState.state = ConstructionState.LayoutPaper;
+        zineState.state = nextState(zineState.state, output);// ConstructionState.LayoutPaper;
       }
       break;
     case LayoutPaper:
@@ -300,7 +368,7 @@ void draw() {
       PGraphics paperg = zineState.paperg;
       if (cell == 0 && row == 0){
         //new page
-        pdfg.nextPage();  // Tell it to go to the next page
+        //pdfg.nextPage();  // Tell it to go to the next page
         pdfg.endDraw();
         zineState.paperg = createGraphics(paperWidthPx, paperHeightPx);
         paperg = zineState.paperg;
@@ -324,13 +392,15 @@ void draw() {
       if (cell == cellsPerRow - 1 && row == rowsPerPage - 1){
         //filled page
         zineState.pdf.image(paperg, 0, 0);
+        pdfg.nextPage();  // Tell it to go to the next page
       }
       zineState.progress++;
       if (zineState.progress >= zineState.limit){
-        zineState.state = ConstructionState.Done;
+        zineState.state = nextState(zineState.state, output);// ConstructionState.Done;
       }
       break;
     case Done:
+      boolean dispose;
       if (zineState.copyNum >= totalCopies){
         noLoop();
         pushStyle();
@@ -338,9 +408,15 @@ void draw() {
         textSize(100);
         text("FIN", width/2, height/2);
         popStyle();
+        dispose = true;
       } else {
         zineState.copyNum++;
-        zineState.state = ConstructionState.Init;
+        zineState.state = nextState(zineState.state, output);// ConstructionState.Init;
+        dispose = separateCopies;
+      }
+      if (dispose && zineState.pdf != null){
+        zineState.pdf.dispose();
+        zineState.pdf = null;
       }
       break;
   }
@@ -375,8 +451,6 @@ void draw() {
         zineState.limit = totalCells;
         break;
       case Done:
-        zineState.pdf.dispose();
-        zineState.pdf = null;
         break;
     }
   }
@@ -431,4 +505,11 @@ public enum ConstructionState{
   RenderCover,
   LayoutPaper,
   Done
+}
+
+public enum OutputType{
+  Cover,
+  Spreads,
+  InnerPages,
+  All
 }
