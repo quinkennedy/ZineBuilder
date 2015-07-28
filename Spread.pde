@@ -11,10 +11,7 @@ class Spread {
   PGraphics pg;
   private int spreadWidthPx;
   private int spreadHeightPx;
-  PFont headingFont;
-  PFont bodyFont;
-  PFont monoFont;
-  PFont footerFont;
+  FontFamily headingFamily, bodyFamily, monoFamily, footerFamily;
   XML xml;
   private int topMargin = 200;
   private int bottomMargin = 200;
@@ -80,10 +77,10 @@ class Spread {
     // load content
     xml = loadXML("zine.xml");
 
-    headingFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48);
-    bodyFont = createFont("fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48);
-    monoFont = createFont("fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf", 48);
-    footerFont = createFont("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48);
+    headingFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, SensoryZine001.this);
+    bodyFamily = FontFamily.loadBody(SensoryZine001.this);
+    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-ExtraLight.ttf", 48, SensoryZine001.this);
+    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, SensoryZine001.this);
 
     spreads = xml.getChildren("spread");
     
@@ -116,19 +113,21 @@ class Spread {
       pageData = new PageData[pages.length];
       for (int i = 0; i < pages.length; i++) {
         pageData[i] = new PageData();
-        pageData[i].heading = extractString(pages[i], "heading");
-        pageData[i].subheading = extractString(pages[i], "subheading");
+        pageData[i].heading = pages[i].getChild("heading");
+        pageData[i].subheading = pages[i].getChild("subheading");
         pageData[i].setBodyHeight();
-        pageData[i].body = extractString(pages[i], "body");
-        pageData[i].footer = extractString(pages[i], "footer");
+        pageData[i].body = pages[i].getChild("body");
+        pageData[i].footer = pages[i].getChild("footer");
         pageData[i].pageID = pages[i].getString("id");
         pageData[i].contentImages = extractImages(pages[i]);
 
         pageData[i].type = pages[i].getString("type");
         if (pageData[i].type == null) {
         } else if (pageData[i].type.equals("quote")) {
-          pageData[i].quote = extractString(pages[i], "quote");
-          pageData[i].author = pages[i].getChild("quote").getString("author");
+          pageData[i].quote = pages[i].getChild("quote");
+          if (pageData[i].quote != null){
+            pageData[i].author = pageData[i].quote.getString("author");
+          }
         } else if (pageData[i].type.equals("toc")) {
           pageData[i].content = extractContents(spreads);
         } else if (pageData[i].type.equals("photo")) {
@@ -147,37 +146,21 @@ class Spread {
     headingSize = size;
     subheadingSize = size/2;
     for (int i = 0; i < pageData.length; i++) {
-      if (pageData[i].hasHeading() || pageData[i].hasSubheading()) {
-        FormattedTextBlock.FormattedText[] hText;
-        if (pageData[i].hasHeading() && pageData[i].hasSubheading()) {
-          hText = new FormattedTextBlock.FormattedText[]{
-            new FormattedTextBlock.FormattedText(pageData[i].heading + "\n", headingFont, headingSize), 
-            new FormattedTextBlock.FormattedText(pageData[i].subheading, headingFont, subheadingSize)};
-        } else {
-          hText = new FormattedTextBlock.FormattedText[]{
-            new FormattedTextBlock.FormattedText(
-            pageData[i].hasHeading() ? pageData[i].heading : pageData[i].subheading, 
-            headingFont, 
-            pageData[i].hasHeading() ? headingSize : subheadingSize)};
-        }
-        pageData[i].headingBlock = new FormattedTextBlock(hText, pageData[i].contentWidthPx, pg);
-        pageData[i].setBodyHeight();
-      }
+      pageData[i].setBodyHeight();
     }
   }
 
   public int getMaxHeadingSize() {
-    int allowedHeadingHeight = contentHeightPx/4;
     //PFont font = loadFont("bold-print.vlw");
-    int headingSize = allowedHeadingHeight;
+    int headingSize = this.headingSize;
     for (int i = 0; i < pageData.length; i++) {
-      if (pageData[i].heading != null && pageData[i].heading.length() > 0) {
-        FormattedTextBlock.FormattedText[] text = 
-          {new FormattedTextBlock.FormattedText(pageData[i].heading + "\n", headingFont, headingSize), 
-          new FormattedTextBlock.FormattedText(pageData[i].subheading, headingFont, subheadingSize)};
-        FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx, pg);
-        textBlock.constrainHeight(allowedHeadingHeight, pg);
-        headingSize = textBlock.text[0].fontSize;
+      HeadingBox hBox = new HeadingBox(pageData[i].heading, pageData[i].subheading, headingFamily, 
+                                       headingSize, headingSize/2, pg, vars, true);
+      Rectangle usedArea = hBox.layout(new Rectangle(0, 0, pageData[i].contentWidthPx, headingHeight), pg);
+      if (hBox.hasHeading()){
+        headingSize = (int)min(headingSize, hBox.getHeadingSize());
+      } else if (hBox.hasSubheading()){
+        headingSize = (int)min(headingSize, hBox.getSubheadingSize() * 2);
       }
     }
     return headingSize;
@@ -185,15 +168,13 @@ class Spread {
 
   public int getMaxFooterHeight() {
     //PFont font = loadFont("footer-print.vlw");
-    pg.textFont(footerFont);
+    pg.textFont(footerFamily.get(FontWeight.REGULAR, FontEm.REGULAR));
     pg.textSize(footerSize);
     int maxFooterHeight = 0;
     for (int i = 0; i < pageData.length; i++) {
-      if (pageData[i].footer != null && pageData[i].footer.length() > 0) {
-        FormattedTextBlock.FormattedText[] text = {new FormattedTextBlock.FormattedText(pageData[i].footer, footerFont, footerSize)};
-        FormattedTextBlock textBlock = new FormattedTextBlock(text, pageData[i].contentWidthPx - pageNumWidth, pg);
-        maxFooterHeight = Math.max(textBlock.totalHeight, maxFooterHeight);
-      }
+      TextBox fBox = new TextBox(pageData[i].footer, footerFamily, footerSize, pg, vars, false);
+      Rectangle usedArea = fBox.layout(new Rectangle(0, 0, pageData[i].contentWidthPx, Float.POSITIVE_INFINITY), pg);
+      maxFooterHeight = (int)Math.max(usedArea.h, maxFooterHeight);
     }
     return maxFooterHeight;
   }
@@ -208,35 +189,10 @@ class Spread {
   private void calculatePageNumDims() {
     //PFont fFont = loadFont("footer-print.vlw");
     pg.pushStyle();
-    pg.textFont(bodyFont);
+    pg.textFont(bodyFamily.get(FontWeight.REGULAR, FontEm.REGULAR));
     pageNumWidth = (int)pg.textWidth("99");
     pageNumHeight = (int)pg.textAscent();
     pg.popStyle();
-  }
-
-  public String extractString(XML _page, String _tag) {
-    XML tXML = _page.getChild(_tag);
-    if (tXML == null) {
-      return null;
-    } else {
-      String output = "";
-      XML[] pieces = tXML.getChildren();
-      for(int i = 0; i < pieces.length; i++){
-        XML piece = pieces[i];
-        String name = piece.getName();
-        if (name.equals("#text")){
-          output += piece.getContent();
-        } else if (name.equals("var")){
-          String key = piece.getString("key");
-          if (key != null && vars.containsKey(key)){
-            output += vars.get(key);
-          } else {
-            output += piece.format(-1);
-          }
-        }
-      }
-      return output;
-    }
   }
 
   public PImage[] extractImages(XML _page) {
@@ -250,19 +206,11 @@ class Spread {
   }
 
   public Content[] extractContents(XML[] _spreads) {
-    ArrayList<XML> pages = new ArrayList<XML>();
     ArrayList<Content> contents = new ArrayList<Content>();
-    for (int i = 0; i < _spreads.length; i++) {
-      XML[] temp = _spreads[i].getChildren("page");
-      for (int j = 0; j < temp.length; j++) {
-        pages.add(temp[j]);
-      }
-    }
-    for (int i = 0; i < pages.size(); i++) {
-      String heading = extractString(pages.get(i), "heading");
-      String pageno = pages.get(i).getString("id");
-      if (heading != null && heading.length() > 0) {
-        contents.add(new Content(pageno, heading));
+    for(int i = 0; i < pageData.length; i++){
+      HeadingBox hBox = new HeadingBox(pageData[i].heading, null, headingFamily, headingSize, subheadingSize, pg, vars, false);
+      if (hBox.hasHeading()){
+        contents.add(new Content(pageData[i].pageID, hBox.getHeadingText(pg)));
       }
     }
     return contents.toArray(new Content[contents.size()]);
@@ -324,14 +272,10 @@ class Spread {
     pageData = new PageData[pages.length];
     for (int i = 0; i < pages.length; i++) {
       pageData[i] = new PageData();
-      pageData[i].heading = extractString(pages[i], "heading");
-      //heading = pages[i].getChild("heading");
-      pageData[i].subheading = extractString(pages[i], "subheading");
-      //subheading = pages[i].getChild("subheading");
-      pageData[i].body = extractString(pages[i], "body");
-      //body = pages[i].getChild("body");
-      pageData[i].footer = extractString(pages[i], "footer");
-      //footer = pages[i].getChild("footer");
+      pageData[i].heading = pages[i].getChild("heading");
+      pageData[i].subheading = pages[i].getChild("subheading");
+      pageData[i].body = pages[i].getChild("body");
+      pageData[i].footer = pages[i].getChild("footer");
       pageData[i].contentImages = extractImages(pages[i]);
 
       if (spreadNum < 2) {
@@ -383,7 +327,7 @@ class Spread {
     }
 
     
-    pg.textFont(bodyFont);
+    pg.textFont(bodyFamily.getReg());
     pg.fill(primaryColor);
     if (isCover) {
       pg.fill(255, 122, 255);
@@ -446,9 +390,9 @@ class Spread {
   }
 
   public void quote(PageData pd) {
-    TextBox author = new TextBox(pd.author, bodyFont, headingSize, true);
+    TextBox author = new TextBox(pd.author, bodyFamily.getReg(), headingSize, pg, true);
     Rectangle aRect = author.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.bodyHeightPx/3), pg);
-    TextBox quote = new TextBox(pd.quote, bodyFont, quoteSize, true);
+    TextBox quote = new TextBox(pd.quote, bodyFamily, quoteSize, pg, vars, true);
     quote.render(
       new Rectangle(0, pd.hasHeading() || pd.hasSubheading() ? headingHeight : 0, pd.contentWidthPx, pd.bodyHeightPx - aRect.h),
       pg,
@@ -466,17 +410,14 @@ class Spread {
   public void code(PageData pd) {
     // For code samples
     //PFont myCodeFont = createFont("SourceCodePro-ExtraLight", 48);
-
-    pg.textFont(monoFont);
-    pg.fill(primaryColor);
-    pg.textSize(bodySize-5);
+    TextBox code = new TextBox(pd.body, monoFamily, bodySize - 5, pg, vars, true);
+    Rectangle cRect = code.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.bodyHeightPx), pg);
     pg.pushStyle();
     pg.fill(255);
     pg.noStroke();
-    pg.rect(0,0,pd.contentWidthPx, pd.contentHeightPx - footerHeight);
+    pg.rect(cRect.x, cRect.y, cRect.w, cRect.h);
     pg.popStyle();
-    pg.text(pd.body, 0, 0, pd.contentWidthPx, pd.contentHeightPx - footerHeight);
-    pg.textSize(headingSize);
+    code.render(new Rectangle(0, 0, pd.contentWidthPx, pd.bodyHeightPx),pg);
   }
 
   public void toplist(PageData pd) {
@@ -491,22 +432,28 @@ class Spread {
     String[] separators = {" ", "|", "   ", " | ", " /**/ ", "\n"};
     int interI = (int)random(1, separators.length);
     int intraI = (int)random(0, interI);
-    int size = headingFont.getSize();
-    FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[pd.content.length*2];
+    int size = headingSize;//headingFont.getSize();
+    FormattedTextBlock cBox = new FormattedTextBlock(pg);
+    
+    //FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[pd.content.length*2];
     for (int i = 0; i < pd.content.length; i++) {
-      fText[i*2] = new FormattedTextBlock.FormattedText(pd.content[i].page, headingFont, size);
-      fText[i*2+1] = new FormattedTextBlock.FormattedText(
-        separators[intraI] + pd.content[i].text + separators[interI], bodyFont, size);
+      cBox.add(pd.content[i].page, headingFamily.getReg(), size);
+      cBox.add(separators[intraI] + pd.content[i].text + separators[interI], bodyFamily.getReg(), size);
+      //fText[i*2] = new FormattedTextBlock.FormattedText(pd.content[i].page, headingFont, size);
+      //fText[i*2+1] = new FormattedTextBlock.FormattedText(
+      //  separators[intraI] + pd.content[i].text + separators[interI], bodyFont, size);
     }
-    FormattedTextBlock textBlock = new FormattedTextBlock(fText, contentWidthPx[0], pg);
-    textBlock.constrainHeight(contentHeightPx, pg);
+    //FormattedTextBlock textBlock = new FormattedTextBlock(fText, contentWidthPx[0], pg);
+    cBox.setConstraints(pd.contentWidthPx, pd.bodyHeightPx - headingHeight);
+    //textBlock.constrainHeight(contentHeightPx, pg);
 
     //now draw the text
     pg.pushMatrix();
     if (pd.hasHeading() || pd.hasSubheading()){
       pg.translate(0, pd.contentHeightPx/4);
     }
-    drawBlockedText(textBlock, pg);
+    cBox.render(pg);
+    //drawBlockedText(textBlock, pg);
     pg.popMatrix();
   }
 
@@ -537,14 +484,9 @@ class Spread {
     //lets see how much space the body text needs
     TextBox tBox = null;
     float bodyHeight = 0;
-    if (pd.body != null && pd.body.length() > 0) {
+    if (pd.body != null && pd.body.getChildren().length > 0) {
       // We should add an optional background for the content boxes.
-      //pg.pushStyle();
-      //pg.fill(255);
-      //pg.noStroke();
-      //pg.rect(0,0,pd.contentWidthPx, pd.contentHeightPx - footerHeight);
-      //pg.popStyle();
-      tBox = new TextBox(pd.body, bodyFont, bodySize, false);
+      tBox = new TextBox(pd.body, bodyFamily, bodySize, pg, vars, false);
       pd.bodyRect = tBox.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx), pg);
       bodyHeight = pd.bodyRect.h;
     }
@@ -579,12 +521,12 @@ class Spread {
   }
 
   private Rectangle renderHeading(PageData pd) {
-    HeadingBox box = new HeadingBox(pd.heading, pd.subheading, headingFont, headingSize, subheadingSize);
+    HeadingBox box = new HeadingBox(pd.heading, pd.subheading, headingFamily, headingSize, subheadingSize, pg, vars, false);
     return box.render(new Rectangle(0, 0, pd.contentWidthPx, headingHeight), pg, debug);
   }
 
   private Rectangle renderFooter(PageData pd) {
-    TextBox tBox = new TextBox(pd.footer == null ? "" : pd.footer, footerFont, footerSize, false);
+    TextBox tBox = new TextBox(pd.footer, footerFamily, footerSize, pg, vars, false);
     return tBox.render(new Rectangle(0, pd.contentHeightPx - footerHeight, pd.contentWidthPx, footerHeight), pg, debug);
   }
 
@@ -592,7 +534,7 @@ class Spread {
     if (pd.pageID != null && pd.pageID.length() > 0) {
       //PFont fFont = loadFont("footer-print.vlw");
       pg.pushStyle();
-      pg.textFont(bodyFont);
+      pg.textFont(bodyFamily.getReg());
       pg.textSize(bodySize*0.7);
       int currWidth = (int)pg.textWidth(pd.pageID);
       int currHeight = bodySize; //(int)pg.lineHeight(pd.pageID);
@@ -662,20 +604,20 @@ class Spread {
   }
 
   class PageData {
-    String heading, subheading, body, footer, quote, author, pageID, background;
+    XML heading, subheading, body, footer, quote;
+    String author, pageID, background;
     String type;
     PImage[] contentImages;
     Content[] content;
     int contentWidthPx, contentHeightPx, rightMarginPx, leftMarginPx, topMarginPx, bottomMarginPx;
     int bodyHeightPx;
     Side outsideEdge;
-    FormattedTextBlock headingBlock;
     Rectangle footerRect, headingRect, bodyRect, imageRect;
     boolean hasHeading() {
-      return heading != null && heading.length() > 0;
+      return heading != null;
     }
     boolean hasSubheading() {
-      return subheading != null && subheading.length() > 0;
+      return subheading != null;
     }
     void setBodyHeight(){
       bodyHeightPx = contentHeightPx - footerHeight;
@@ -688,4 +630,54 @@ class Spread {
 
 enum Side {
   RIGHT, LEFT, NONE
+}
+
+static class FontFamily{
+  Map<FontWeight, Map<FontEm, PFont>> fonts;
+  
+  private FontFamily(){
+    fonts = new HashMap<FontWeight, Map<FontEm, PFont>>();
+  }
+  
+  public void loadFont(FontWeight w, FontEm e, String path, float size, PApplet p){
+    PFont f = p.createFont(path, size);
+    if (!fonts.keySet().contains(w)){
+      fonts.put(w, new HashMap<FontEm, PFont>());
+    }
+    Map<FontEm, PFont> currWeight = fonts.get(w);
+    currWeight.put(e, f);
+  }
+  
+  public PFont getReg(){
+    return get(FontWeight.REGULAR, FontEm.REGULAR);
+  }
+  
+  public PFont get(FontWeight w, FontEm e){
+    if (fonts.keySet().contains(w) && fonts.get(w).keySet().contains(e)){
+      return fonts.get(w).get(e);
+    } else {
+      return null;
+    }
+  }
+  
+  public static FontFamily loadBody(PApplet p){
+    FontFamily fam = new FontFamily();
+    fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48, p);
+    fam.loadFont(FontWeight.BOLD, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Bold.ttf", 48, p);
+    return fam;
+  }
+  
+  public static FontFamily loadSingle(String path, float size, PApplet p){
+    FontFamily fam = new FontFamily();
+    fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, path, size, p);
+    return fam;
+  }
+}
+
+enum FontWeight{
+  EXTRA_LIGHT, LIGHT, REGULAR, SEMI_BOLD, BOLD, BLACK;
+}
+
+enum FontEm{
+  REGULAR, ITALIC
 }

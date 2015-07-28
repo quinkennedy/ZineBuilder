@@ -3,20 +3,66 @@ import processing.core.PGraphics;
 import java.util.ArrayList;
 
 public class FormattedTextBlock{ //<>//
-  FormattedText[] text;
-  int maxWidth;
-  ArrayList<FormattedLine> lines;
-  int totalHeight, constrainHeight;
+  public ArrayList<FormattedText> text;
+  PGraphics pg;
+  private ArrayList<FormattedLine> lines;
+  private float totalHeight, totalWidth;
+  private float constrainHeight = Float.POSITIVE_INFINITY, constrainWidth = Float.POSITIVE_INFINITY;
+  private boolean calculated = false;
+  private VerticalResolutionTechnique vt = VerticalResolutionTechnique.Scale;
+  private HorizontalResolutionTechnique ht = HorizontalResolutionTechnique.Overflow;
+ // private ArrayList<Rectangle> blockedOut = new ArrayList<Rectangle>();
   
-  public FormattedTextBlock(FormattedText[] text, int maxWidth, PGraphics pg){
-    this.text = text;
-    this.maxWidth = maxWidth;
-    calculateLines(pg);
+  //public FormattedTextBlock(FormattedText[] text, float targetWidth, PGraphics pg){
+  //  this.text = new ArrayList<FormattedText>(text.length);
+  //  for(int i = 0; i < text.length; i++){
+  //    this.text.add(text[i]);
+  //  }
+  //  this.targetWidth = targetWidth;
+  //  this.pg = pg;
+  //}
+  
+  public FormattedTextBlock(PGraphics pg){
+    text = new ArrayList<FormattedText>();
+    this.pg = pg;
   }
+  
+  public float getHeight(){
+    if (!calculated){
+      constrain();
+    }
+    return totalHeight;
+  }
+  
+  public float getWidth(){
+    if (!calculated){
+      constrain();
+    }
+    return totalWidth;
+  }
+  
+  public void add(String txt, PFont font, float fontSize){
+    add(new FormattedText(txt, font, fontSize));
+  }
+  
+  public void add(FormattedText txt){
+    text.add(txt);
+    calculated = false;
+  }
+  
+  public void setConstraints(float width, float height){
+    constrainWidth = width;
+    constrainHeight = height;
+    calculated = false;
+  }
+  
+  //public void addBlocker(Rectangle block){
+  //  blockedOut.add(block);
+  //}
   
   //split the formatted text into separate lines of text
   //based on computed text lengths and given maximum text block width
-  private void calculateLines(PGraphics pg){
+  private void calculateLines(){
     //all the lines
     lines = new ArrayList<FormattedLine>();
     //the current line we are populating
@@ -24,15 +70,18 @@ public class FormattedTextBlock{ //<>//
     //the width of the FormattedText text that has 
     //been committed to the current line
     float currWidth = 0;
+    float largestWidth = 0;
     //the current text that can concatenate on the current line
     //but has not yet been committed
     String contig = "";
+    String lastSep = "";
     int prevDescent = 0, currDescent = 0, currAscent = 0, currY = 0;
     FormattedText tempText;
+    boolean autoNewline = false;
     
     //for each formatted text element
-    for(int ti = 0; ti < text.length; ti++){
-      FormattedText currT = text[ti];
+    for(int ti = 0; ti < text.size(); ti++){
+      FormattedText currT = text.get(ti);
       //set the PGraphics font for accurate width calculation
       pg.textFont(currT.font, currT.fontSize);
       
@@ -49,46 +98,52 @@ public class FormattedTextBlock{ //<>//
         SplitText currW = words[wi];
         //get the width of the uncommitted text along with
         //the current word we are testing
-        //TODO: understand the difference between unseen separators (spaces)
-        // and seen separators (hyphens)
-        float contigWidth = pg.textWidth(contig + currW.text);
-        float contigNsepWidth = pg.textWidth(contig + currW.toString());
+        float contigWidth = pg.textWidth(contig + lastSep + currW.text);
         
         //if the word doesn't fit
-        if (currWidth + contigWidth > maxWidth){
+        if (currWidth + contigWidth > constrainWidth){
           //commit all un-committed text
           if (contig.length() > 0){
             tempText = new FormattedText(contig, currT.font, currT.fontSize);
             line.add(tempText);
             tempText.startX = currWidth;
             tempText.startY = currY;
+            currWidth += pg.textWidth(contig);
           }
           //create the new line to fill
           line = newLine(lines);
+          autoNewline = true;
+          largestWidth = Math.max(currWidth, largestWidth);
           currWidth = 0;
           currAscent = (int)Math.ceil(pg.textAscent());
           currY += currDescent + currAscent;
           prevDescent = currDescent;
           currDescent = (int)Math.ceil(pg.textDescent());
           contig = "";
+          lastSep = "";
         }
         //add this word to the un-committed text
-        contig += currW.toString();
+        contig += lastSep + currW.text;
+        lastSep = currW.postSep;
         //if we have a newline character, and have content on this line
-        if (currW.postSep.equals("\n") && (contig.length() > 0 || line.texts.size() > 0)){
+        if (currW.postSep.equals("\n") && (!autoNewline || contig.length() > 0 || line.texts.size() > 0)){
           //force a newline (unless we just did a newline)
           
           //commit text
           //let's not include the newline character
           if (contig.length() > 1){
-            tempText = new FormattedText(contig.substring(0, contig.length() - 1), currT.font, currT.fontSize);
+            tempText = new FormattedText(contig, currT.font, currT.fontSize);
             line.add(tempText);
             tempText.startX = currWidth;
             tempText.startY = currY;
+            currWidth += pg.textWidth(tempText.text);
           }
           contig = "";
+          lastSep = "";
           //start a new line
           line = newLine(lines);
+          autoNewline = false;
+          largestWidth = Math.max(currWidth, largestWidth);
           currWidth = 0;
           currY += currDescent;
           prevDescent = currDescent;
@@ -107,20 +162,23 @@ public class FormattedTextBlock{ //<>//
         contig = "";
       }
     }
+    largestWidth = Math.max(currWidth, largestWidth);
     totalHeight = currY + currDescent;
+    totalWidth = largestWidth;
   }
   
-  public void constrainHeight(int maxHeight, PGraphics pg){
-    constrainHeight = maxHeight;
-    if (totalHeight <= maxHeight){
+  public void constrain(){
+    //TODO: constrain width as well
+    calculateLines();
+    if (totalHeight <= constrainHeight){
       //already fits!
       return;
     }
     //backup original text
-    FormattedText[] origText = text;
-    text = new FormattedText[text.length];
-    for(int i = 0; i < text.length; i++){
-      text[i] = new FormattedText(origText[i].text, origText[i].font, origText[i].fontSize);
+    ArrayList<FormattedText> origText = text;
+    text = new ArrayList<FormattedText>(origText.size());
+    for(int i = 0; i < origText.size(); i++){
+      text.add(new FormattedText(origText.get(i).text, origText.get(i).font, origText.get(i).fontSize));
     }
     
     boolean nochange = false;
@@ -134,7 +192,7 @@ public class FormattedTextBlock{ //<>//
     while(!nochange && iterations < limit){
       iterations++;
       nochange = true;
-      if (totalHeight > maxHeight){
+      if (totalHeight > constrainHeight){
         if (!didFit){
           bestFitScaleAmount = scaleAmount;
         }
@@ -146,21 +204,22 @@ public class FormattedTextBlock{ //<>//
         lastAdjust /= 2;
         scaleAmount += lastAdjust;
       }
-      for(int i = 0; i < text.length; i++){
-        int lastSize = text[i].fontSize;
-        text[i].fontSize = (int)(origText[i].fontSize * scaleAmount);
-        nochange &= (text[i].fontSize == lastSize);
+      for(int i = 0; i < text.size(); i++){
+        float lastSize = text.get(i).fontSize;
+        text.get(i).fontSize = (float)(origText.get(i).fontSize * scaleAmount);
+        nochange &= (text.get(i).fontSize == lastSize);
       }
       if (!nochange){
-        calculateLines(pg);
+        calculateLines();
       }
     }
     
     //scale according to best fit
-    for(int i = 0; i < text.length; i++){
-      text[i].fontSize = (int)(origText[i].fontSize * bestFitScaleAmount);
+    for(int i = 0; i < text.size(); i++){
+      text.get(i).fontSize = (int)(origText.get(i).fontSize * bestFitScaleAmount);
     }
-    calculateLines(pg);
+    calculateLines();
+    calculated = true;
   }
   
   public void render(PGraphics g){
@@ -168,13 +227,16 @@ public class FormattedTextBlock{ //<>//
   }
   
   public void render(PGraphics g, boolean debug){
+    if (!calculated){
+      constrain();
+    }
     if (debug){
       g.pushStyle();
       g.noFill();
       g.stroke(200);
-      g.rect(0, 0, maxWidth, constrainHeight);
+      g.rect(0, 0, constrainWidth, constrainHeight);
       g.stroke(0);
-      g.rect(0, 0, maxWidth, totalHeight);
+      g.rect(0, 0, totalWidth, totalHeight);
       g.popStyle();
     }
     FormattedLine currLine;
@@ -201,9 +263,24 @@ public class FormattedTextBlock{ //<>//
   }
   
   public String toString(){
+    if (!calculated){
+      constrain();
+    }
     String output = "[BLOCKED TEXT]\n";
-    for(int i = 0; i < text.length; i++){
-      output += text[i].toString() + "\n";
+    for(int i = 0; i < text.size(); i++){
+      output += text.get(i).toString() + "\n";
+    }
+    output += "[LINES]\n";
+    for(int i = 0; i < lines.size(); i++){
+      output += lines.get(i).toString() + "\n";
+    }
+    return output;
+  }
+  
+  public String getString(){
+    String output = "";
+    for(int i = 0; i < text.size(); i++){
+      output += text.get(i).getString();
     }
     return output;
   }
@@ -211,18 +288,18 @@ public class FormattedTextBlock{ //<>//
   public static class FormattedText{
     String text;
     PFont font;
-    int fontSize;
+    float fontSize;
     float startX, startY;
     
     public FormattedText(String text, PFont font){
       init(text, font, font.getSize());
     }
     
-    public FormattedText(String text, PFont font, int fontSize){
+    public FormattedText(String text, PFont font, float fontSize){
       init(text, font, fontSize);
     }
     
-    private void init(String _text, PFont _font, int _fontSize){
+    private void init(String _text, PFont _font, float _fontSize){
       this.text = _text;
       this.font = _font;
       this.fontSize = _fontSize;
@@ -231,7 +308,15 @@ public class FormattedTextBlock{ //<>//
     public SplitText[] split(){
       String restText = text;
       int i;
-      char[] splitGlyphs = {' ', '\n'};
+      char[] visibleSplits = {'-'};
+      char[] invisibleSplits = {' ', '\n'};
+      char[] splitGlyphs = new char[visibleSplits.length + invisibleSplits.length];
+      for(int j = 0; j < invisibleSplits.length; j++){
+        splitGlyphs[j] = invisibleSplits[j];
+      }
+      for(int j = 0; j < visibleSplits.length; j++){
+        splitGlyphs[invisibleSplits.length + j] = visibleSplits[j];
+      }
       ArrayList<SplitText> sText = new ArrayList<SplitText>();
       
       do{
@@ -241,12 +326,25 @@ public class FormattedTextBlock{ //<>//
         } else {
           String item = restText.substring(0, i);//startIndex, endIndex
           String sep = restText.substring(i, i+1);
+          if (sep != null && sep.length() > 0 && isIn(sep.charAt(0), visibleSplits)){
+            item += sep;
+            sep = "";
+          }
           restText = restText.substring(i + 1);
           sText.add(new SplitText(item, sep));
         }
       }while(i >= 0 && restText.length() > 0);
       
       return sText.toArray(new SplitText[sText.size()]);
+    }
+    
+    private boolean isIn(char c, char[] l){
+      for(int i = 0; i < l.length; i++){
+        if (c == l[i]){
+          return true;
+        }
+      }
+      return false;
     }
     
     private int indexOf(String s, char[] glyphs){
@@ -275,6 +373,10 @@ public class FormattedTextBlock{ //<>//
       String output =  font.getName() + ":" + text;
       return output;
     }
+    
+    public String getString(){
+      return text;
+    }
   }
   
   public static class SplitText{
@@ -297,5 +399,12 @@ public class FormattedTextBlock{ //<>//
     public void add(FormattedText text){
       texts.add(text);
     }
+  }
+  
+  public enum VerticalResolutionTechnique{
+    Scale, Drop
+  }
+  public enum HorizontalResolutionTechnique{
+    Scale, Overflow, Wrap, Drop
   }
 }

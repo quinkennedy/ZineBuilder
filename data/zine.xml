@@ -53,8 +53,7 @@ James and Joshua
 	   <footer>This generative zine technology would not have been possible without a partnership with our friend Quin Kennedy (@quinkennedy) and the kind people who provide Processing and Processing libraries. </footer>
 	</page>
 	<page id="3" type="code">
-	   <body>
-	   	/**
+	   <body>	   	/**
 	   	* James, Joshua, and Quin wrote this  
 	   	* generative zine code available at 
 	   	* https://github.com/adenine/SensoryAestheticsZine001 
@@ -83,7 +82,7 @@ James and Joshua
     	}
         /**
         * This zine also uses StippleGen2, , 
-	   </body>
+        */</body>
 	</page>
 </spread>
 <spread id="3">
@@ -215,8 +214,7 @@ Where we see the static phenomenon we need to only look closer or further to und
 <spread id="7">
 	<page id="12" type="toplist">
 		<heading>10 Things we can't measure:</heading>
-		<body>
-1. Reality
+		<body>1. Reality
 2. Intention
 3. Success
 4. Godzilla’s Impact on Humanity
