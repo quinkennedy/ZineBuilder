@@ -278,6 +278,7 @@ void draw() {
     case CreateInfo:
       infoPage(zineState.pdf); //start with an info page with spread thumbnails
       zineState.state = ConstructionState.RenderCover;
+      break;
     case RenderCover:
       int p = zineState.progress;
       pdfg.nextPage();
