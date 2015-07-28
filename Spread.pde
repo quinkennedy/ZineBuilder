@@ -207,10 +207,13 @@ class Spread {
 
   public Content[] extractContents(XML[] _spreads) {
     ArrayList<Content> contents = new ArrayList<Content>();
-    for(int i = 0; i < pageData.length; i++){
-      HeadingBox hBox = new HeadingBox(pageData[i].heading, null, headingFamily, headingSize, subheadingSize, pg, vars, false);
-      if (hBox.hasHeading()){
-        contents.add(new Content(pageData[i].pageID, hBox.getHeadingText(pg)));
+    for(int i = 0; i < _spreads.length; i++){
+      XML[] pages = _spreads[i].getChildren("page");
+      for(int j = 0; j < pages.length; j++){
+        HeadingBox hBox = new HeadingBox(pages[j].getChild("heading"), null, headingFamily, headingSize, subheadingSize, pg, vars, false);
+        if (hBox.hasHeading()){
+          contents.add(new Content(pages[j].getString("id"), hBox.getHeadingText(pg)));
+        }
       }
     }
     return contents.toArray(new Content[contents.size()]);
@@ -422,7 +425,7 @@ class Spread {
 
   public void toplist(PageData pd) {
     TextBox tBox = null;
-    tBox = new TextBox(pd.body, bodyFont, subheadingSize, false);
+    tBox = new TextBox(pd.body, bodyFamily, subheadingSize, pg, vars, false);
     pd.bodyRect = tBox.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx), pg);
     tBox.render(new Rectangle(0, this.headingHeight, pd.contentWidthPx, headingHeight), pg, debug);
   }

@@ -5,7 +5,7 @@ import java.util.*;
 
 PFont screenFont;
 boolean testLayout = false;
-boolean debug = true;
+boolean debug = false;
 float margin = 50;
 float paperWidthIn = 8.5; //inches
 float paperHeightIn = 11; //inches

@@ -143,8 +143,14 @@ class HeadingBox extends TextBox{
     parse(_heading, fnt, FontWeight.REGULAR, FontEm.REGULAR, _headingSize, vars, text);
     int numTexts = text.text.size();
     hasHeading = numTexts > 0;
+    if (hasHeading){
+      text.add("\n", fnt.getReg(), _subheadingSize);
+    }
     parse(_subheading, fnt, FontWeight.REGULAR, FontEm.REGULAR, _subheadingSize, vars, text);
     hasSubheading = text.text.size() > numTexts;
+    if (!hasSubheading){
+      text.dropLast();
+    }
     adjustFontSize = adjustSize;
   }
   public boolean isResizable(){

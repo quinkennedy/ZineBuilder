@@ -50,6 +50,12 @@ public class FormattedTextBlock{ //<>//
     calculated = false;
   }
   
+  public void dropLast(){
+    if (text != null && text.size() > 0){
+      text.remove(text.size() - 1);
+    }
+  }
+  
   public void setConstraints(float width, float height){
     constrainWidth = width;
     constrainHeight = height;
