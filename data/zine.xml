@@ -7,7 +7,8 @@
 	<page id="1">
 		<image src="images/jj2.png"></image>
 		<heading>Sensory Aesthetics</heading>
-		<subheading>A generative fanzine about the future of Computing.</subheading>
+		<subheading>A generative fanzine about 
+the future of Computing.</subheading>
 		<footer>Issue 001: Compiled and rendered for Foocamp 02015 (<var key="num"></var>/200)</footer>
 	</page>
 </cover>
@@ -16,12 +17,17 @@
 	   <image src="images/U_2_694819491672_archigram.jpg"></image>
 	</page>
 		<page id="4">
-	   <heading>Thank you for taking the time to read this zine. We had a few goals when we set out to write it and would love feedback.  Our goal were to discuss:
-Why should we invent computing to extend and augment humans? How will it teach us more deeply about ourselves?
-How can we extend our technologies to the objects and environments which help define who we are and how we live? What new sensing will need to be created?
-What if we understood an acre of land? What if the biomass of the earth were networked? 
+	   <heading>Thank you for taking the time to read this zine. Our goals were to discuss:
 
-Thanks for reading. Reach us at @sensoryixd #sensoryaesthetics</heading>
+* Why should we invent computing to extend and augment humans? How will it teach us more deeply about ourselves?
+
+* How can we extend our technologies to the objects and environments which help define who we are and how we live? What new sensing will need to be created?
+
+* What if we understood an acre of land? What if the biomass of the earth were networked? 
+
+We would like to thank the Processing community for making this possible, in particular contributors to Processing Core, CAN_GenerativeTypography, StippleGen2, and iText.
+
+Thanks for reading. Reach us at @sensorycc #sensoryaesthetics</heading>
 	   <subheading></subheading>
 	</page>
 </cover>
@@ -46,7 +52,7 @@ __ yes  __no __not sure</footer>
 	   <subheading></subheading>
 	   <body>
 
-		Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics fanzine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 02015. It is printed in small run editions (you are holding <var key="num"></var>/200) but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of as a generative fanzine by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensoryixd with questions or comments. We look forward to meeting you.
+		Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics fanzine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 02015. It is printed in small run editions (you are holding <var key="num"></var>/200) but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of as a generative fanzine by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensorycc with questions or comments. We look forward to meeting you.
 
 Warm Regards, 
 James and Joshua
@@ -113,7 +119,7 @@ Circle One:    TRUE  /  FALSE  / UNDECIDED</footer>
 	   <subheading>Unlikely Hero of Sensing</subheading>
 	   <body>On November 28th, 2014 rapper Lil B crossed the threshold of following a million people on twitter. Inverting the usual paradigm of how celebrities use social media, Lil B celebrates not how many people follow him but rather how many people he follows.  In his own words: 
 
-“HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”
+<bold>“HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”</bold>
 
 Imagine we suspend our disbelief and that he reads for one day all of the tweets of all the people he follows. The mind boggles. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input. That is why Lil B is today’s hero of sensing. (TYBG)
 </body>
@@ -191,7 +197,7 @@ Where we see the static phenomenon we need to only look closer or further to und
 <spread id="7">
 	<page id="12" type="toplist">
 		<heading>10 Things we can't Measure</heading>
-		<body>1. Reality
+		<body><bold>1. Reality
 2. Intention
 3. Success
 4. Godzilla’s Impact on Humanity
@@ -200,8 +206,7 @@ Where we see the static phenomenon we need to only look closer or further to und
 7. Why we fight
 8. The ringing in my ears
 9. Missed calls (*)
-10. The moment
-</body>
+10. The moment</bold></body>
 <footer>*Did you really miss that call?</footer>
 	</page>
 	<page id="13" type="photo">
@@ -212,9 +217,7 @@ Where we see the static phenomenon we need to only look closer or further to und
 	<page id="14">
  	<heading>Information Acre</heading>
 	   <subheading>   </subheading>
-	   <body>
-
-	   	Imagine the bit as the toss of a fair coin. The result is either heads or tails. The "holographic principle" would suggest that there is a limit to the number of bits which physics can support. This amount is placed at 10^69 bits per square meter before the point in which adding more information would collapse into a black hole. This is approximately 1, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 bits per square meter of two dimensional space.
+	   <body>Imagine the bit as the toss of a fair coin. The result is either heads or tails. The "holographic principle" would suggest that there is a limit to the number of bits which physics can support. This amount is placed at 10^69 bits per square meter before the point in which adding more information would collapse into a black hole. This is approximately 1, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 bits per square meter of two dimensional space.
 
 Our proposal: Dedicate 1 square acre of land to the deep pursuit of sensing. Bring scientists, artists, hardware and software designers together to try to make a dent in that information space. Sense the biology, the chemistry, the conditions, and the human reaction to that one acre. Publish this material for the world. 
 

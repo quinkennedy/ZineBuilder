@@ -149,7 +149,7 @@ class HeadingBox extends TextBox{
     if (hasHeading){
       text.add("\n", fnt.getReg(), _subheadingSize);
     }
-    parse(_subheading, fnt, FontWeight.REGULAR, FontEm.REGULAR, _subheadingSize, vars, text);
+    parse(_subheading, fnt, FontWeight.LIGHT, FontEm.REGULAR, _subheadingSize, vars, text);
     hasSubheading = text.text.size() > numTexts;
     if (!hasSubheading){
       text.dropLast();
