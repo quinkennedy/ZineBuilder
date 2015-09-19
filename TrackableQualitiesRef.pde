@@ -7,7 +7,7 @@ import java.util.*;
 int totalCopies = 1;
 int contiguousCopies = 1;
 //boolean separateCopies = false;
-OutputType output = OutputType.InnerPages;
+OutputType output = OutputType.Spreads;
 boolean debug = false;
 final static int START_AT = 1;
 
@@ -278,12 +278,15 @@ ConstructionState nextState(ConstructionState currState, OutputType outputType){
     case RenderCover:
       switch(outputType){
         case All:
-        case Spreads:
         case InnerPages:
           return ConstructionState.LayoutPaper;
+        case Spreads:
+          return ConstructionState.RenderSpreads;
         case Cover:
           return ConstructionState.Done;
       }
+    case RenderSpreads:
+      return ConstructionState.Done;
     case LayoutPaper:
       return ConstructionState.Done;
     case Done:
@@ -322,7 +325,11 @@ void draw() {
         String sn;
         sn = "000" + zineState.copyNum;
         sn = sn.substring(sn.length() - 4);
-        zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "tq_"+output.toString()+"_"+sn+".pdf");
+        if (output == OutputType.Spreads){
+          zineState.pdf = createGraphics(pageWidthPx * 2, pageHeightPx, PDF, "tq_"+output.toString()+"_"+sn+".pdf");
+        } else {
+          zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "tq_"+output.toString()+"_"+sn+".pdf");
+        }
         zineState.pdf.beginDraw();
       }
       zineState.state = nextState(zineState.state, output);
@@ -375,6 +382,16 @@ void draw() {
       zineState.pdf.image(cover[p+1].getPage(), 0, paperHeightPx/2);
       vars.put("num", str(zineState.copyNum));
       nextPage(zineState, totalCopies, contiguousCopies, output);
+      zineState.progress++;
+      if (zineState.progress >= zineState.limit){
+        zineState.state = nextState(zineState.state, output);
+      }
+      break;
+    case RenderSpreads:
+      int spreadNum = zineState.progress;
+      Spread currSpread = spreads[spreadNum];
+      zineState.pdf.image(currSpread.getPage(), 0, 0);
+      ((PGraphicsPDF)zineState.pdf).nextPage();
       zineState.progress++;
       if (zineState.progress >= zineState.limit){
         zineState.state = nextState(zineState.state, output);
@@ -463,6 +480,10 @@ void draw() {
         zineState.progress = 0;
         zineState.limit = coverPages;
         break;
+      case RenderSpreads:
+        zineState.progress = 0;
+        zineState.limit = numSpreads;
+        break;
       case LayoutPaper:
         zineState.progress = 0;
         int cellsPerRow = zpl[0][0].length;
@@ -524,6 +545,7 @@ public enum ConstructionState{
   CreateCover,
   CreateInfo,
   RenderCover,
+  RenderSpreads,
   LayoutPaper,
   Done
 }

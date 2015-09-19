@@ -4,22 +4,33 @@
 	<page id="2">
 		<body>
 		</body>
+	<upsidedown><body></body></upsidedown>
 	</page>
 	<page id="1">
 	<body></body>	
+	<upsidedown><body></body></upsidedown>
 	</page>
 </cover>
 <cover id="2">
 	<page id="3">
 	<body></body>	
+	<upsidedown><body></body></upsidedown>
 	</page>
 		<page id="4">
 	<body></body>	
+	<upsidedown><body></body></upsidedown>
 	</page>
 </cover>
 <spread id="1">
 	<page id="16">
-		<body>Assembled during the Choreographic Coding Labs organized by Motion Bank. Printed during CCL5 at UCLA in September 2015.</body>
+		<body>12 dimentions of movement. 
+a <bold>Pocket Reference</bold> for:
+
+* disruptive movement
+* computationally-trackable movement
+
+to spark thought and discussion about movement.</body>
+		<footer>V1.0.0</footer>
 	</page>
 	<page id="1">
 		<body>Atomic, or bite-sized, qualities of movement. 
@@ -32,73 +43,72 @@ a <bold>Pocket Reference</bold> for:
 </spread>
 <spread id="2">
 	<page id="2">
-		<heading>Center of Mass</heading>
+		<body>Assembled during the Choreographic Coding Labs organized by Motion Bank. Printed during CCL5 at UCLA in September 2015.</body>
 	</page>
 	<page id="3">
-	   <heading>Bounding Volume</heading>
-		<subheading>Box or Sphere</subheading>
-		<body>An area or volume (rectangle, box, circle, sphere) which is as small as possible while still completely containing the performer.</body>
+	   <heading>Extension</heading>
+	<upsidedown><heading>Constriction</heading></upsidedown>
 	</page>
 </spread>
 <spread id="3">
 	<page id="4">
-		<heading>Reach</heading>
-		<body>The action of reaching, with an intended, distant point outside the body, out of reach.</body>
+		<heading>Circular</heading>
+	<upsidedown><heading>Linear</heading></upsidedown>
 	</page>
 	<page id="5">
-	   <heading>Level</heading>
-		<body>Performer's height from the floor. Example terms: <italic>low</italic>, <italic>medium</italic>, <italic>high</italic>, <italic>lower</italic>, <italic>higher</italic>.</body>
+		<heading>Open</heading>
+	<upsidedown><heading>Closed</heading></upsidedown>
 	</page>
 </spread>
 <spread id="4">
 	<page id="6">
-		<heading>Circularity &lt;--> Linearity &lt;--> Angularity &lt;--></heading>
-	<body>Arrangement of parts of the body in a circular/linear/angular sequence. Also can be movement of parts of the body, or the entire body, along a circular/linear/angular path.</body>
+		<heading>Sturdy</heading>
+	<upsidedown><heading>Falling</heading></upsidedown>
 	</page>
 	<page id="7">
-		<heading>Parallelism</heading>
+		<heading>Avoided Space</heading>
+	<upsidedown><heading>Activated Space</heading></upsidedown>
 	</page>
-	<body>The amount to which lines extended frm particular body parts (for example the forearms) are parallel to one-another.</body>
 </spread>
 <spread id="5">
 	<page id="8"> 
-		<heading>Movement Intensity</heading>
-		<body>Amount and speed of movement relative to the performer's position (or Center of Mass). Does not consider gross movement of performer around stage</body>
+		<heading>Inhabited Space</heading>
+	<upsidedown><heading>Negative Space</heading></upsidedown>
 	</page>
 	<page id="9">
-	   <heading>Travel Intensity</heading>
-		<body>Amount of space recently covered by the performer. Focusing on performer's gross movement around stage</body>
+		<heading>Soft</heading>
+	<upsidedown><heading>Thick</heading></upsidedown>
 	</page>
 </spread>
 <spread id="6">
 	<page id="10">
-	<heading>Isolation</heading>
-	<body>moving one or several contiguous body parts while keeping the others still.</body>
+		<heading>Parallel</heading>
+	<upsidedown><heading>Angular</heading></upsidedown>
 	</page>
 	<page id="11">
-		<heading>Negative Space</heading>
-		<body>Created Space, enclosed space, but not inhabited space</body>
+		<heading>High Intensity</heading>
+	<upsidedown><heading>Inactive</heading></upsidedown>
 	</page>
 </spread>
 <spread id="7">
 	<page id="12">
-		<heading>Avoided Space</heading>
-		<body>Space which is defined over time by the performer's avoidance of it. Commonly accentuated by angular movement</body>
+		<heading>Isolated</heading>
+	<upsidedown><heading>Integrated</heading></upsidedown>
 	</page>
 	<page id="13">
-		<heading>Gaze</heading>
-		<body>Direction or point that performer is looking at</body>
-	   <footer>"full-body gaze"</footer>	   
+		<heading>Tall</heading>
+	<upsidedown><heading>Low</heading></upsidedown>
 	</page>
 </spread>
 <spread id="8">
 	<page id="14">
-		<heading>Points/Areas of Contact</heading>
-		<body>points of contact such as where your feet are touching the ground.</body>
+		<heading>Complex</heading>
+	<upsidedown><heading>Simple</heading></upsidedown>
 	</page>
 	<page id="15">
-	 <heading>Balance/Sturdiness</heading>
-		<body>a function of <italic>Center of Mass</italic> and <italic>Areas of Contact</italic></body>
+<upsidedown>
+		<body>Assembled during the Choreographic Coding Labs organized by Motion Bank. Printed during CCL5 at UCLA in September 2015.</body>
+</upsidedown>
 	</page>
 </spread>
 </zine>

@@ -139,6 +139,7 @@ class Spread {
         if (pages[i].getChild("upsidedown") != null){
           upsidedownData[i].heading = pages[i].getChild("upsidedown").getChild("heading");
           upsidedownData[i].body = pages[i].getChild("upsidedown").getChild("body");
+          upsidedownData[i].footer = pages[i].getChild("upsidedown").getChild("footer");
         }
       }
 
@@ -296,6 +297,7 @@ class Spread {
 
 
     pageData = new PageData[pages.length];
+    upsidedownData = new PageData[pages.length];
     for (int i = 0; i < pages.length; i++) {
       pageData[i] = new PageData();
       pageData[i].heading = pages[i].getChild("heading");
@@ -312,6 +314,12 @@ class Spread {
 
       pageData[i].type = pages[i].getString("type");
       if (pageData[i].type == null) {
+      }
+        
+      upsidedownData[i] = new PageData();
+      if (pages[i].getChild("upsidedown") != null){
+        upsidedownData[i].heading = pages[i].getChild("upsidedown").getChild("heading");
+        upsidedownData[i].body = pages[i].getChild("upsidedown").getChild("body");
       }
     }
 
@@ -401,6 +409,9 @@ class Spread {
       pg.pushMatrix();
       pg.translate(pageWidthPx - pageWidthPx * i, 0);
       pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
+      if (upsidedownData[i].footer != null) {
+        upsidedownData[i].footerRect = renderFooter(upsidedownData[i]);
+      }
       if (upsidedownData[i].hasHeading()){
         upsidedownData[i].headingRect = renderHeading(upsidedownData[i]);
       }
