@@ -79,10 +79,10 @@ class Spread {
     // load content
     xml = loadXML("zine.xml");
 
-    headingFamily = FontFamily.loadHeading(TrackableQualitiesRef.this);//FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, SensoryZine001.this);
-    bodyFamily = FontFamily.loadBody(TrackableQualitiesRef.this);
-    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-Light.ttf", 48, TrackableQualitiesRef.this);
-    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, TrackableQualitiesRef.this);
+    headingFamily = FontFamily.loadHeading(DimsOfMovementZine.this);//FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, SensoryZine001.this);
+    bodyFamily = FontFamily.loadBody(DimsOfMovementZine.this);
+    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-Light.ttf", 48, DimsOfMovementZine.this);
+    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, DimsOfMovementZine.this);
 
     spreads = xml.getChildren("spread");
     
