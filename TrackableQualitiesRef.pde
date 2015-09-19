@@ -7,21 +7,20 @@ import java.util.*;
 int totalCopies = 1;
 int contiguousCopies = 1;
 //boolean separateCopies = false;
-OutputType output = OutputType.Spreads;
+OutputType output = OutputType.InnerPages;
 boolean debug = false;
 final static int START_AT = 1;
-
 PFont screenFont;
 boolean testLayout = false;
 float margin = 50;
-float paperWidthIn = 11; //inches
-float paperHeightIn = 8.5; //inches
+float paperWidthIn = 8.5; //inches
+float paperHeightIn = 11; //inches
 int desiredDPI = 300; //pixels per inch
 int paperWidthPx = int(paperWidthIn * desiredDPI);
 int paperHeightPx = int(paperHeightIn * desiredDPI);
 // how many folds you want to create for your zine
-int widthFolds = 2;
-int heightFolds = 1;
+int widthFolds = 1;
+int heightFolds = 2;
 int pageWidthPx = paperWidthPx / (int)Math.pow(2, widthFolds);
 int pageHeightPx = paperHeightPx / (int)Math.pow(2, heightFolds);
 int compWidthPx = pageWidthPx * 2;

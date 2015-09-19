@@ -23,27 +23,25 @@
 </cover>
 <spread id="1">
 	<page id="16">
-		<body>12 dimentions of movement. 
-a <bold>Pocket Reference</bold> for:
-
-* disruptive movement
-* computationally-trackable movement
-
-to spark thought and discussion about movement.</body>
+<upsidedown>
+		<body><bold>12 dimensions of movement.</bold>
+a Pocket Sketchbook to spark thought and discussion.</body>
 		<footer>V1.0.0</footer>
+</upsidedown>
 	</page>
 	<page id="1">
-		<body>Atomic, or bite-sized, qualities of movement. 
-a <bold>Pocket Reference</bold> for:
-
-* disruptive movement
-* computationally-trackable movement</body>
+		<body><bold>12 dimensions of movement.</bold>
+a Pocket Sketchbook to spark thought and discussion.</body>
 		<footer>V1.0.0</footer>
 	</page>
 </spread>
 <spread id="2">
 	<page id="2">
-		<body>Assembled during the Choreographic Coding Labs organized by Motion Bank. Printed during CCL5 at UCLA in September 2015.</body>
+		<body>Suggestions for use:
+* focus on a dimension while going to work
+* illustrate each dimension in this booklet
+* describe a system which would recognize each dimension</body>
+		<footer>http://choreographiccoding.org/projects/trackable-qualities</footer>
 	</page>
 	<page id="3">
 	   <heading>Extension</heading>
@@ -66,18 +64,18 @@ a <bold>Pocket Reference</bold> for:
 	<upsidedown><heading>Falling</heading></upsidedown>
 	</page>
 	<page id="7">
-		<heading>Avoided Space</heading>
+		<heading>Ignored Space</heading>
 	<upsidedown><heading>Activated Space</heading></upsidedown>
 	</page>
 </spread>
 <spread id="5">
 	<page id="8"> 
-		<heading>Inhabited Space</heading>
-	<upsidedown><heading>Negative Space</heading></upsidedown>
+		<heading>Direct</heading>
+	<upsidedown><heading>Indirect</heading></upsidedown>
 	</page>
 	<page id="9">
-		<heading>Soft</heading>
-	<upsidedown><heading>Thick</heading></upsidedown>
+		<heading>Light</heading>
+	<upsidedown><heading>Heavy</heading></upsidedown>
 	</page>
 </spread>
 <spread id="6">
@@ -102,12 +100,16 @@ a <bold>Pocket Reference</bold> for:
 </spread>
 <spread id="8">
 	<page id="14">
-		<heading>Complex</heading>
-	<upsidedown><heading>Simple</heading></upsidedown>
+		<heading>Sustained</heading>
+	<upsidedown><heading>Quick</heading></upsidedown>
 	</page>
 	<page id="15">
 <upsidedown>
-		<body>Assembled during the Choreographic Coding Labs organized by Motion Bank. Printed during CCL5 at UCLA in September 2015.</body>
+		<body>Suggestions for use:
+* focus on a dimension while going to work
+* illustrate each dimension in this booklet
+* describe a system which would recognize each dimension</body>
+		<footer>http://choreographiccoding.org/projects/trackable-qualities</footer>
 </upsidedown>
 	</page>
 </spread>
