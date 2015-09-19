@@ -2,234 +2,103 @@
 <zine>
 <cover id="1">
 	<page id="2">
-		<heading>Bye.</heading>
+		<body>
+		</body>
 	</page>
 	<page id="1">
-		<image src="images/jj2.png"></image>
-		<heading>Sensory Aesthetics</heading>
-		<subheading>A generative fanzine about 
-the future of Computing.</subheading>
-		<footer>Issue 001: Compiled and rendered for Foocamp 02015 (<var key="num"></var>/200)</footer>
+	<body></body>	
 	</page>
 </cover>
 <cover id="2">
 	<page id="3">
-	   <image src="images/U_2_694819491672_archigram.jpg"></image>
+	<body></body>	
 	</page>
 		<page id="4">
-	   <heading>Thank you for taking the time to read this zine. Our goals were to discuss:
-
-* Why should we invent computing to extend and augment humans? How will it teach us more deeply about ourselves?
-
-* How can we extend our technologies to the objects and environments which help define who we are and how we live? What new sensing will need to be created?
-
-* What if we understood an acre of land? What if the biomass of the earth were networked? 
-
-We would like to thank the Processing community for making this possible, in particular contributors to Processing Core, CAN_GenerativeTypography, StippleGen2, and iText.
-
-Thanks for reading. Reach us at @sensorycc #sensoryaesthetics</heading>
-	   <subheading></subheading>
+	<body></body>	
 	</page>
 </cover>
 <spread id="1">
-	<page id="16" type="quote">
-		<subheading>02015</subheading>
-		<quote author="">Today's noise is tomorrow's information.
-			
--Quin Kennedy</quote>
-		<footer>Sensory Aesthetics</footer>
+	<page id="16">
+		<body>Assembled during the Choreographic Coding Labs organized by Motion Bank. Printed during CCL5 at UCLA in September 2015.</body>
 	</page>
-	<page id="1" type="toc">
-		<heading>Table of Contents</heading>
-		<footer>Every year children are taught how to interpet a table of contents, an information structure which dates back at least 2000 years. Do you remember learning how to use a table of contents?  
+	<page id="1">
+		<body>Atomic, or bite-sized, qualities of movement. 
+a <bold>Pocket Reference</bold> for:
 
-__ yes  __no __not sure</footer>
+* disruptive movement
+* computationally-trackable movement</body>
+		<footer>V1.0.0</footer>
 	</page>
 </spread>
 <spread id="2">
 	<page id="2">
-		<heading>hello, world</heading>
-	   <subheading></subheading>
-	   <body>
-
-		Hello fellow foocamper! Welcome to the first issue of the Sensory Aesthetics fanzine. This zine is about creating dialogue around the future of computing and humanity and we made it especially for you at Foocamp 02015. It is printed in small run editions (you are holding <var key="num"></var>/200) but the source code is readily available at http://www.github.com/sensoryaesthetics. Sensory Aesthetics was conceived of as a generative fanzine by James Tichenor (@jamestichenor) and Joshua Walton (@brunchstorm), two interaction designers with a love for how computing can extend and augment human understanding and capability. We hope you enjoy the zine and please come find us or contact us @sensorycc with questions or comments. We look forward to meeting you.
-
-Warm Regards, 
-James and Joshua
-
-	   </body>
-	   <image src="images/jj2.png"></image>
-	   <footer>This generative zine technology would not have been possible without a partnership with our friend Quin Kennedy (@quinkennedy) and the kind people who provide Processing and Processing libraries. </footer>
+		<heading>Center of Mass</heading>
 	</page>
-	<page id="3" type="code">
-	   <body>
-
-
-
-
-
-
-
-
-
-	   	/**
-	   	* James, Joshua, and Quin wrote this  
-	   	* generative zine code available at 
-	   	* https://github.com/adenine/SensoryAestheticsZine001 
-	   	* 
-	   	*/
-    	for(int row = 0; row &lt; zpl[0].length; row++){
-      		for(int cell = 0; cell &lt; zpl[0][0].length; cell++){
-        		println(&quot;placing cell &quot; + (++progress));
-        		ZinePageLayout cpg = zpl[page][row][cell];
-        		int spreadI = ((cpg.getNumber() / 2) % numSpreads);
-        		boolean leftPage = cpg.getNumber()%2 == 0;
-        		Spread comp = spreads[spreadI];
-        		if (cpg.getHFlip()){
-         	 		paperg.copy(comp.getPage(),
-            		leftPage ? pageWidthPx : (pageWidthPx*2), 
-            		pageHeightPx, -pageWidthPx, -pageHeightPx,
-            		pageWidthPx * cell, pageHeightPx * row, 
-            		pageWidthPx, pageHeightPx);
-        		} else {
-          			paperg.copy(comp.getPage(), 
-            		leftPage ? 0 : pageWidthPx, 0, pageWidthPx, 
-            		pageHeightPx, pageWidthPx * cell, pageHeightPx * row, 
-            		pageWidthPx, pageHeightPx);
-        		}
-      		}
-    	}
-    </body>
+	<page id="3">
+	   <heading>Bounding Volume</heading>
+		<subheading>Box or Sphere</subheading>
+		<body>An area or volume (rectangle, box, circle, sphere) which is as small as possible while still completely containing the performer.</body>
 	</page>
 </spread>
 <spread id="3">
 	<page id="4">
-	   <heading>Compute Thyself</heading>
-	   <subheading></subheading>
-	   <body>The history of computing can follow a line of augmenting and extending human capability. Through this pursuit we have learned a great deal about what it means to be human. For instance in the pursuit of language translation we have come to deeper understanding of the complexity and dynamism of human language. As humans we often move the conscious interpretation of our senses to the ‘background’ of our brain to focus more on our thoughts. From staring into space when lost in thought, sticking your tongue out of your mouth when you are trying to concentrate, or to turning down the radio when you need to focus on driving we intuitively arrange our sense ratios. We see complex cloud configurations beginning to work this way, but how often do we use this technique with machines? How often do we need to turn off one mode of input to put more energy towards calculations? How can we create interactions in the periphery? Which technologies support the subconscious computation, the nuanced reaction, the laissez faire commitment? Do our machines choose to ignore us when they are tired? What is the attention span of the machine? Do they ever really give us their attention?
-	   </body>
-	   <image src="images/eames.png"></image>
-	   <footer>By pursuing these technologies we create a mirror for humanity and learn about ourselves through constructivist / constructionist practice. 
-
-Circle One:    TRUE  /  FALSE  / UNDECIDED</footer>
+		<heading>Reach</heading>
+		<body>The action of reaching, with an intended, distant point outside the body, out of reach.</body>
 	</page>
 	<page id="5">
-	   <image src="images/lilb2.jpg"></image>
-	   <heading>Lil B</heading>
-	   <subheading>Unlikely Hero of Sensing</subheading>
-	   <body>On November 28th, 2014 rapper Lil B crossed the threshold of following a million people on twitter. Inverting the usual paradigm of how celebrities use social media, Lil B celebrates not how many people follow him but rather how many people he follows.  In his own words: 
-
-<bold>“HEY TWITTER I FOLLOWED 1 MILLION + PEOPLE WITH MY BARE HANDS !!! ALL MYSELF !!!! HISTORY! WOW – Lil B”</bold>
-
-Imagine we suspend our disbelief and that he reads for one day all of the tweets of all the people he follows. The mind boggles. The proposition here is that his fame (on twitter) is not for what he says but rather how he listens. His genuine interest in hearing from his fans transforms his celebrity from one of output to one of input. That is why Lil B is today’s hero of sensing. (TYBG)
-</body>
-	   <footer>Who are your heroes of sensing?
-__________________________
-__________________________
-</footer>
+	   <heading>Level</heading>
+		<body>Performer's height from the floor. Example terms: <italic>low</italic>, <italic>medium</italic>, <italic>high</italic>, <italic>lower</italic>, <italic>higher</italic>.</body>
 	</page>
 </spread>
-<spread id="4" background="arch">
-	<page id="6" type="photo">
-	 	<footer>Archigram</footer>
+<spread id="4">
+	<page id="6">
+		<heading>Circularity &lt;--> Linearity &lt;--> Angularity &lt;--></heading>
+	<body>Arrangement of parts of the body in a circular/linear/angular sequence. Also can be movement of parts of the body, or the entire body, along a circular/linear/angular path.</body>
 	</page>
-	<page id="7" type="photo">
+	<page id="7">
+		<heading>Parallelism</heading>
 	</page>
+	<body>The amount to which lines extended frm particular body parts (for example the forearms) are parallel to one-another.</body>
 </spread>
 <spread id="5">
 	<page id="8"> 
-	 <heading>Spacemind</heading>
-	   <subheading>  </subheading>
-	   <body>
-
-We can all relate to the need to alter our environment to inhabit changes to our thinking. But how much do we really understand this phenomenon? Current computers act as tools to extend the powers of humans minds, using primarily text and two dimensional media. Spacemind proposes that the true value of the internet of things is that the things are already part of our mind. The objects in our environment and the environment itself are going through a bits to atoms and atoms to bits transformation. We need to understand what differences make a difference in our environments and how that augments our thoughts. As object and environments become digital how will they transform? 
-
-</body>
-	   <footer>(How can we think of our spaces as part of our mind?)</footer>
-	   <image src="images/drawing2b.jpg"></image>
+		<heading>Movement Intensity</heading>
+		<body>Amount and speed of movement relative to the performer's position (or Center of Mass). Does not consider gross movement of performer around stage</body>
 	</page>
 	<page id="9">
-		<heading>Nothing is Static</heading>
-		<subheading>  </subheading>
-		<body>
-
-
-In the Felix Hess piece ‘It’s in the Air’ the artist has created three hundred small and lightweight flags which move to the fluctuations present in the environment. If the human remains ‘still’ the flags will move in accordance with the heat tunnel forming the air around the human.
-
-“Human sense organs can receive only news of difference, and the differences must be coded into events in time (i.e., into changes) in order to be perceptible. Ordinary static differences that remain constant for more than a few seconds become perceptible, only by scanning. Similarly, very slow changes become perceptible only by a combination of scanning and bringing together observations from separated moments in the continuum of time.”  -Gregory Bateson
-
-Where we see the static phenomenon we need to only look closer or further to understand that it is not static at all. How can we develop new types of sensing to look not at the state, but at the transition? When should state and when should you look for transition? When we examine the phenomenon of the universe how do we find the difference that makes a difference?
-
- </body>
- <footer>"I am not investigating in the objective world, I am investigating sensitivity." 
- - Felix Hess</footer>
-<image src="images/felixhess2.jpg"></image>
+	   <heading>Travel Intensity</heading>
+		<body>Amount of space recently covered by the performer. Focusing on performer's gross movement around stage</body>
 	</page>
 </spread>
 <spread id="6">
 	<page id="10">
-		<heading>Personal Computing</heading>
-	   <subheading>Designed for the Individual</subheading>
-	   <body>Many of the types of personal computing devices we have can be linked to one of the descriptions used by Mark Weiser when he said “My colleagues and I have built what we call tabs, pads and boards: inch-scale machines that approximate active Post-It notes, foot-scale ones that behave something like a sheet of paper (or a book or a magazine), and yard-scale displays that are the equivalent of a blackboard or bulletin board.” 
-
-
--> Tabs
--> Pads / Boards
--> Sheet of Paper / Book
--> Blackboard / Bulletin board</body>
-	   <footer>¯\_(ツ)_/¯</footer>
-	   <image src="images/personal.png"></image>
+	<heading>Isolation</heading>
+	<body>moving one or several contiguous body parts while keeping the others still.</body>
 	</page>
 	<page id="11">
-		<heading>Communal Computing</heading>
-	   <subheading>Designed for the Society</subheading>
-	   <body>We need to determine an additional set of computing device manifestations. We aren't sure what they will be, but our working list is the room, the house, the city, and the earth. As Mark Weiser said, "we are trying to conceive a new way of thinking about computers in the world, one that takes into account the natural human environment and allows the computers themselves to vanish into the background."
-
-
--> Rooms
--> Homes
--> Cities
--> Planets</body>
-	   <footer>¯\_(ツ)_/¯</footer>	   
-	   <image src="images/communal.png"></image>
+		<heading>Negative Space</heading>
+		<body>Created Space, enclosed space, but not inhabited space</body>
 	</page>
 </spread>
 <spread id="7">
-	<page id="12" type="toplist">
-		<heading>10 Things we can't Measure</heading>
-		<body><bold>1. Reality
-2. Intention
-3. Success
-4. Godzilla’s Impact on Humanity
-5. True love
-6. The Future
-7. Why we fight
-8. The ringing in my ears
-9. Missed calls (*)
-10. The moment</bold></body>
-<footer>*Did you really miss that call?</footer>
+	<page id="12">
+		<heading>Avoided Space</heading>
+		<body>Space which is defined over time by the performer's avoidance of it. Commonly accentuated by angular movement</body>
 	</page>
-	<page id="13" type="photo">
-		<image src="images/drawing4b.jpg"></image>
+	<page id="13">
+		<heading>Gaze</heading>
+		<body>Direction or point that performer is looking at</body>
+	   <footer>"full-body gaze"</footer>	   
 	</page>
 </spread>
 <spread id="8">
 	<page id="14">
- 	<heading>Information Acre</heading>
-	   <subheading>   </subheading>
-	   <body>Imagine the bit as the toss of a fair coin. The result is either heads or tails. The "holographic principle" would suggest that there is a limit to the number of bits which physics can support. This amount is placed at 10^69 bits per square meter before the point in which adding more information would collapse into a black hole. This is approximately 1, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 bits per square meter of two dimensional space.
-
-Our proposal: Dedicate 1 square acre of land to the deep pursuit of sensing. Bring scientists, artists, hardware and software designers together to try to make a dent in that information space. Sense the biology, the chemistry, the conditions, and the human reaction to that one acre. Publish this material for the world. 
-
-We have tentatively named this project Information Acre and are currently looking for a suitable area in the Pacific Northwest for this to occur. 
-</body>
-	   <image src="images/biomass.gif"></image>
+		<heading>Points/Areas of Contact</heading>
+		<body>points of contact such as where your feet are touching the ground.</body>
 	</page>
 	<page id="15">
-		<heading></heading>
-		<subheading></subheading>
-		<image src="images/archigram14.gif"></image>
-		 <footer>Want to join us on Information Acre? Contact: @brunchstorm or @jamestichenor.</footer>
+	 <heading>Balance/Sturdiness</heading>
+		<body>a function of <italic>Center of Mass</italic> and <italic>Areas of Contact</italic></body>
 	</page>
 </spread>
 </zine>

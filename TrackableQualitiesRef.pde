@@ -1,11 +1,11 @@
-//for PDF //<>// //<>//
+//for PDF //<>// //<>// //<>//
 import processing.pdf.*;
 //for Map
 import java.util.*;
 
 //Edit these for various PDF outputs for production
 int totalCopies = 1;
-int contiguousCopies = 201;
+int contiguousCopies = 1;
 //boolean separateCopies = false;
 OutputType output = OutputType.InnerPages;
 boolean debug = false;
@@ -14,13 +14,13 @@ final static int START_AT = 1;
 PFont screenFont;
 boolean testLayout = false;
 float margin = 50;
-float paperWidthIn = 8.5; //inches
-float paperHeightIn = 11; //inches
+float paperWidthIn = 11; //inches
+float paperHeightIn = 8.5; //inches
 int desiredDPI = 300; //pixels per inch
 int paperWidthPx = int(paperWidthIn * desiredDPI);
 int paperHeightPx = int(paperHeightIn * desiredDPI);
 // how many folds you want to create for your zine
-int widthFolds = 1;
+int widthFolds = 2;
 int heightFolds = 1;
 int pageWidthPx = paperWidthPx / (int)Math.pow(2, widthFolds);
 int pageHeightPx = paperHeightPx / (int)Math.pow(2, heightFolds);
@@ -28,7 +28,7 @@ int compWidthPx = pageWidthPx * 2;
 int compHeightPx = pageHeightPx;
 //how many pages you plan to print on, 
 //so for a quarter size book each printer page represents 8 of the book pages
-int printerPages = 2; // double sided
+int printerPages = 1; // double sided
 int numPages = (int)Math.pow(2, widthFolds) * (int)Math.pow(2, heightFolds) * 2 * printerPages;
 int numSpreads = numPages/2;//front and back covers share the first spread
 int coverPages = 2;
@@ -322,7 +322,7 @@ void draw() {
         String sn;
         sn = "000" + zineState.copyNum;
         sn = sn.substring(sn.length() - 4);
-        zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "sensory_"+output.toString()+"_"+sn+".pdf");
+        zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "tq_"+output.toString()+"_"+sn+".pdf");
         zineState.pdf.beginDraw();
       }
       zineState.state = nextState(zineState.state, output);

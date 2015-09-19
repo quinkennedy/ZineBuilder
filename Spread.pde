@@ -22,7 +22,7 @@ class Spread {
   private int headingSize = 100;
   private int subheadingSize = 50;
   private int footerSize = 30;
-  private int bodySize = 30;
+  private int bodySize = 45;
   private int quoteSize = 120;
   private int footerHeight = 0;
   private int headingHeight = 0;
@@ -33,9 +33,11 @@ class Spread {
   private color primaryColor = color(0);
   private color spotColor = color(122);
   private PageData[] pageData;
+  private PageData[] upsidedownData;
   private boolean rendered = false;
   private boolean isCover;
   private XML[] spreads;
+  private boolean showPageNum = false;
   /*
   / v-leftOutsideMargin
    / v     rightOutsideMargin
@@ -77,10 +79,10 @@ class Spread {
     // load content
     xml = loadXML("zine.xml");
 
-    headingFamily = FontFamily.loadHeading(SensoryZine001.this);//FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, SensoryZine001.this);
-    bodyFamily = FontFamily.loadBody(SensoryZine001.this);
-    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-Light.ttf", 48, SensoryZine001.this);
-    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, SensoryZine001.this);
+    headingFamily = FontFamily.loadHeading(TrackableQualitiesRef.this);//FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, SensoryZine001.this);
+    bodyFamily = FontFamily.loadBody(TrackableQualitiesRef.this);
+    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-Light.ttf", 48, TrackableQualitiesRef.this);
+    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, TrackableQualitiesRef.this);
 
     spreads = xml.getChildren("spread");
     
@@ -110,6 +112,7 @@ class Spread {
 
       //parse page-specific content
       pageData = new PageData[pages.length];
+      upsidedownData = new PageData[pages.length];
       for (int i = 0; i < pages.length; i++) {
         pageData[i] = new PageData();
         pageData[i].heading = pages[i].getChild("heading");
@@ -130,6 +133,12 @@ class Spread {
         } else if (pageData[i].type.equals("toc")) {
           pageData[i].content = extractContents(spreads);
         } else if (pageData[i].type.equals("photo")) {
+        }
+        
+        upsidedownData[i] = new PageData();
+        if (pages[i].getChild("upsidedown") != null){
+          upsidedownData[i].heading = pages[i].getChild("upsidedown").getChild("heading");
+          upsidedownData[i].body = pages[i].getChild("upsidedown").getChild("body");
         }
       }
 
@@ -252,6 +261,19 @@ class Spread {
         pageData[i].leftMarginPx = insideRightMargin;
         pageData[i].rightMarginPx = rightOutsideMargin;
       }
+      upsidedownData[i].contentWidthPx = contentWidthPx[i];
+      upsidedownData[i].contentHeightPx = contentHeightPx;
+      upsidedownData[i].topMarginPx = topMargin;
+      upsidedownData[i].bottomMarginPx = bottomMargin;
+      if (i == 0) {
+        upsidedownData[i].outsideEdge = Side.LEFT;
+        upsidedownData[i].leftMarginPx = leftOutsideMargin;
+        upsidedownData[i].rightMarginPx = insideLeftMargin;
+      } else {
+        upsidedownData[i].outsideEdge = Side.RIGHT;
+        upsidedownData[i].leftMarginPx = insideRightMargin;
+        upsidedownData[i].rightMarginPx = rightOutsideMargin;
+      }
     }
   }
 
@@ -351,7 +373,9 @@ class Spread {
       if (pageData[i].hasHeading() || pageData[i].hasSubheading()) {
         pageData[i].headingRect = renderHeading(pageData[i]);
       }
-      renderPageNum(pageData[i]);
+      if (showPageNum){
+        renderPageNum(pageData[i]);
+      }
 
       if (pageData[i].type == null) {
         base(pageData[i]);
@@ -369,6 +393,21 @@ class Spread {
       pg.popMatrix();
       //quote = pages[i].getChild("quote");
     }
+    
+    pg.pushMatrix();
+    pg.translate(pg.width, pg.height);
+    pg.rotate(PI);
+    for(int i = 0; i < pageData.length; i++){
+      pg.pushMatrix();
+      pg.translate(pageWidthPx - pageWidthPx * i, 0);
+      pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
+      if (upsidedownData[i].hasHeading()){
+        upsidedownData[i].headingRect = renderHeading(upsidedownData[i]);
+      }
+      base(upsidedownData[i]);
+      pg.popMatrix();
+    }
+    pg.popMatrix();
 
     //draw spread-general content for debugging purposes
     //pg.textSize(500);
@@ -688,6 +727,8 @@ static class FontFamily{
     FontFamily fam = new FontFamily();
     fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48, p);
     fam.loadFont(FontWeight.BOLD, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Bold.ttf", 48, p);
+    fam.loadFont(FontWeight.REGULAR, FontEm.ITALIC, "fonts/source-sans-pro/TTF/SourceSansPro-It.ttf", 48, p);
+    fam.loadFont(FontWeight.BOLD, FontEm.ITALIC, "fonts/source-sans-pro/TTF/SourceSansPro-BoldIt.ttf", 48, p);
     return fam;
   }
   
