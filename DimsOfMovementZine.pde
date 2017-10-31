@@ -416,11 +416,11 @@ void draw() {
       boolean leftPage = cpg.getNumber()%2 == 0;
       Spread comp = spreads[spreadI];
       if (cpg.getHFlip()){
-        paperg.copy(comp.getPage(),
+        paperg.copy(comp.getPage().copy(),
           leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
           pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
       } else {
-        paperg.copy(comp.getPage(), 
+        paperg.copy(comp.getPage().copy(), 
           leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
           pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
       }
