@@ -1,9 +1,9 @@
 /*
  *  Composition
  *
- *  DESCRIPTION: A pretty generic composition class 
- * 
- *  Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php 
+ *  DESCRIPTION: A pretty generic composition class
+ *
+ *  Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  */
 
 class Spread {
@@ -22,7 +22,7 @@ class Spread {
   private int headingSize = 100;
   private int subheadingSize = 50;
   private int footerSize = 30;
-  private int bodySize = 45;
+  private int bodySize = 30;
   private int quoteSize = 120;
   private int footerHeight = 0;
   private int headingHeight = 0;
@@ -56,7 +56,7 @@ class Spread {
    /    * Source Sans Pro: https://github.com/adobe-fonts/source-sans-pro
    /    * Source Code Pro (monospaced): https://github.com/adobe-fonts/source-code-pro
    /    * Source Serif Pro: https://github.com/adobe-fonts/source-serif-pro
-   /  
+   /
    /  These typeface were designed for UI. What could be more UI than a zine?!?
    */
 
@@ -70,28 +70,29 @@ class Spread {
   }
 
   Spread(int _spreadNum, int _spreadWidthPx, int _spreadHeightPx, boolean isCover) {
+    loadStyling();
     spreadNum = _spreadNum;
     spreadWidthPx = _spreadWidthPx;
     spreadHeightPx = _spreadHeightPx;
     this.isCover = isCover;
-    
+
     print(" I THINK MY SPREAD NUM IS "+spreadNum);
     // load content
-    xml = loadXML("zine.xml");
+    xml = loadXML(new File(getDirectory(), "zine.xml").getAbsolutePath());
 
-    headingFamily = FontFamily.loadHeading(DimsOfMovementZine.this);//FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, SensoryZine001.this);
-    bodyFamily = FontFamily.loadBody(DimsOfMovementZine.this);
-    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-Light.ttf", 48, DimsOfMovementZine.this);
-    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, DimsOfMovementZine.this);
+    headingFamily = FontFamily.loadHeading(ZineBuilder.this);//FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, SensoryZine001.this);
+    bodyFamily = FontFamily.loadBody(ZineBuilder.this);
+    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-Light.ttf", 48, ZineBuilder.this);
+    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, ZineBuilder.this);
 
     spreads = xml.getChildren("spread");
-    
+
     if (isCover == true) {
      createCover();
      println("laying out cover "+spreadNum);
     } else {
       // parse spreads
-      
+
       //XML spread = children[spreadNum-1];
       XML[] pages = spreads[spreadNum-1].getChildren("page");
       int numPages = pages.length;
@@ -104,7 +105,7 @@ class Spread {
       //body = children[pageNum-1].getChild("body").getContent();
 
 
-      pg = createGraphics(_spreadWidthPx, _spreadHeightPx);  
+      pg = createGraphics(_spreadWidthPx, _spreadHeightPx);
 
 
       //pg.textAlign(CENTER, CENTER);
@@ -134,7 +135,7 @@ class Spread {
           pageData[i].content = extractContents(spreads);
         } else if (pageData[i].type.equals("photo")) {
         }
-        
+
         upsidedownData[i] = new PageData();
         if (pages[i].getChild("upsidedown") != null){
           upsidedownData[i].heading = pages[i].getChild("upsidedown").getChild("heading");
@@ -146,9 +147,30 @@ class Spread {
       pg.endDraw();
     }
     calculatePageNumDims();
-    setMargins(topMargin, bottomMargin, 
-      leftOutsideMargin, rightOutsideMargin, 
+    setMargins(topMargin, bottomMargin,
+      leftOutsideMargin, rightOutsideMargin,
       insideLeftMargin, insideRightMargin);
+  }
+
+  public void loadStyling(){
+    File styleFile = new File(getDirectory(), "style.xml");
+    if (styleFile.exists()){
+      XML style = loadXML(styleFile.getAbsolutePath());
+      headingSize = getFrom(style, "headingSize", headingSize);
+      subheadingSize = getFrom(style, "subheadingSize", subheadingSize);
+      footerSize = getFrom(style, "footerSize", footerSize);
+      bodySize = getFrom(style, "bodySize", bodySize);
+      quoteSize = getFrom(style, "quoteSize", quoteSize);
+    }
+  }
+
+  private int getFrom(XML xml, String childName, int fallback){
+    XML child = xml.getChild(childName);
+    if (child == null){
+      return fallback;
+    } else {
+      return child.getIntContent();
+    }
   }
 
   public void setHeadingSize(int size) {
@@ -163,7 +185,7 @@ class Spread {
     //PFont font = loadFont("bold-print.vlw");
     int headingSize = this.headingSize;
     for (int i = 0; i < pageData.length; i++) {
-      HeadingBox hBox = new HeadingBox(pageData[i].heading, pageData[i].subheading, headingFamily, 
+      HeadingBox hBox = new HeadingBox(pageData[i].heading, pageData[i].subheading, headingFamily,
                                        headingSize, headingSize/2, pg, vars, true);
       Rectangle usedArea = hBox.layout(new Rectangle(0, 0, pageData[i].contentWidthPx, headingHeight), pg);
       if (hBox.hasHeading()){
@@ -187,7 +209,7 @@ class Spread {
     }
     return maxFooterHeight;
   }
-  
+
   public void setFooterHeight(int h){
     footerHeight = h;
     for(int i = 0; i < pageData.length; i++){
@@ -227,8 +249,8 @@ class Spread {
     return contents.toArray(new Content[contents.size()]);
   }
 
-  public void setMargins(int _topMargin, int _bottomMargin, 
-    int _leftOutsideMargin, int _rightOutsideMargin, 
+  public void setMargins(int _topMargin, int _bottomMargin,
+    int _leftOutsideMargin, int _rightOutsideMargin,
     int _insideLeftMargin, int _insideRightMargin) {
     topMargin = _topMargin;
     bottomMargin = _bottomMargin;
@@ -289,7 +311,7 @@ class Spread {
     }
 
     //myPGFont = createFont("SourceSansPro-Bold", 48);
-    pg = createGraphics(spreadWidthPx, spreadHeightPx);  
+    pg = createGraphics(spreadWidthPx, spreadHeightPx);
 
     ////pg.textAlign(CENTER, CENTER);
     pg.beginDraw();
@@ -315,7 +337,7 @@ class Spread {
       pageData[i].type = pages[i].getString("type");
       if (pageData[i].type == null) {
       }
-        
+
       upsidedownData[i] = new PageData();
       if (pages[i].getChild("upsidedown") != null){
         upsidedownData[i].heading = pages[i].getChild("upsidedown").getChild("heading");
@@ -343,7 +365,7 @@ class Spread {
     //pg.textAlign(CENTER, CENTER);
     pg.beginDraw();
     pg.background(bgColor);
-    
+
     // background
     //if (spreads[spreadNum-1].getString("background")
     // print(spreads[spreadNum-1]);
@@ -353,7 +375,7 @@ class Spread {
       if (background != null && background.equals("dots")) {
         for (int j=0; j<spreadWidthPx/10; j++) {
           for (int k=0; k<spreadHeightPx/10; k++) {
-             //pg.rect(j*10, k*10, 5, 5); 
+             //pg.rect(j*10, k*10, 5, 5);
              pg.point(j*10, k*10);
           }
         }
@@ -364,7 +386,7 @@ class Spread {
       }
     }
 
-    
+
     pg.textFont(bodyFamily.getReg());
     pg.fill(primaryColor);
 
@@ -401,7 +423,7 @@ class Spread {
       pg.popMatrix();
       //quote = pages[i].getChild("quote");
     }
-    
+
     pg.pushMatrix();
     pg.translate(pg.width, pg.height);
     pg.rotate(PI);
@@ -451,9 +473,9 @@ class Spread {
       debug);
     author.render(
       new Rectangle(
-        pd.contentWidthPx - aRect.w, 
-        pd.contentHeightPx - footerHeight - aRect.h, 
-        aRect.w, 
+        pd.contentWidthPx - aRect.w,
+        pd.contentHeightPx - footerHeight - aRect.h,
+        aRect.w,
         aRect.h),
       pg,
       debug);
@@ -478,7 +500,7 @@ class Spread {
     pd.bodyRect = tBox.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx), pg);
     tBox.render(new Rectangle(0, this.headingHeight, pd.contentWidthPx, headingHeight), pg, debug);
   }
-  
+
   public void toc(PageData pd) {
     //parse the data into FormattedTextBlock;
     String[] separators = {" ", "|", "   ", " | ", " /**/ ", "\n"};
@@ -486,7 +508,7 @@ class Spread {
     int intraI = (int)random(0, interI);
     int size = headingSize;//headingFont.getSize();
     FormattedTextBlock cBox = new FormattedTextBlock(pg);
-    
+
     //FormattedTextBlock.FormattedText[] fText = new FormattedTextBlock.FormattedText[pd.content.length*2];
     for (int i = 0; i < pd.content.length; i++) {
       cBox.add(pd.content[i].page, headingFamily.getReg(), size);
@@ -516,7 +538,7 @@ class Spread {
   }
 
   public void clickbait(String _heading, String _subheading, String _body, String _footer) {
-    //his guy went to... What happens next will blow your mind 
+    //his guy went to... What happens next will blow your mind
     //These facts about childbirth will change the way you look at life FOREVER
     //What this little kid can do with a bongo drum will make you sob uncontrollably until you burst
     //18 Stages of getting addicted to...
@@ -543,7 +565,7 @@ class Spread {
       bodyHeight = pd.bodyRect.h;
     }
     float headingHeight = (pd.headingRect != null ? pd.headingRect.h : 0);
-    
+
     //lets see how tall the image needs to be
     if (pd.contentImages != null && pd.contentImages.length > 0) {
       float targetImageHeight = 0;
@@ -563,7 +585,7 @@ class Spread {
       }
       pd.imageRect = iBox.layout(rArea, pg);
       targetImageHeight = pd.imageRect.h;
-      
+
       if (targetImageHeight <= hopedImageHeight){
         if (isCover){
           rArea = new Rectangle(-40, hopedImageHeight - targetImageHeight, pd.imageRect.w, targetImageHeight);
@@ -578,7 +600,7 @@ class Spread {
         }
       }
       pd.imageRect = iBox.render(rArea, pg);
-      
+
       if (bodyHeight > 0){
         pd.bodyRect = tBox.render(new Rectangle(0, pd.imageRect.y + pd.imageRect.h, pd.contentWidthPx, bodyHeight), pg);
       }
@@ -708,11 +730,11 @@ enum Side {
 
 static class FontFamily{
   Map<FontWeight, Map<FontEm, PFont>> fonts;
-  
+
   private FontFamily(){
     fonts = new HashMap<FontWeight, Map<FontEm, PFont>>();
   }
-  
+
   public void loadFont(FontWeight w, FontEm e, String path, float size, PApplet p){
     PFont f = p.createFont(path, size);
     if (!fonts.keySet().contains(w)){
@@ -721,11 +743,11 @@ static class FontFamily{
     Map<FontEm, PFont> currWeight = fonts.get(w);
     currWeight.put(e, f);
   }
-  
+
   public PFont getReg(){
     return get(FontWeight.REGULAR, FontEm.REGULAR);
   }
-  
+
   public PFont get(FontWeight w, FontEm e){
     if (fonts.keySet().contains(w) && fonts.get(w).keySet().contains(e)){
       return fonts.get(w).get(e);
@@ -733,7 +755,7 @@ static class FontFamily{
       return null;
     }
   }
-  
+
   public static FontFamily loadBody(PApplet p){
     FontFamily fam = new FontFamily();
     fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48, p);
@@ -742,14 +764,14 @@ static class FontFamily{
     fam.loadFont(FontWeight.BOLD, FontEm.ITALIC, "fonts/source-sans-pro/TTF/SourceSansPro-BoldIt.ttf", 48, p);
     return fam;
   }
-  
+
   public static FontFamily loadHeading(PApplet p){
     FontFamily fam = new FontFamily();
     fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, p);
     fam.loadFont(FontWeight.LIGHT, FontEm.REGULAR, "fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, p);
     return fam;
   }
-  
+
   public static FontFamily loadSingle(String path, float size, PApplet p){
     FontFamily fam = new FontFamily();
     fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, path, size, p);
