@@ -1,63 +1,45 @@
-//for PDF //<>// //<>// //<>//
+import controlP5.*; //<>//
+//for PDF //<>// //<>//
 import processing.pdf.*;
 //for Map
 import java.util.*;
 
-//Edit these for various PDF outputs for production
-int totalCopies = 1;
-int contiguousCopies = 1;
 //boolean separateCopies = false;
-OutputType output = OutputType.InnerPages;
 boolean debug = false;
-final static int START_AT = 1;
 PFont screenFont;
 boolean testLayout = false;
-float margin = 50;
-float paperWidthIn = 8.5; //inches
-float paperHeightIn = 11; //inches
-int desiredDPI = 300; //pixels per inch
-int paperWidthPx = int(paperWidthIn * desiredDPI);
-int paperHeightPx = int(paperHeightIn * desiredDPI);
-// how many folds you want to create for your zine
-int widthFolds = 1;
-int heightFolds = 2;
-int pageWidthPx = paperWidthPx / (int)Math.pow(2, widthFolds);
-int pageHeightPx = paperHeightPx / (int)Math.pow(2, heightFolds);
-int compWidthPx = pageWidthPx * 2;
-int compHeightPx = pageHeightPx;
-//how many pages you plan to print on, 
-//so for a quarter size book each printer page represents 8 of the book pages
-int printerPages = 1; // double sided
-int numPages = (int)Math.pow(2, widthFolds) * (int)Math.pow(2, heightFolds) * 2 * printerPages;
-int numSpreads = numPages/2;//front and back covers share the first spread
+int paperWidthPx;
+int paperHeightPx;
+int pageWidthPx;
+int pageHeightPx;
+int compWidthPx;
+int compHeightPx;
+int numPages;
+int numSpreads;
 int coverPages = 2;
-int topMargin = 200;
-int bottomMargin = 300;
-int centerLeft = 50;
-int centerRight = 50;
-String bookTitle = "Sensory Aesthetics";
-Spread[] spreads = new Spread[numSpreads];
-Spread[] cover = new Spread[coverPages * 2];
+Spread[] spreads;
+Spread[] cover;
 Map<String, String> vars = new HashMap<String, String>();
 ZinePageLayout[][][] zpl;
+ControlP5 cp5;
 
 
 /*
  *  SensoryZine001.pde
- *  
+ *
  *  SUMMARY: A first attempt at a generative zine creation tool.
  *
- *  DESCRIPTION: Define a size, dpi, and number of folds and the 
- *  program will output a pdf. 
- * 
- *  Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php 
+ *  DESCRIPTION: Define a size, dpi, and number of folds and the
+ *  program will output a pdf.
+ *
+ *  Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  */
 
 /* NOTES AND TODO
- 
+
  Define the data model and then it puts itself together right? right?!? ;-(
  paper width 8.5
- paper height 11 
+ paper height 11
  desired dpi 300
  size 0.5 (half size), 0.25 (quarter size), 0.0833 (one twelfth), 0.0625 (one sixteenth)
  top margin
@@ -65,16 +47,16 @@ ZinePageLayout[][][] zpl;
  centerleft margin
  centerright margin
  number of pages (dependent on size)
- 
- Take the parameters and generate the first page which 
+
+ Take the parameters and generate the first page which
  is just some summary info and each of the spreads.
- 
+
  Then paginate and layout the book for printing in the subsequent pages.
- 
+
  Eventually we can use the processing window to show the controls
- 
+
  Lets special case the cover
- 
+
  Content Block Types (Information Blocks):
  * Quote
  * Quotation
@@ -82,11 +64,11 @@ ZinePageLayout[][][] zpl;
  * Table of Contents
  * Table (Page number, title)
  * Information Block
- * Photo 
+ * Photo
  * Drawing (Generative)
- 
+
  Potential Block Types: (Also the idea of maps for navigation and summary vs content blocks)
- * Analogy 
+ * Analogy
  * Metaphor / Simile
  * Checklist
  * Classification List / Table
@@ -150,10 +132,10 @@ ZinePageLayout[][][] zpl;
  * Process
  * Table of Contents
  * Index
- 
- 
- 
- Base Class 
+
+
+
+ Base Class
  * heading
  * subheading
  * body
@@ -164,19 +146,344 @@ ZinePageLayout[][][] zpl;
 
 void setup() {
   size(400, 400);
+  setupUI();
+  loadDir();
   if (testLayout){
     testLayout();
     return;
   }
-  
-  println ("Your zine will have "+numPages+" pages");
+
   //// CHECK WHAT FONTS ARE ON THE SYSTEM
   //String[] fontList = PFont.list();
   //println(fontList);
   screenFont = createFont("SourceSansPro-Bold", 48);
 
   zineState = new ZineState();
+}
+
+Numberbox paperWidthIn, paperHeightIn;
+
+private void setupUI(){
+  cp5 = new ControlP5(this);
+
+  cp5.addTab("details");
+
+  int row;
+
+  // Default tab
+  row = 40;
+  cp5.addTextfield("Directory")
+    .setSize(width - 20 - 20, 20)
+    .setPosition(20, row);
+  cp5.addButton("Choose")
+    .setPosition(width - 20 - 70, row+20+10);
+  row += 40;
+  cp5.addNumberbox("Copies")
+    .setPosition(20, row)
+    .setValue(1);
+  row += 40;
+  cp5.addNumberbox("startAtIndex")
+    .setPosition(20, row);
+  row += 40;
+  cp5.addRadioButton("exportType")
+    .setPosition(20, row)
+    .setItemsPerRow(4)
+    .setSpacingColumn(60)
+    .addItem("Cover", 0)
+    .addItem("Spreads", 1)
+    .addItem("Inner Pages", 2)
+    .addItem("All", 3);
+
+  // Details tab
+  row = 40;
+  cp5.addTextfield("title")
+    .moveTo("details")
+    .setPosition(20, row);
+  row += 40;
+  paperWidthIn = cp5.addNumberbox("paperWidth")
+    .moveTo("details")
+    .setPosition(20, row)
+    .setMultiplier(0.01);
+  paperHeightIn = cp5.addNumberbox("paperHeight")
+    .moveTo("details")
+    .setPosition(100, row)
+    .setMultiplier(0.01);
+  cp5.addButton("rotatePaper")
+    .moveTo("details")
+    .setPosition(180, row);
+  row += 40;
+  cp5.addRadioButton("standardPapers")
+    .moveTo("details")
+    .setPosition(20, row)
+    .setItemsPerRow(5)
+    .setSpacingColumn(50)
+    .addItem("A4", 3)
+    .addItem("A3", 4)
+    .addItem("A2", 5)
+    .addItem("A1", 6)
+    .addItem("A0", 7)
+    .addItem("US std", 0)
+    .addItem("US legal", 1)
+    .addItem("US Tabloid", 2);
+  row += 40;
+  cp5.addNumberbox("totalCopies")
+    .moveTo("details")
+    .setPosition(20, row)
+    .setValue(1);
+  row += 40;
+  cp5.addNumberbox("dpi")
+    .moveTo("details")
+    .setPosition(20, row)
+    .setValue(300);
+  row += 40;
+
+  cp5.addNumberbox("margin")
+    .moveTo("details")
+    .setPosition(20, row);
+  cp5.addNumberbox("topMargin")
+    .moveTo("details")
+    .setPosition(100, row);
+  cp5.addNumberbox("bottomMargin")
+    .moveTo("details")
+    .setPosition(180, row);
+  cp5.addNumberbox("centerLeftMargin")
+    .moveTo("details")
+    .setPosition(260, row);
+  cp5.addNumberbox("centerRightMargin")
+    .moveTo("details")
+    .setPosition(340, row);
+  row += 40;
+
+  cp5.addNumberbox("widthFolds")
+    .moveTo("details")
+    .setPosition(20, row);
+  cp5.addNumberbox("heightFolds")
+    .moveTo("details")
+    .setPosition(100, row);
+//how many pages you plan to print on,
+//so for a quarter size book each printer page represents 8 of the book pages
+  cp5.addNumberbox("printerPages")
+    .moveTo("details")
+    .setPosition(180, row)
+    .setValue(1);
+  row += 40;
+
+  cp5.addNumberbox("coverPages")
+    .moveTo("details")
+    .setPosition(20, row)
+    .setValue(2);
+
+  cp5.addButton("Ready")
+    .setPosition(width - 20 - 70, height - 20 - 20);
+  cp5.addButton("TestLayout")
+    .setPosition(width - 20 - 70 - 10 - 70, height - 20 - 20);
+}
+
+private void setPaperSize(float w, float h){
+    paperWidthIn.setValue(w);
+    paperHeightIn.setValue(h);
+}
+
+public void standardPapers(int i){
+  switch(i){
+    case 0:
+      setPaperSize(8.5, 11);
+      break;
+    case 1:
+      setPaperSize(8.5, 14);
+      break;
+    case 2:
+      setPaperSize(11, 17);
+      break;
+    case 3:
+      setPaperSize(8.3, 11.7);
+      break;
+    case 4:
+      setPaperSize(11.7, 16.5);
+      break;
+    case 5:
+      setPaperSize(16.5, 23.4);
+      break;
+    case 6:
+      setPaperSize(23.4, 33.1);
+      break;
+    case 7:
+      setPaperSize(33.1, 46.8);
+      break;
+  }
+}
+
+public void rotatePaper(){
+  setPaperSize(
+    paperHeightIn.getValue(),
+    paperWidthIn.getValue());
+}
+
+private void computeVars(){
+  int widthFolds = getWidthFolds();
+  int heightFolds = getHeightFolds();
+  int printerPages = getPrinterPages();
+
+
+  testLayout = false;
+  float paperWidthIn = getPaperWidth(); //inches
+  float paperHeightIn = getPaperHeight(); //inches
+  int desiredDPI = getDPI(); //pixels per inch
+  paperWidthPx = int(paperWidthIn * desiredDPI);
+  paperHeightPx = int(paperHeightIn * desiredDPI);
+
+
+  pageWidthPx = paperWidthPx / (int)Math.pow(2, widthFolds);
+  pageHeightPx = paperHeightPx / (int)Math.pow(2, heightFolds);
+  compWidthPx = pageWidthPx * 2;
+  compHeightPx = pageHeightPx;
+  numPages = (int)Math.pow(2, widthFolds) * (int)Math.pow(2, heightFolds) * 2 * printerPages;
+  numSpreads = numPages/2;//front and back covers share the first spread
+
+
+  spreads = new Spread[numSpreads];
+  cover = new Spread[coverPages * 2];
+
+
+  println ("Your zine will have "+numPages+" pages");
+
   zpl = getLayout(heightFolds, widthFolds, printerPages*2);
+}
+
+public void Choose(){
+  selectFolder("Select a folder to process:", "folderSelected");
+}
+
+public void folderSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+  } else {
+    println("User selected " + selection.getAbsolutePath());
+    cp5.get(Textfield.class, "Directory").setText(selection.getAbsolutePath());
+    ParseSettings();
+  }
+}
+
+public void ParseSettings(){
+  //load settings
+  File directory = new File(getDirectory());
+  File settingsFile = new File(directory, "settings.xml");
+  if (settingsFile.exists()){
+    XML settings = loadXML(settingsFile.getAbsolutePath());
+    List<Numberbox> numbers = cp5.getAll(Numberbox.class);
+    for(Numberbox number : numbers){
+      number.setValue(settings.getChild(number.getName()).getFloatContent());
+    }
+    cp5.get(Textfield.class, "title").setValue(settings.getChild("title").getContent());
+    //TODO: export type
+  }
+}
+
+public void SaveSettings(){
+  File directory = new File(getDirectory());
+  File settingsFile = new File(directory, "settings.xml");
+  XML settings = new XML("settings");
+  List<Numberbox> numbers = cp5.getAll(Numberbox.class);
+  for(Numberbox number : numbers){
+    XML xmlNum = settings.addChild(number.getName());
+    xmlNum.setContent(String.format("%.2f", number.getValue()));
+  }
+  settings.addChild("title").setContent(cp5.get(Textfield.class, "title").getText());
+  //TODO: export type
+  saveXML(settings, settingsFile.getAbsolutePath());
+}
+
+public void Ready(){
+  String dir = getDirectory();
+  if (dir == null || dir.equals("")){
+    println("Please choose directory");
+  } else {
+    computeVars();
+    SaveSettings();
+    zineState.state = ConstructionState.Init;
+  }
+}
+
+public void TestLayout(){
+  computeVars();
+  testLayout();
+}
+
+private String getDirectory(){
+  return cp5.get(Textfield.class, "Directory").getText();
+}
+
+private void loadDir(){
+
+}
+
+private String getTitle(){
+  return cp5.get(Textfield.class, "title").getText();
+}
+
+private int getGUIInt(String name){
+  return (int)getGUIFloat(name);
+}
+
+private float getGUIFloat(String name){
+  return cp5.get(Numberbox.class, name).getValue();
+}
+
+private int getWidthFolds(){
+  return getGUIInt("widthFolds");
+}
+
+private int getHeightFolds(){
+  return getGUIInt("heightFolds");
+}
+
+private int getPrinterPages(){
+  return getGUIInt("printerPages");
+}
+
+private int getDPI(){
+  return getGUIInt("dpi");
+}
+
+private int getMargin(){
+  return getGUIInt("margin");
+}
+
+private float getPaperWidth(){
+  return getGUIFloat("paperWidth");
+}
+
+private float getPaperHeight(){
+  return getGUIFloat("paperHeight");
+}
+
+private int getStartAt(){
+  return getGUIInt("startAtIndex");
+}
+
+private int getTotalCopies(){
+  return getGUIInt("totalCopies");
+}
+
+private int getNumCopies(){
+  int numCopies = getGUIInt("Copies");
+  return max(numCopies, 1);
+}
+
+private OutputType getOutputType(){
+  int index = (int)(cp5.get(RadioButton.class, "exportType").getValue());
+  switch(index){
+    case 0:
+      return OutputType.Cover;
+    case 1:
+      return OutputType.Spreads;
+    case 2:
+      return OutputType.InnerPages;
+    case 3:
+      return OutputType.All;
+    default:
+      return OutputType.Cover;
+  }
 }
 
 public void infoPage(PGraphics pdf) {
@@ -191,18 +498,18 @@ public void infoPage(PGraphics pdf) {
   int reportX = 100;
   int column2 = reportX+1200;
   int column3 = column2 + 500;
-  pdf.text(bookTitle, 100, reportHeight);
-  text(bookTitle, width/2, 100);
+  pdf.text(getTitle(), 100, reportHeight);
+  text(getTitle(), width/2, 100);
   reportHeight += reportSpace;
-  pdf.text("This book is "+paperWidthIn+" in. wide x "+paperHeightIn+" in. height", reportX, reportHeight, column2, pageHeightPx);
-  text("This book is "+paperWidthIn+" in. wide x "+paperHeightIn+" in. height", width/2, 120);
+  pdf.text("This book is "+getPaperWidth()+" in. wide x "+getPaperHeight()+" in. height", reportX, reportHeight, column2, pageHeightPx);
+  text("This book is "+getPaperWidth()+" in. wide x "+getPaperHeight()+" in. height", width/2, 120);
   text("Please check the Sketch folder for the output PDF file", width/2, 140);
   reportHeight += reportSpace;
-  pdf.text("Targeting a DPI of: " + desiredDPI, reportX, reportHeight, column2, pageHeightPx);
+  pdf.text("Targeting a DPI of: " + getDPI(), reportX, reportHeight, column2, pageHeightPx);
   reportHeight += reportSpace;
-  pdf.text("It should be folded "+widthFolds+" time on the width and "+heightFolds+" on the height.", reportX, reportHeight, column2, pageHeightPx);
+  pdf.text("It should be folded "+getWidthFolds()+" time on the width and "+getHeightFolds()+" on the height.", reportX, reportHeight, column2, pageHeightPx);
   reportHeight += reportSpace;
-  pdf.text("In order to bind the "+numPages+" pages using "+printerPages+" printer pages.", reportX, reportHeight, column2, pageHeightPx);
+  pdf.text("In order to bind the "+numPages+" pages using "+getPrinterPages()+" printer pages.", reportX, reportHeight, column2, pageHeightPx);
 
   pdf.noFill();
 
@@ -213,8 +520,8 @@ public void infoPage(PGraphics pdf) {
   for (int p=0; p<cover.length; p++) {
     tXPos = column3;
 
-    pdf.image(cover[p].getPage(), 
-      tXPos, tYPos, 
+    pdf.image(cover[p].getPage(),
+      tXPos, tYPos,
       cover[p].getWidth()/10, cover[p].getHeight()/10);
     pdf.rect(tXPos, tYPos, cover[p].getWidth()/10, cover[p].getHeight()/10);
     tYPos += 300;
@@ -227,8 +534,8 @@ public void infoPage(PGraphics pdf) {
 
     tXPos = column2;
 
-    pdf.image(spreads[k].getPage(), 
-      tXPos, tYPos, 
+    pdf.image(spreads[k].getPage(),
+      tXPos, tYPos,
       spreads[k].getWidth()/10, spreads[k].getHeight()/10);
     pdf.rect(tXPos, tYPos, spreads[k].getWidth()/10, spreads[k].getHeight()/10);
     tYPos += 300;
@@ -237,6 +544,8 @@ public void infoPage(PGraphics pdf) {
 
 ConstructionState nextState(ConstructionState currState, OutputType outputType){
   switch(currState){
+    case Gather:
+      return ConstructionState.Init;
     case Init:
       switch(outputType){
         case All:
@@ -289,26 +598,31 @@ ConstructionState nextState(ConstructionState currState, OutputType outputType){
     case LayoutPaper:
       return ConstructionState.Done;
     case Done:
-      return ConstructionState.Init;
+      return ConstructionState.Gather;
   }
-  return ConstructionState.Init;
+  return ConstructionState.Gather;
 }
 
 void nextPage(ZineState zineState, int totalCopies, int numContiguousCopies, OutputType outType){
   //if ((zineState.copyNum >= totalCopies) || zineState.copyNum % numContiguousCopies == 0){
-  //  if ((outType == OutputType.All || outType == OutputType.InnerPages) && 
-  //      zineState.state == ConstructionState.LayoutPaper && 
+  //  if ((outType == OutputType.All || outType == OutputType.InnerPages) &&
+  //      zineState.state == ConstructionState.LayoutPaper &&
   //      zineState.progress >= zineState.limit - 1){
   //    //no newline
   //    return;
   //  }
-  //  if (outType == OutputType.Cover && zineState.state == ConstructionState.RenderCover && 
+  //  if (outType == OutputType.Cover && zineState.state == ConstructionState.RenderCover &&
   //      zineState.progress >= zineState.limit - 1){
   //    //no newline
   //    return;
   //  }
   //}
   ((PGraphicsPDF)zineState.pdf).nextPage();
+}
+
+void update(){
+  if (zineState.state == ConstructionState.Gather){
+  }
 }
 
 void draw() {
@@ -318,24 +632,26 @@ void draw() {
     zineState.pdf.beginDraw();
   }
   switch(zineState.state){
+    case Gather:
+      break;
     case Init:
       vars.put("num", str(zineState.copyNum));
       if (zineState.pdf == null){
         String sn;
         sn = "000" + zineState.copyNum;
         sn = sn.substring(sn.length() - 4);
-        if (output == OutputType.Spreads){
-          zineState.pdf = createGraphics(pageWidthPx * 2, pageHeightPx, PDF, "tq_"+output.toString()+"_"+sn+".pdf");
+        if (getOutputType() == OutputType.Spreads){
+          zineState.pdf = createGraphics(pageWidthPx * 2, pageHeightPx, PDF, getTitle()+"_"+getOutputType().toString()+"_"+sn+".pdf");
         } else {
-          zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, "tq_"+output.toString()+"_"+sn+".pdf");
+          zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, getTitle()+"_"+getOutputType().toString()+"_"+sn+".pdf");
         }
         zineState.pdf.beginDraw();
       }
-      zineState.state = nextState(zineState.state, output);
+      zineState.state = nextState(zineState.state, getOutputType());
       break;
     case GenSpreads:
       int k = zineState.progress;
-      spreads[k] = new Spread(k+1, pageWidthPx * 2, pageHeightPx, false); 
+      spreads[k] = new Spread(k+1, pageWidthPx * 2, pageHeightPx, false);
       spreads[k].setMargins(70,100,100,100,100,100);
       //spreads[k].setMargins(200,200,200,200,100,100);
       int currHeadingSize = spreads[k].getMaxHeadingSize();
@@ -351,7 +667,7 @@ void draw() {
           spreads[i].setHeadingSize(zineState.minHeadingSize);
           spreads[i].setFooterHeight(zineState.maxFooterHeight);
         }
-        zineState.state = nextState(zineState.state, output);
+        zineState.state = nextState(zineState.state, getOutputType());
       }
       break;
     case CreateCover:
@@ -365,13 +681,13 @@ void draw() {
       cover[q+1].setFooterHeight(cover[q+1].getMaxFooterHeight());
       zineState.progress++;
       if (zineState.progress >= zineState.limit){
-        zineState.state = nextState(zineState.state, output);
+        zineState.state = nextState(zineState.state, getOutputType());
       }
       break;
     case CreateInfo:
       infoPage(zineState.pdf); //start with an info page with spread thumbnails
-      nextPage(zineState, totalCopies, contiguousCopies, output);
-      zineState.state = nextState(zineState.state, output);
+      nextPage(zineState, getTotalCopies(), getNumCopies(), getOutputType());
+      zineState.state = nextState(zineState.state, getOutputType());
       break;
     case RenderCover:
       int p = zineState.progress * 2;
@@ -380,10 +696,10 @@ void draw() {
       vars.put("num", str(zineState.copyNum * 2));
       zineState.pdf.image(cover[p+1].getPage(), 0, paperHeightPx/2);
       vars.put("num", str(zineState.copyNum));
-      nextPage(zineState, totalCopies, contiguousCopies, output);
+      nextPage(zineState, getTotalCopies(), getNumCopies(), getOutputType());
       zineState.progress++;
       if (zineState.progress >= zineState.limit){
-        zineState.state = nextState(zineState.state, output);
+        zineState.state = nextState(zineState.state, getOutputType());
       }
       break;
     case RenderSpreads:
@@ -393,7 +709,7 @@ void draw() {
       ((PGraphicsPDF)zineState.pdf).nextPage();
       zineState.progress++;
       if (zineState.progress >= zineState.limit){
-        zineState.state = nextState(zineState.state, output);
+        zineState.state = nextState(zineState.state, getOutputType());
       }
       break;
     case LayoutPaper:
@@ -420,8 +736,8 @@ void draw() {
           leftPage ? pageWidthPx : (pageWidthPx*2), pageHeightPx, -pageWidthPx, -pageHeightPx,
           pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
       } else {
-        paperg.copy(comp.getPage().copy(), 
-          leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx, 
+        paperg.copy(comp.getPage().copy(),
+          leftPage ? 0 : pageWidthPx, 0, pageWidthPx, pageHeightPx,
           pageWidthPx * cell, pageHeightPx * row, pageWidthPx, pageHeightPx);
       }
       paperg.endDraw();
@@ -429,16 +745,16 @@ void draw() {
       if (cell == cellsPerRow - 1 && row == rowsPerPage - 1){
         //filled page
         zineState.pdf.image(paperg, 0, 0);
-        nextPage(zineState, totalCopies, contiguousCopies, output);
+        nextPage(zineState, getTotalCopies(), getNumCopies(), getOutputType());
       }
       zineState.progress++;
       if (zineState.progress >= zineState.limit){
-        zineState.state = nextState(zineState.state, output);// ConstructionState.Done;
+        zineState.state = nextState(zineState.state, getOutputType());// ConstructionState.Done;
       }
       break;
     case Done:
       boolean dispose;
-      if (zineState.copyNum >= totalCopies){
+      if (zineState.copyNum >= getTotalCopies()){
         noLoop();
         pushStyle();
         textAlign(CENTER, CENTER);
@@ -448,8 +764,8 @@ void draw() {
         dispose = true;
       } else {
         zineState.copyNum++;
-        zineState.state = nextState(zineState.state, output);// ConstructionState.Init;
-        dispose = zineState.copyNum%contiguousCopies == 0;
+        zineState.state = nextState(zineState.state, getOutputType());// ConstructionState.Init;
+        dispose = zineState.copyNum%getNumCopies() == 0;
       }
       if (dispose && zineState.pdf != null){
         zineState.pdf.dispose();
@@ -495,12 +811,14 @@ void draw() {
         break;
     }
   }
-  zineState.draw();
+  if (zineState.state != ConstructionState.Gather){
+    zineState.draw();
+  }
 }
 
 ZineState zineState;
 class ZineState{
-  int copyNum = START_AT - 1;
+  int copyNum = getStartAt() - 1;
   PGraphics pdf;
   PGraphics paperg;
   int progress = 0;
@@ -508,23 +826,23 @@ class ZineState{
   ConstructionState state = ConstructionState.Done;
   int minHeadingSize = -1;
   int maxFooterHeight = 0;
-  
+
   public void draw(){
     pushMatrix();
     translate(20, 20);
-    text("zine " + copyNum + " of " + totalCopies, 0, 0);
+    text("zine " + copyNum + " of " + getTotalCopies(), 0, 0);
     noFill();
     stroke(255);
     translate(0, 5);
     scale(3, 1);
     rect(0, 0, 100, 10);
     fill(255);
-    rect(0, 0, 100*((float)copyNum/totalCopies), 10);
-    
+    rect(0, 0, 100*((float)copyNum/getTotalCopies()), 10);
+
     scale(1/3.0, 1);
     translate(0, 35);
     text("state: " + state.name(), 0, 0);
-    
+
     translate(0, 15);
     text("progress: " + progress + " of " + limit, 0, 0);
     noFill();
@@ -539,6 +857,7 @@ class ZineState{
 }
 
 public enum ConstructionState{
+  Gather,
   Init,
   GenSpreads,
   CreateCover,
