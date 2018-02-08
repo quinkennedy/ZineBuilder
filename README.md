@@ -14,11 +14,11 @@ When you generate your zine, the current settings will be saved over `settings.x
 
 # Format for the zine.xml file
 
-The zine.xml file uses a <zine> tag to create a new zine. Typically this is followed by a <cover> tag which have some special properties vs. the typical <spread> tag used to define a new set of two pages. Each spread has an id element that will tell the Zine Generator what order to renders the spreads. Typically these are in order to maintain the sanity of the people collaborating.
+The zine.xml file uses a ```<zine>``` tag to create a new zine. Typically this is followed by a ```<cover>``` tag which have some special properties vs. the typical ```<spread>``` tag used to define a new set of two pages. Each spread has an id element that will tell the Zine Generator what order to renders the spreads. Typically these are in order to maintain the sanity of the people collaborating.
     
 ## Covers and Spreads
 
-Cover and spreads are composed of two <page> tags to represent the two pages of the spread or cover. Pages can include content using a few different tags
+Cover and spreads are composed of two ```<page>``` tags to represent the two pages of the spread or cover. Pages can include content using a few different tags
 
 ```
 <heading></heading>
