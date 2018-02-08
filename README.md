@@ -20,14 +20,18 @@ The zine.xml file uses a <zine> tag to create a new zine. Typically this is foll
 
 Cover and spreads are composed of two <page> tags to represent the two pages of the spread or cover. Pages can include content using a few different tags
 
+```
 <heading></heading>
 <subheading></subheading>
 <image src="image.png"></image>
 <footer></footer>
+```
 
 ## Tag System
 
+````
 (<var key="num"></var>/150)
+````
 
 ## Example zine.xml file
 
