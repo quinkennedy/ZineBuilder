@@ -2,7 +2,7 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import java.util.ArrayList;
 
-public class FormattedTextBlock{ //<>//
+public class FormattedTextBlock{ //<>// //<>//
   public ArrayList<FormattedText> text;
   PGraphics pg;
   private ArrayList<FormattedLine> lines;

@@ -116,6 +116,8 @@ class Spread {
       upsidedownData = new PageData[pages.length];
       for (int i = 0; i < pages.length; i++) {
         pageData[i] = new PageData();
+        System.out.println("setting xml");
+        pageData[i].xml = pages[i];
         pageData[i].heading = pages[i].getChild("heading");
         pageData[i].subheading = pages[i].getChild("subheading");
         pageData[i].setBodyHeight();
@@ -137,10 +139,12 @@ class Spread {
         }
 
         upsidedownData[i] = new PageData();
-        if (pages[i].getChild("upsidedown") != null){
-          upsidedownData[i].heading = pages[i].getChild("upsidedown").getChild("heading");
-          upsidedownData[i].body = pages[i].getChild("upsidedown").getChild("body");
-          upsidedownData[i].footer = pages[i].getChild("upsidedown").getChild("footer");
+        XML upsidedown = pages[i].getChild("upsidedown");
+        if (upsidedown != null){
+          upsidedownData[i].xml = upsidedown;
+          upsidedownData[i].heading = upsidedown.getChild("heading");
+          upsidedownData[i].body = upsidedown.getChild("body");
+          upsidedownData[i].footer = upsidedown.getChild("footer");
         }
       }
 
@@ -396,7 +400,7 @@ class Spread {
       //locate to correct 1/2 of spread
       pg.translate(pageWidthPx * i, 0);
       //adjust for margins
-      pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
+      //pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
       if (pageData[i].footer != null) {
         pageData[i].footerRect = renderFooter(pageData[i]);
       }
@@ -554,59 +558,86 @@ class Spread {
   }
 
   public void base(PageData pd) {
-    float startY = 0;
-    //lets see how much space the body text needs
-    TextBox tBox = null;
-    float bodyHeight = 0;
-    if (pd.body != null && pd.body.getChildren().length > 0) {
-      // We should add an optional background for the content boxes.
-      tBox = new TextBox(pd.body, bodyFamily, bodySize, pg, vars, false);
-      pd.bodyRect = tBox.layout(new Rectangle(0, 0, pd.contentWidthPx, pd.contentHeightPx), pg);
-      bodyHeight = pd.bodyRect.h;
+    System.out.println("xml is " + pd.xml);
+    if (pd.xml == null){
+      return;
     }
-    float headingHeight = (pd.headingRect != null ? pd.headingRect.h : 0);
-
-    //lets see how tall the image needs to be
-    if (pd.contentImages != null && pd.contentImages.length > 0) {
-      float targetImageHeight = 0;
-      float maxImageHeight = pd.contentHeightPx - bodyHeight - headingHeight - footerHeight;
-      float hopedImageHeight;
-      if (isCover){
-        hopedImageHeight = (pd.headingRect == null ? (pd.contentHeightPx - footerHeight) : (pd.contentHeightPx - footerHeight - headingHeight - 20));
-      } else {
-        hopedImageHeight = pd.contentHeightPx - bodyHeight - this.headingHeight - footerHeight;
-      }
-      ImageBox iBox = new ImageBox(pd.contentImages[0]);
-      Rectangle rArea;
-      if (isCover){
-        rArea = new Rectangle(0, 0, pd.contentWidthPx, hopedImageHeight);
-      } else {
-        rArea = new Rectangle(0, 0, pd.contentWidthPx, maxImageHeight);
-      }
-      pd.imageRect = iBox.layout(rArea, pg);
-      targetImageHeight = pd.imageRect.h;
-
-      if (targetImageHeight <= hopedImageHeight){
-        if (isCover){
-          rArea = new Rectangle(-40, hopedImageHeight - targetImageHeight, pd.imageRect.w, targetImageHeight);
-        } else {
-          rArea = new Rectangle(0, this.headingHeight, pd.contentWidthPx, hopedImageHeight);
+    XML[] content = pd.xml.getChildren();
+    Rectangle[] sizing = new Rectangle[content.length];
+    boolean[] isAdjustable = new boolean[content.length];
+    Rectangle contentRect = new Rectangle(pd.leftMarginPx, pd.topMarginPx, pd.contentWidthPx, pd.contentHeightPx);
+    float totalHeight = 0;
+    float adjustableHeight = 0;
+    float numAdjustable = 0;
+    //for each custom box, figure out how big it wants to be
+    for(int i = 0; i < content.length; i++){
+      WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
+      if (box != null){
+        sizing[i] = box.layout(content[i], contentRect, pg);
+        totalHeight += sizing[i].h;
+        isAdjustable[i] = box.isResizable();
+        if (isAdjustable[i]){
+          numAdjustable++;
+          adjustableHeight += sizing[i].h;
         }
       } else {
-        if (isCover){
-          rArea = new Rectangle(-40, 0, pd.imageRect.w, rArea.h);
-        } else {
-          rArea = new Rectangle(0, headingHeight, pd.contentWidthPx, pd.contentHeightPx - footerHeight - bodyHeight - headingHeight);
-        }
+        //empty box as placeholder
+        sizing[i] = new Rectangle(0, 0, 0, 0);
       }
-      pd.imageRect = iBox.render(rArea, pg);
-
-      if (bodyHeight > 0){
-        pd.bodyRect = tBox.render(new Rectangle(0, pd.imageRect.y + pd.imageRect.h, pd.contentWidthPx, bodyHeight), pg);
-      }
-    } else if (bodyHeight > 0){
-      pd.bodyRect = tBox.render(new Rectangle(0, this.headingHeight, pd.contentWidthPx, bodyHeight), pg);
     }
+    //calculate how much smaller adjustable boxes need to be
+    float adjustment = 1;
+    if (totalHeight > contentRect.h){
+      float staticHeight = (totalHeight - adjustableHeight);
+      float remainingHeight = contentRect.h - staticHeight;
+      adjustment = remainingHeight / adjustableHeight;
+    }
+    //adjust boxes
+    float y = pd.topMarginPx;
+    for(int i = 0; i < sizing.length; i++){
+      sizing[i].y = y;
+      if (isAdjustable[i]){
+        sizing[i].h *= adjustment;
+      }
+      y += sizing[i].h;
+    }
+    //draw!
+    for(int i = 0; i < content.length; i++){
+      WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
+      if (box != null){
+        box.render(content[i], sizing[i], pg);
+      }
+    }
+    
+    ////misc "isCover" handling?
+    //  if (isCover){
+    //    hopedImageHeight = (pd.headingRect == null ? (pd.contentHeightPx - footerHeight) : (pd.contentHeightPx - footerHeight - headingHeight - 20));
+    //  } else {
+    //    hopedImageHeight = pd.contentHeightPx - bodyHeight - this.headingHeight - footerHeight;
+    //  }
+    //  ImageBox iBox = new ImageBox(pd.contentImages[0]);
+    //  Rectangle rArea;
+    //  if (isCover){
+    //    rArea = new Rectangle(0, 0, pd.contentWidthPx, hopedImageHeight);
+    //  } else {
+    //    rArea = new Rectangle(0, 0, pd.contentWidthPx, maxImageHeight);
+    //  }
+    //  pd.imageRect = iBox.layout(rArea, pg);
+    //  targetImageHeight = pd.imageRect.h;
+
+    //  if (targetImageHeight <= hopedImageHeight){
+    //    if (isCover){
+    //      rArea = new Rectangle(-40, hopedImageHeight - targetImageHeight, pd.imageRect.w, targetImageHeight);
+    //    } else {
+    //      rArea = new Rectangle(0, this.headingHeight, pd.contentWidthPx, hopedImageHeight);
+    //    }
+    //  } else {
+    //    if (isCover){
+    //      rArea = new Rectangle(-40, 0, pd.imageRect.w, rArea.h);
+    //    } else {
+    //      rArea = new Rectangle(0, headingHeight, pd.contentWidthPx, pd.contentHeightPx - footerHeight - bodyHeight - headingHeight);
+    //    }
+    //  }
   }
 
   private Rectangle renderHeading(PageData pd) {
@@ -700,7 +731,7 @@ class Spread {
   }
 
   class PageData {
-    XML heading, subheading, body, footer, quote;
+    XML heading, subheading, body, footer, quote, xml;
     String author, pageID, background;
     String type;
     PImage[] contentImages;
