@@ -92,10 +92,16 @@ class TextBox extends ContentBox{
     if (currName.equals("#text")){
       return node.getContent();
     } else if (currName.equals("var")){
-      if (vars.containsKey(node.getString("key"))){
-        return vars.get(node.getString("key"));
+      String varKey = node.getString("key");
+      if (vars.containsKey(varKey)){
+        return vars.get(varKey);
       } else {
-        return node.format(-1);
+        WorkshopText ct = WorkshopTexts.GetInstance(ZineBuilder.this).texts.get(varKey);
+        if (ct != null){
+          return ct.GetText(node);
+        } else {
+          return node.format(-1);
+        }
       }
     } else if (currName.equals("bold")){
       myWeight = FontWeight.BOLD;

@@ -1,5 +1,5 @@
-import controlP5.*; //<>// //<>// //<>// //<>// //<>//
-//for PDF //<>// //<>// //<>// //<>// //<>// //<>//
+import controlP5.*; //<>//
+//for PDF //<>//
 import processing.pdf.*;
 //for Map
 import java.util.*;
@@ -145,7 +145,7 @@ ControlP5 cp5;
 
 
 void setup() {
-  size(400, 400);
+  size(400, 400, P3D);
   setupUI();
   loadDir();
   if (testLayout){

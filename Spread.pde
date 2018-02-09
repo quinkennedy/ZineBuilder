@@ -105,7 +105,7 @@ class Spread {
       //body = children[pageNum-1].getChild("body").getContent();
 
 
-      pg = createGraphics(_spreadWidthPx, _spreadHeightPx);
+      pg = createGraphics(_spreadWidthPx, _spreadHeightPx, P3D);
 
 
       //pg.textAlign(CENTER, CENTER);
@@ -315,7 +315,7 @@ class Spread {
     }
 
     //myPGFont = createFont("SourceSansPro-Bold", 48);
-    pg = createGraphics(spreadWidthPx, spreadHeightPx);
+    pg = createGraphics(spreadWidthPx, spreadHeightPx, P3D);
 
     ////pg.textAlign(CENTER, CENTER);
     pg.beginDraw();
@@ -573,7 +573,9 @@ class Spread {
     for(int i = 0; i < content.length; i++){
       WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
       if (box != null){
+        pg.pushStyle();
         sizing[i] = box.layout(content[i], contentRect, pg);
+        pg.popStyle();
         totalHeight += sizing[i].h;
         isAdjustable[i] = box.isResizable();
         if (isAdjustable[i]){
@@ -605,7 +607,9 @@ class Spread {
     for(int i = 0; i < content.length; i++){
       WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
       if (box != null){
+        pg.pushStyle();
         box.render(content[i], sizing[i], pg);
+        pg.popStyle();
       }
     }
     
