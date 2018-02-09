@@ -198,7 +198,7 @@ private void setupUI(){
    row += 40;
    myTextarea = cp5.addTextarea("myTxt")
      .setPosition(20, row)
-     .setSize(350,200)
+     .setSize(width - 20 - 20, height - row - 40)
      .setLineHeight(14);
     myTextarea.setText("Welcome to the Zine Builder. From here you can select a "
                        +"folder containing a zine.xml file. You can make selections "
