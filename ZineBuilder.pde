@@ -654,10 +654,13 @@ void draw() {
         sn = "000" + zineState.copyNum;
         sn = sn.substring(sn.length() - 4);
         
+        File directory = new File(getDirectory());
+        String filename = getTitle()+"_"+getOutputType().toString()+"_"+sn+".pdf";
+        File outputFile = new File(directory, filename);
         if (getOutputType() == OutputType.Spreads){
-          zineState.pdf = createGraphics(pageWidthPx * 2, pageHeightPx, PDF, getTitle()+"_"+getOutputType().toString()+"_"+sn+".pdf");
+          zineState.pdf = createGraphics(pageWidthPx * 2, pageHeightPx, PDF, outputFile.getAbsolutePath());
         } else {
-          zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, getTitle()+"_"+getOutputType().toString()+"_"+sn+".pdf");
+          zineState.pdf = createGraphics(paperWidthPx, paperHeightPx, PDF, outputFile.getAbsolutePath());
         }
         zineState.pdf.beginDraw();
       }
