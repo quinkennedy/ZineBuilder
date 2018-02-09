@@ -165,11 +165,12 @@ Numberbox paperWidthIn, paperHeightIn;
 
 private void setupUI(){
   cp5 = new ControlP5(this);
-
+  Textarea myTextarea;
+  
   cp5.addTab("details");
 
   int row;
-
+  
   // Default tab
   row = 40;
   cp5.addTextfield("Directory")
@@ -193,6 +194,16 @@ private void setupUI(){
     .addItem("Spreads", 1)
     .addItem("Inner Pages", 2)
     .addItem("All", 3);
+   row += 40;
+   myTextarea = cp5.addTextarea("myTxt")
+     .setPosition(20, row)
+     .setSize(350,200)
+     .setLineHeight(14);
+    myTextarea.setText("Welcome to the Zine Builder. From here you can select a "
+                       +"folder containing a zine.xml file. You can make selections "
+                       +"in the details tab and they will be saved to a settings.xml "
+                       +"file and loaded automatically next time you open the same zine folder. "
+                       +"When you are ready to generate a PDF for your zine select \"READY\" button");
 
   // Details tab
   row = 40;
@@ -829,7 +840,7 @@ class ZineState{
 
   public void draw(){
     pushMatrix();
-    translate(20, 20);
+    translate(20, 280);
     text("zine " + copyNum + " of " + getTotalCopies(), 0, 0);
     noFill();
     stroke(255);
@@ -840,7 +851,7 @@ class ZineState{
     rect(0, 0, 100*((float)copyNum/getTotalCopies()), 10);
 
     scale(1/3.0, 1);
-    translate(0, 35);
+    translate(0, 20);
     text("state: " + state.name(), 0, 0);
 
     translate(0, 15);
