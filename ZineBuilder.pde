@@ -648,9 +648,11 @@ void draw() {
     case Init:
       vars.put("num", str(zineState.copyNum));
       if (zineState.pdf == null){
+        //assemble copy number as 4-digits with leading zeros
         String sn;
         sn = "000" + zineState.copyNum;
         sn = sn.substring(sn.length() - 4);
+        
         if (getOutputType() == OutputType.Spreads){
           zineState.pdf = createGraphics(pageWidthPx * 2, pageHeightPx, PDF, getTitle()+"_"+getOutputType().toString()+"_"+sn+".pdf");
         } else {
