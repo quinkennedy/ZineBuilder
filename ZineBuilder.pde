@@ -191,10 +191,10 @@ private void setupUI(){
     .setPosition(20, row)
     .setItemsPerRow(4)
     .setSpacingColumn(60)
-    .addItem("Cover", 0)
-    .addItem("Spreads", 1)
-    .addItem("Inner Pages", 2)
-    .addItem("All", 3);
+    .addItem("Cover", 1)
+    .addItem("Spreads", 2)
+    .addItem("Inner Pages", 3)
+    .addItem("All", 4);
    row += 40;
    myTextarea = cp5.addTextarea("myTxt")
      .setPosition(20, row)
@@ -485,16 +485,16 @@ private int getNumCopies(){
 private OutputType getOutputType(){
   int index = (int)(cp5.get(RadioButton.class, "exportType").getValue());
   switch(index){
-    case 0:
-      return OutputType.Cover;
     case 1:
-      return OutputType.Spreads;
+      return OutputType.Cover;
     case 2:
-      return OutputType.InnerPages;
+      return OutputType.Spreads;
     case 3:
+      return OutputType.InnerPages;
+    case 4:
       return OutputType.All;
     default:
-      return OutputType.Cover;
+      return OutputType.Spreads;
   }
 }
 
