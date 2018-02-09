@@ -574,7 +574,7 @@ class Spread {
       WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
       if (box != null){
         pg.pushStyle();
-        sizing[i] = box.layout(content[i], contentRect, pg);
+        sizing[i] = box.layout(content[i], contentRect, pg, vars);
         pg.popStyle();
         totalHeight += sizing[i].h;
         isAdjustable[i] = box.isResizable();
@@ -608,7 +608,7 @@ class Spread {
       WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
       if (box != null){
         pg.pushStyle();
-        box.render(content[i], sizing[i], pg);
+        box.render(content[i], sizing[i], pg, vars);
         pg.popStyle();
       }
     }
