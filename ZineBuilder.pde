@@ -1,5 +1,5 @@
-import controlP5.*; //<>//
-//for PDF //<>//
+import controlP5.*; //<>// //<>//
+//for PDF //<>// //<>//
 import processing.pdf.*;
 //for Map
 import java.util.*;
@@ -19,7 +19,7 @@ int numSpreads;
 int coverPages = 2;
 Spread[] spreads;
 Spread[] cover;
-Map<String, String> vars = new HashMap<String, String>();
+VarService vars;
 ZinePageLayout[][][] zpl;
 ControlP5 cp5;
 
@@ -146,6 +146,7 @@ ControlP5 cp5;
 
 void setup() {
   size(400, 400, P3D);
+  vars = new VarService(this);
   setupUI();
   loadDir();
   if (testLayout){

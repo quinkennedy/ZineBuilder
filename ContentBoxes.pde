@@ -35,7 +35,7 @@ class TextBox extends ContentBox{
   
   private TextBox(){}
   
-  public TextBox(XML txt, FontFamily fnt, float size, PGraphics pg, Map<String, String> vars, boolean adjustSize){
+  public TextBox(XML txt, FontFamily fnt, float size, PGraphics pg, VarService vars, boolean adjustSize){
     font = fnt;
     fontSize = size;
     text = new FormattedTextBlock(pg);
@@ -68,7 +68,7 @@ class TextBox extends ContentBox{
   //if it gets a string back, then it concatinates that string to it's own string, if there
   //  were nodes added to the List after this function was entered, add this function's text to the List
   protected void parse(XML txt, FontFamily fnt, FontWeight weight, FontEm em, 
-      float size, Map<String, String> vars, FormattedTextBlock block){
+      float size, VarService vars, FormattedTextBlock block){
     LinkedList<FormattedTextBlock.FormattedText> bits = 
       new LinkedList<FormattedTextBlock.FormattedText>();
     String result = parse(bits, txt, fnt, weight, em, size, vars);
@@ -82,7 +82,7 @@ class TextBox extends ContentBox{
   
   private String parse(
       LinkedList<FormattedTextBlock.FormattedText> bits, XML node, FontFamily fnt, 
-      FontWeight weight, FontEm em, float size, Map<String, String> vars){
+      FontWeight weight, FontEm em, float size, VarService vars){
     FontWeight myWeight = weight;
     FontEm myEm = em;
     if (node == null){
@@ -93,15 +93,11 @@ class TextBox extends ContentBox{
       return node.getContent();
     } else if (currName.equals("var")){
       String varKey = node.getString("key");
-      if (vars.containsKey(varKey)){
-        return vars.get(varKey);
+      String varValue = vars.Get(varKey, node);
+      if (varValue == null){
+        return node.format(-1);
       } else {
-        WorkshopText ct = WorkshopTexts.GetInstance(ZineBuilder.this).texts.get(varKey);
-        if (ct != null){
-          return ct.GetText(node);
-        } else {
-          return node.format(-1);
-        }
+        return varValue;
       }
     } else if (currName.equals("bold")){
       myWeight = FontWeight.BOLD;
@@ -138,10 +134,10 @@ class HeadingBox extends TextBox{
   float headingSize, subheadingSize;
   XML heading, subheading;
   boolean hasHeading, hasSubheading;
-  Map<String, String> vars;
+  VarService vars;
   
   public HeadingBox(XML _heading, XML _subheading, FontFamily fnt, float _headingSize, 
-      float _subheadingSize, PGraphics pg, Map<String, String> _vars, boolean adjustSize){
+      float _subheadingSize, PGraphics pg, VarService _vars, boolean adjustSize){
     heading = _heading;
     subheading = _subheading;
     font = fnt;
