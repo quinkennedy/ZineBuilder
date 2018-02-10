@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<zine>
+<cover id="1">
+	<page id="2">
+		<heading>Bye.</heading>
+	</page>
+	<page id="1">
+		<image src="images/jj2.png"></image>
+		<heading>Reality Bytes Back</heading>
+		<subheading>A generative zine from Sensory Aesthetics about reality.</subheading>
+		<footer>Issue 002: New Years 2018 (<var key="num"></var>/100)</footer>
+	</page>
+</cover>
+<cover id="2">
+	<page id="3">
+	   <image src="images/U_2_694819491672_archigram.jpg"></image>
+	</page>
+		<page id="4">
+	   <heading>Thank you for taking the time to read this zine. Our goals were to discuss:
+
+* Why should we invent computing to extend and augment humans? How will it teach us more deeply about ourselves?
+
+* How can we extend our technologies to the objects and environments which help define who we are and how we live? What new sensing will need to be created?
+
+* What if we understood an acre of land? What if the biomass of the earth were networked? 
+
+We would like to thank the Processing community for making this possible, in particular contributors to Processing Core, CAN_GenerativeTypography, StippleGen2, and iText.
+
+Thanks for reading. Reach us at @sensorycc #sensoryaesthetics</heading>
+	   <subheading></subheading>
+	</page>
+</cover>
+<spread id="1">
+	<page id="16" type="quote">
+		<subheading>02015</subheading>
+		<quote author="">Today's noise is tomorrow's information.
+			
+-Quin Kennedy</quote>
+		<footer>Sensory Aesthetics</footer>
+	</page>
+	<page id="1" type="toc">
+		<heading>Table of Contents</heading>
+		<footer>Every year children are taught how to interpet a table of contents, an information structure which dates back at least 2000 years. Do you remember learning how to use a table of contents?  
+
+__ yes  __no __not sure</footer>
+	</page>
+</spread>
+<spread id="2">
+	<page id="2">
+		<JoshuaExample></JoshuaExample>
+	</page>
+	<page id="3" type="code">
+	   <JoshuaExampleFullBleed></JoshuaExampleFullBleed>
+	</page>
+</spread>
+<spread id="3">
+	<page id="4">
+		<heading>With a Title</heading>
+	   <JoshuaExample></JoshuaExample>
+	</page>
+	<page id="5">
+	  <heading>What Again?</heading>
+	  <JoshuaExample></JoshuaExample>
+	  <footer>Now something at the bottom.</footer>
+	</page>
+</spread>
+<spread id="4" background="arch">
+	<page id="6" type="photo">
+	 	<footer>Archigram</footer>
+	</page>
+	<page id="7" type="photo">
+	</page>
+</spread>
+<spread id="5">
+	<page id="8"> 
+	 <JoshuaExampleFullBleed></JoshuaExampleFullBleed>
+	</page>
+	<page id="9">
+	</page>
+</spread>
+<spread id="6">
+	<page id="10">
+		<JoshuaExampleFullSpread></JoshuaExampleFullSpread>
+	</page>
+</spread>
+<spread id="7">
+	<page id="12" type="toplist">
+		<heading>10 Things we can't Measure</heading>
+		<body><bold>1. Reality
+2. Intention
+3. Success
+4. Godzilla’s Impact on Humanity
+5. True love
+6. The Future
+7. Why we fight
+8. The ringing in my ears
+9. Missed calls (*)
+10. The moment</bold></body>
+<footer>*Did you really miss that call?</footer>
+	</page>
+	<page id="13" type="photo">
+		<image src="images/drawing4b.jpg"></image>
+	</page>
+</spread>
+<spread id="8">
+	<page id="14">
+ 	<heading>Information Acre</heading>
+	   <subheading>   </subheading>
+	   <body>Imagine the bit as the toss of a fair coin. The result is either heads or tails. The "holographic principle" would suggest that there is a limit to the number of bits which physics can support. This amount is placed at 10^69 bits per square meter before the point in which adding more information would collapse into a black hole. This is approximately 1, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 bits per square meter of two dimensional space.
+
+Our proposal: Dedicate 1 square acre of land to the deep pursuit of sensing. Bring scientists, artists, hardware and software designers together to try to make a dent in that information space. Sense the biology, the chemistry, the conditions, and the human reaction to that one acre. Publish this material for the world. 
+
+We have tentatively named this project Information Acre and are currently looking for a suitable area in the Pacific Northwest for this to occur. 
+</body>
+	   <image src="images/biomass.gif"></image>
+	</page>
+	<page id="15">
+		<heading></heading>
+		<subheading></subheading>
+		<image src="images/archigram14.gif"></image>
+		 <footer>Want to join us on Information Acre? Contact: @brunchstorm or @jamestichenor.</footer>
+	</page>
+</spread>
+</zine>

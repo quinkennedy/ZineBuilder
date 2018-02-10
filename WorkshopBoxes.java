@@ -10,6 +10,9 @@ class WorkshopBoxes{
   private WorkshopBoxes(ZineBuilder zineBuilder){
     boxes.put("helloworld", zineBuilder.new HelloWorld());
     boxes.put("threedee", zineBuilder.new ThreeDee());
+    boxes.put("JoshuaExample", zineBuilder.new JoshuaExample());
+    boxes.put("JoshuaExampleFullBleed", zineBuilder.new JoshuaExampleFullBleed());
+    boxes.put("JoshuaExampleFullSpread", zineBuilder.new JoshuaExampleFullSpread());
   }
   
   public static WorkshopBoxes GetInstance(ZineBuilder zineBuilder){
