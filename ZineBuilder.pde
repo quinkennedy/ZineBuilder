@@ -147,7 +147,7 @@ ControlP5 cp5;
 
 
 void setup() {
-  size(400, 400, P3D);
+  size(400, 400, P2D);
   vars = new VarService(this);
   setupUI();
   loadDir();

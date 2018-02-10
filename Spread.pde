@@ -91,17 +91,16 @@ class Spread {
       createCover();
       println("laying out cover "+spreadNum);
     } else {
-      pg = createGraphics(_spreadWidthPx, _spreadHeightPx, P3D);
-      
-      // parse spreads
       XML[] pages;
+      XML currSpread = null;
       if (spreadNum <= spreads.length){
-
-        //XML spread = children[spreadNum-1];
-        pages = spreads[spreadNum-1].getChildren("page");
+        currSpread = spreads[spreadNum - 1];
+        pages = currSpread.getChildren("page");
       } else {
         pages = new XML[0];
       }
+      
+      pg = createGraphics(_spreadWidthPx, _spreadHeightPx, currSpread);
       
       int numPages = pages.length;
       pageWidthPx = spreadWidthPx;
@@ -161,6 +160,26 @@ class Spread {
     setMargins(topMargin, bottomMargin,
       leftOutsideMargin, rightOutsideMargin,
       insideLeftMargin, insideRightMargin);
+  }
+  
+  PGraphics createGraphics(int width, int height, XML spread){
+    String renderer = null;
+    if (spread != null){
+      renderer = spread.getString("renderer");
+    }
+    if (renderer == null){
+      renderer = "";
+    }
+    switch (renderer){
+      case "P2D":
+        return ZineBuilder.this.createGraphics(width, height, P2D);
+      case "P3D":
+        return ZineBuilder.this.createGraphics(width, height, P3D);
+      case "OPENGL":
+        return ZineBuilder.this.createGraphics(width, height, OPENGL);
+      default:
+        return ZineBuilder.this.createGraphics(width, height);
+    }
   }
 
   public void loadStyling(){
@@ -318,16 +337,17 @@ class Spread {
 
   public void createCover() {
     //myPGFont = createFont("SourceSansPro-Bold", 48);
-    pg = createGraphics(spreadWidthPx, spreadHeightPx, P3D);
-    
     XML[] cover = xml.getChildren("cover");
     XML[] pages;
-    
+    XML currCover = null;
     if (spreadNum <= cover.length){
-      pages = cover[spreadNum-1].getChildren("page");
+      currCover = cover[spreadNum - 1];
+      pages = currCover.getChildren("page");
     } else {
       pages = new XML[0];
     }
+    
+    pg = createGraphics(spreadWidthPx, spreadHeightPx, currCover);
     
     numPages = pages.length;
     pageWidthPx = spreadWidthPx;

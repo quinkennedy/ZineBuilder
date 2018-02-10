@@ -221,7 +221,12 @@ class WorkshopImage extends WorkshopBox{
     File directory = new File(getDirectory());
     String filename = String.format(xml.getString("src"), parseInt(vars.Get("num")));
     File file = new File(directory, filename);
-    return loadImage(file.getAbsolutePath());
+    PImage image = loadImage(file.getAbsolutePath());
+    if (image == null){
+      System.err.println("could not find image: " + filename);
+      image = loadImage("images/fpo.jpg");
+    }
+    return image;
   }
   private String getFit(XML xml){
     String fit = xml.getString("fit");
