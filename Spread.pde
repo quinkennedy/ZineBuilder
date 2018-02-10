@@ -88,13 +88,21 @@ class Spread {
     spreads = xml.getChildren("spread");
 
     if (isCover == true) {
-     createCover();
-     println("laying out cover "+spreadNum);
+      createCover();
+      println("laying out cover "+spreadNum);
     } else {
+      pg = createGraphics(_spreadWidthPx, _spreadHeightPx, P3D);
+      
       // parse spreads
+      XML[] pages;
+      if (spreadNum <= spreads.length){
 
-      //XML spread = children[spreadNum-1];
-      XML[] pages = spreads[spreadNum-1].getChildren("page");
+        //XML spread = children[spreadNum-1];
+        pages = spreads[spreadNum-1].getChildren("page");
+      } else {
+        pages = new XML[0];
+      }
+      
       int numPages = pages.length;
       pageWidthPx = spreadWidthPx;
       if (numPages > 0) {
@@ -105,7 +113,6 @@ class Spread {
       //body = children[pageNum-1].getChild("body").getContent();
 
 
-      pg = createGraphics(_spreadWidthPx, _spreadHeightPx, P3D);
 
 
       //pg.textAlign(CENTER, CENTER);
@@ -305,17 +312,23 @@ class Spread {
   }
 
   public void createCover() {
+    //myPGFont = createFont("SourceSansPro-Bold", 48);
+    pg = createGraphics(spreadWidthPx, spreadHeightPx, P3D);
+    
     XML[] cover = xml.getChildren("cover");
-    XML[] pages = cover[spreadNum-1].getChildren("page");
-
-    int numPages = pages.length;
+    XML[] pages;
+    
+    if (spreadNum <= cover.length){
+      pages = cover[spreadNum-1].getChildren("page");
+    } else {
+      pages = new XML[0];
+    }
+    
+    numPages = pages.length;
     pageWidthPx = spreadWidthPx;
     if (numPages > 0) {
       pageWidthPx /= numPages;
     }
-
-    //myPGFont = createFont("SourceSansPro-Bold", 48);
-    pg = createGraphics(spreadWidthPx, spreadHeightPx, P3D);
 
     ////pg.textAlign(CENTER, CENTER);
     pg.beginDraw();
@@ -373,20 +386,22 @@ class Spread {
     // background
     //if (spreads[spreadNum-1].getString("background")
     // print(spreads[spreadNum-1]);
-    if (spreads[spreadNum-1].hasAttribute("background")) {
-      print(spreads[spreadNum-1].getString("background"));
-      String background = spreads[spreadNum-1].getString("background");
-      if (background != null && background.equals("dots")) {
-        for (int j=0; j<spreadWidthPx/10; j++) {
-          for (int k=0; k<spreadHeightPx/10; k++) {
-             //pg.rect(j*10, k*10, 5, 5);
-             pg.point(j*10, k*10);
+    if (spreadNum <= spreads.length){
+      if (spreads[spreadNum-1].hasAttribute("background")) {
+        print(spreads[spreadNum-1].getString("background"));
+        String background = spreads[spreadNum-1].getString("background");
+        if (background != null && background.equals("dots")) {
+          for (int j=0; j<spreadWidthPx/10; j++) {
+            for (int k=0; k<spreadHeightPx/10; k++) {
+               //pg.rect(j*10, k*10, 5, 5);
+               pg.point(j*10, k*10);
+            }
           }
         }
-      }
-      if (background != null && background.equals("arch")) {
-        PImage tImg = loadImage("images/U_2_694819491672_archigram.jpg");
-        pg.image(tImg, 0,0,spreadWidthPx, spreadHeightPx);
+        if (background != null && background.equals("arch")) {
+          PImage tImg = loadImage("images/U_2_694819491672_archigram.jpg");
+          pg.image(tImg, 0,0,spreadWidthPx, spreadHeightPx);
+        }
       }
     }
 
