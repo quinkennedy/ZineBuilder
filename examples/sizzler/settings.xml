@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-  <Copies>1.00</Copies>
+  <Copies>2.00</Copies>
   <bottomMargin>0.00</bottomMargin>
   <centerLeftMargin>0.00</centerLeftMargin>
   <centerRightMargin>0.00</centerRightMargin>
@@ -11,9 +11,9 @@
   <paperHeight>11.00</paperHeight>
   <paperWidth>8.50</paperWidth>
   <printerPages>2.00</printerPages>
-  <startAtIndex>0.00</startAtIndex>
+  <startAtIndex>1.00</startAtIndex>
   <topMargin>0.00</topMargin>
-  <totalCopies>1.00</totalCopies>
+  <totalCopies>2.00</totalCopies>
   <widthFolds>1.00</widthFolds>
   <title>Sweet Sweet Zine</title>
 </settings>

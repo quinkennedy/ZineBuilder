@@ -426,11 +426,9 @@ class Spread {
       
       if (pageData[i].footer != null) {
         pageData[i].footerRect = renderFooter(pageData[i]);
-        println(spreadNum + "," + i + " footer: " + pageData[i].footerRect);
       }
       if (pageData[i].hasHeading() || pageData[i].hasSubheading()) {
         pageData[i].headingRect = renderHeading(pageData[i]);
-        println(spreadNum + "," + i + " heading: " + pageData[i].headingRect);
       }
       if (showPageNum){
         renderPageNum(pageData[i]);
@@ -598,8 +596,8 @@ class Spread {
   }
   
   private Rectangle getContentRect(PageData pd){
-    float headingHeight = (pd.headingRect != null ? pd.headingRect.h : 0);
-    return new Rectangle(pd.leftMarginPx, pd.topMarginPx + this.headingHeight, pd.contentWidthPx, pd.contentHeightPx - headingHeight);
+    float headingHeight = (pd.headingRect != null ? this.headingHeight : 0);
+    return new Rectangle(pd.leftMarginPx, pd.topMarginPx + headingHeight, pd.contentWidthPx, pd.contentHeightPx - headingHeight - footerHeight);
     
     ////misc "isCover" handling?
     //  if (isCover){
@@ -640,7 +638,6 @@ class Spread {
     Rectangle[] sizing = new Rectangle[content.length];
     boolean[] isAdjustable = new boolean[content.length];
     Rectangle contentRect = getContentRect(pd);
-    println(spreadNum + "," + pd.pageID + " contentRect: " + contentRect);
     float totalHeight = 0;
     float adjustableHeight = 0;
     float numAdjustable = 0;
@@ -683,7 +680,6 @@ class Spread {
       WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
       if (box != null){
         pg.pushStyle();
-        println("box " + i + " rect: " + sizing[i] + " type: " + content[i].getName());
         box.render(content[i], sizing[i], pg, vars);
         pg.popStyle();
       }

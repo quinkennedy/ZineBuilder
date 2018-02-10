@@ -201,7 +201,6 @@ class WorkshopBody extends WorkshopBox{
   }
   
   public Rectangle render(XML xml, Rectangle rect, PGraphics pg, VarService vars, boolean debug){
-    println("rendering " + xml + " at " + rect);
     TextBox textBox = new TextBox(xml, FontFamily.families.get("body"), FontFamily.sizes.get("body"), pg, vars, false);
     return textBox.render(rect, pg);
   }
@@ -215,13 +214,12 @@ class WorkshopImage extends WorkshopBox{
   
   /**
    * Loads the image specified by the `<image>` XML.
-   * if the `src` attribute includes `%s`, 
-   * it will be replaced with the zine copy number 
-   * using Java formatting
+   * `src` is run through a string formatter
+   * so you can include `%04d` to inject the copy number
    */
   private PImage load(XML xml, VarService vars){
     File directory = new File(getDirectory());
-    String filename = String.format(xml.getString("src"), vars.Get("num"));
+    String filename = String.format(xml.getString("src"), parseInt(vars.Get("num")));
     File file = new File(directory, filename);
     return loadImage(file.getAbsolutePath());
   }
@@ -235,8 +233,6 @@ class WorkshopImage extends WorkshopBox{
   public Rectangle layout(XML xml, Rectangle area, PGraphics pg, VarService vars){
     PImage image = load(xml, vars);
     String scaleType = getFit(xml);
-    //TODO: support fill, contain, cover, none, scale-down a'la https://www.w3schools.com/css/css3_object-fit.asp
-    //default to "scale-down"
     switch (scaleType){
       case "fill":
       case "cover":

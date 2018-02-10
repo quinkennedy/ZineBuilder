@@ -6,9 +6,9 @@
 	</page>
 	<page id="1">
 		<image src="images/jj2.png"></image>
-		<heading>Reality Bytes Back</heading>
-		<subheading>A generative zine from Sensory Aesthetics about reality.</subheading>
-		<footer>Issue 002: New Years 2018 (<var key="num"></var>/100)</footer>
+		<heading>Generative Zine Workshop 001</heading>
+		<subheading>Let's make a generative zine together using this crazy programmatic layout engine</subheading>
+		<footer>#<var key="num" /> of <var key="total" /> generated on <var key="date"/></footer>
 	</page>
 </cover>
 <cover id="2">
@@ -31,6 +31,7 @@ Thanks for reading. Reach us at @sensorycc #sensoryaesthetics</heading>
 	</page>
 </cover>
 <spread id="1">
+	<!-- the first page in the first spread is actually the back cover -->
 	<page id="16" type="quote">
 		<subheading>02015</subheading>
 		<quote author="">Today's noise is tomorrow's information.
@@ -47,40 +48,48 @@ __ yes  __no __not sure</footer>
 </spread>
 <spread id="2">
 	<page id="2">
-		<JoshuaExample></JoshuaExample>
-	</page>
-	<page id="3" type="code">
 	   <JoshuaExampleFullBleed></JoshuaExampleFullBleed>
+	</page>
+	<page id="3">
+		<heading>Full Bleed</heading>
+		<body>On the opposite page, we see an example of a generative block which renders full bleed.
+
+On the following spread there is an example of a generative block which renders over the entire spread.</body>
 	</page>
 </spread>
 <spread id="3">
-	<page id="4">
-		<heading>With a Title</heading>
-	   <JoshuaExample></JoshuaExample>
-	</page>
-	<page id="5">
-	  <heading>What Again?</heading>
-	  <JoshuaExample></JoshuaExample>
-	  <footer>Now something at the bottom.</footer>
+	<page id="4"> 
+	 <JoshuaExampleFullSpread></JoshuaExampleFullSpread>
 	</page>
 </spread>
-<spread id="4" background="arch">
-	<page id="6" type="photo">
-	 	<footer>Archigram</footer>
+<spread id="4">
+	<page id="6">
+		<heading>Generative Block</heading>
+		<subheading>This page shows a generative block laid out with a heading and subheading</subheading>
+		<JoshuaExample></JoshuaExample>
 	</page>
-	<page id="7" type="photo">
+	<page id="7">
+	  <JoshuaExample></JoshuaExample>
+	  <footer>This page uses the same generative block, but does not have a heading.</footer>
 	</page>
 </spread>
 <spread id="5">
-	<page id="8"> 
-	 <JoshuaExampleFullBleed></JoshuaExampleFullBleed>
+	<page id="8">
+		<heading>Pre-rendered</heading>
+		<subheading>Here we see a pre-renderer sequence of images inserted into the document</subheading>
+		<image src="../ProcessingFrameCreator/screen-%04d.tif" />
 	</page>
 	<page id="9">
+		<body>You can also scale up the image</body>
+		<image src="../ProcessingFrameCreator/screen-%04d.tif" fit="contain" />
 	</page>
 </spread>
 <spread id="6">
 	<page id="10">
-		<JoshuaExampleFullSpread></JoshuaExampleFullSpread>
+		<heading>Generative Text</heading>
+		<subheading>A <var key="noun" /> tried to <var key="verb" /></subheading>
+	</page>
+	<page id="11">
 	</page>
 </spread>
 <spread id="7">

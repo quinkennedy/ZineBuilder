@@ -3,6 +3,8 @@ import controlP5.*; //<>// //<>//
 import processing.pdf.*;
 //for Map
 import java.util.*;
+//for SimpleDateFormat
+import java.text.SimpleDateFormat;
 
 //boolean separateCopies = false;
 boolean debug = false;
@@ -185,7 +187,8 @@ private void setupUI(){
     .setValue(1);
   row += 40;
   cp5.addNumberbox("startAtIndex")
-    .setPosition(20, row);
+    .setPosition(20, row)
+    .setValue(1);
   row += 40;
   cp5.addRadioButton("exportType")
     .setPosition(20, row)
@@ -412,6 +415,7 @@ public void Ready(){
   } else {
     computeVars();
     SaveSettings();
+    zineState.copyNum = getStartAt();
     zineState.state = ConstructionState.Init;
   }
 }
@@ -647,6 +651,10 @@ void draw() {
     case Gather:
       break;
     case Init:
+      Date currDate = new Date();
+      vars.put("time", new SimpleDateFormat("HH:mm z").format(currDate));
+      vars.put("date", new SimpleDateFormat("MMM d, yyyy").format(currDate));
+      vars.put("total", String.valueOf(getTotalCopies()));
       vars.put("num", str(zineState.copyNum));
       if (zineState.pdf == null){
         //assemble copy number as 4-digits with leading zeros
@@ -770,20 +778,23 @@ void draw() {
       }
       break;
     case Done:
-      boolean dispose;
-      if (zineState.copyNum >= getTotalCopies()){
-        noLoop();
+      boolean dispose = false;
+      if (zineState.copyNum >= getTotalCopies() || zineState.copyNum >= getStartAt() + getNumCopies() - 1){
+        //noLoop();
         pushStyle();
         textAlign(CENTER, CENTER);
         textSize(100);
         text("FIN", width/2, height/2);
         popStyle();
+        zineState.state = ConstructionState.Gather;
         dispose = true;
       } else {
         zineState.copyNum++;
-        zineState.state = nextState(zineState.state, getOutputType());// ConstructionState.Init;
-        dispose = zineState.copyNum%getNumCopies() == 0;
+        zineState.state = ConstructionState.Init;
+        //zineState.state = nextState(zineState.state, getOutputType());// ConstructionState.Init;
+        //dispose = ((zineState.copyNum % getNumCopies()) == 0);
       }
+      //zineState.state = nextState(zineState.state, getOutputType());// ConstructionState.Init;
       if (dispose && zineState.pdf != null){
         zineState.pdf.dispose();
         zineState.pdf = null;
@@ -840,7 +851,7 @@ class ZineState{
   PGraphics paperg;
   int progress = 0;
   int limit;
-  ConstructionState state = ConstructionState.Done;
+  ConstructionState state = ConstructionState.Gather;
   int minHeadingSize = -1;
   int maxFooterHeight = 0;
 
