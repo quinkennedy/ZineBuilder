@@ -5,7 +5,7 @@
 		<heading>Bye.</heading>
 	</page>
 	<page id="1">
-		<image src="images/jj2.png"></image>
+		<image src="images/jq_squares.png"></image>
 		<heading>Generative Zine Workshop 001</heading>
 		<subheading>Let's make a generative zine together using this crazy programmatic layout engine</subheading>
 		<footer>#<var key="num" /> of <var key="total" /> generated on <var key="date"/></footer>
@@ -13,6 +13,13 @@
 </cover>
 <cover id="2">
 	<page id="3">
+		<heading>Welcome to our zine shindig!
+
+We will just jam together to create a group zine. You can participate by creating "WorkshopBox" and "WorkshopText" elements. This zine illustrates a few examples of how to make and use these elements.
+
+A "WorkshopBox" allows you to render graphics into a section (or entire) page.
+
+A "WorkshopText" allows you to generate text which will be rendered by the build-in text rendering engine. Your text can also be consumed by other text generators. Stand on the shoulder of giants!</heading>
 	   <image src="images/U_2_694819491672_archigram.jpg"></image>
 	</page>
 		<page id="4">
