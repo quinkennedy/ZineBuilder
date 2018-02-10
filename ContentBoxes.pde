@@ -210,3 +210,84 @@ class WorkshopBody extends WorkshopBox{
     return false;
   }
 }
+
+class WorkshopImage extends WorkshopBox{
+  
+  /**
+   * Loads the image specified by the `<image>` XML.
+   * if the `src` attribute includes `%s`, 
+   * it will be replaced with the zine copy number 
+   * using Java formatting
+   */
+  private PImage load(XML xml, VarService vars){
+    File directory = new File(getDirectory());
+    String filename = String.format(xml.getString("src"), vars.Get("num"));
+    File file = new File(directory, filename);
+    return loadImage(file.getAbsolutePath());
+  }
+  private String getFit(XML xml){
+    String fit = xml.getString("fit");
+    if (fit == null){
+      fit = "scale-down";
+    }
+    return fit;
+  }
+  public Rectangle layout(XML xml, Rectangle area, PGraphics pg, VarService vars){
+    PImage image = load(xml, vars);
+    String scaleType = getFit(xml);
+    //TODO: support fill, contain, cover, none, scale-down a'la https://www.w3schools.com/css/css3_object-fit.asp
+    //default to "scale-down"
+    switch (scaleType){
+      case "fill":
+      case "cover":
+        return area;
+      case "contain":
+      {
+        float scale = area.h / Math.max(image.height, 1);
+        scale = Math.min(scale, area.w / Math.max(image.width, 1));
+        float sWidth = image.width * scale;
+        float sHeight = image.height * scale;
+        return new Rectangle(
+          area.x + (area.w - sWidth) / 2, 
+          area.y + (area.h - sHeight) / 2, 
+          sWidth, 
+          sHeight);
+      }
+      case "scale-down":
+      default:
+      {
+        float scale = 1;
+        scale = Math.min(scale, area.h / Math.max(image.height, 1));
+        scale = Math.min(scale, area.w / Math.max(image.width, 1));
+        float sWidth = image.width * scale;
+        float sHeight = image.height * scale;
+        return new Rectangle(
+          area.x + (area.w - sWidth) / 2, 
+          area.y + (area.h - sHeight) / 2, 
+          sWidth, 
+          sHeight);
+      }
+    }
+  }
+  public Rectangle render(XML xml, Rectangle rect, PGraphics pg, VarService vars, boolean debug){
+    PImage image = load(xml, vars);
+    Rectangle target = layout(xml, rect, pg, vars);
+    String scaleType = getFit(xml);
+    switch (scaleType){
+      case "fill":
+      case "contain":
+      case "scale-down":
+      default:
+        pg.image(image, target.x, target.y, target.w, target.h);
+        break;
+      case "cover":
+        //TODO
+        break;
+    }
+    return target;
+  }
+  
+  public boolean isResizable(){
+    return true;
+  }
+}

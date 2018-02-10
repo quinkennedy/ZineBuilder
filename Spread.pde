@@ -435,21 +435,34 @@ class Spread {
       if (showPageNum){
         renderPageNum(pageData[i]);
       }
-      //undo margin adjustment
-      pg.popMatrix();
 
       if (pageData[i].type == null) {
+        //undo margin adjustment
+        pg.popMatrix();
         base(pageData[i]);
-      } else if (pageData[i].type.equals("quote")) {
-        quote(pageData[i]);
-      } else if (pageData[i].type.equals("toc")) {
-        toc(pageData[i]);
-      } else if (pageData[i].type.equals("toplist")) {
-        toplist(pageData[i]);
-      } else if (pageData[i].type.equals("photo")) {
-        photo(pageData[i]);
-      } else if (pageData[i].type.equals("code")) {
-        code(pageData[i]);
+      } else {
+        switch(pageData[i].type){
+          case "quote":
+            quote(pageData[i]);
+            break;
+          case "toc":
+            toc(pageData[i]);
+            break;
+          case "toplist":
+            toplist(pageData[i]);
+            break;
+          case "photo":
+            photo(pageData[i]);
+            break;
+          case "code":
+            code(pageData[i]);
+            break;
+          default:
+            println("unrecognized page type " + pageData[i].type);
+            break;
+        }
+        //undo margin adjustment
+        pg.popMatrix();
       }
       pg.popMatrix();
       //quote = pages[i].getChild("quote");

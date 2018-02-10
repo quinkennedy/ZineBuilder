@@ -20,6 +20,10 @@ class VarService{
     put("verb", zineBuilder.new Verb());
   }
   
+  public String Get(String key){
+    return Get(key, new XML(key));
+  }
+  
   public String Get(String key, XML xml){
     if (vars.containsKey(key)){
       return vars.get(key);

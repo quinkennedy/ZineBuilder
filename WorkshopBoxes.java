@@ -11,6 +11,7 @@ class WorkshopBoxes{
     boxes.put("helloworld", zineBuilder.new HelloWorld());
     boxes.put("threedee", zineBuilder.new ThreeDee());
     boxes.put("body", zineBuilder.new WorkshopBody());
+    boxes.put("image", zineBuilder.new WorkshopImage());
     boxes.put("JoshuaExample", zineBuilder.new JoshuaExample());
     boxes.put("JoshuaExampleFullBleed", zineBuilder.new JoshuaExampleFullBleed());
     boxes.put("JoshuaExampleFullSpread", zineBuilder.new JoshuaExampleFullSpread());
