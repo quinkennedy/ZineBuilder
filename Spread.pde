@@ -11,7 +11,7 @@ class Spread {
   PGraphics pg;
   private int spreadWidthPx;
   private int spreadHeightPx;
-  FontFamily headingFamily, bodyFamily, monoFamily, footerFamily;
+  FontFamily bodyFamily, headingFamily, monoFamily, footerFamily;
   XML xml;
   private int topMargin = 200;
   private int bottomMargin = 200;
@@ -82,8 +82,8 @@ class Spread {
 
     headingFamily = FontFamily.loadHeading(ZineBuilder.this);//FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, SensoryZine001.this);
     bodyFamily = FontFamily.loadBody(ZineBuilder.this);
-    monoFamily = FontFamily.loadSingle("fonts/source-code-pro/TTF/SourceCodePro-Light.ttf", 48, ZineBuilder.this);
-    footerFamily = FontFamily.loadSingle("fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, ZineBuilder.this);
+    monoFamily = FontFamily.loadSingle("mono", "fonts/source-code-pro/TTF/SourceCodePro-Light.ttf", 48, ZineBuilder.this);
+    footerFamily = FontFamily.loadSingle("footer", "fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, ZineBuilder.this);
 
     spreads = xml.getChildren("spread");
 
@@ -173,6 +173,11 @@ class Spread {
       bodySize = getFrom(style, "bodySize", bodySize);
       quoteSize = getFrom(style, "quoteSize", quoteSize);
     }
+    FontFamily.sizes.put("heading", headingSize);
+    FontFamily.sizes.put("body", bodySize);
+    FontFamily.sizes.put("footer", footerSize);
+    FontFamily.sizes.put("subheading", subheadingSize);
+    FontFamily.sizes.put("quote", quoteSize);
   }
 
   private int getFrom(XML xml, String childName, int fallback){
@@ -414,17 +419,24 @@ class Spread {
       pg.pushMatrix();
       //locate to correct 1/2 of spread
       pg.translate(pageWidthPx * i, 0);
+      
+      pg.pushMatrix();
       //adjust for margins
-      //pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
+      pg.translate(pageData[i].leftMarginPx, pageData[i].topMarginPx);
+      
       if (pageData[i].footer != null) {
         pageData[i].footerRect = renderFooter(pageData[i]);
+        println(spreadNum + "," + i + " footer: " + pageData[i].footerRect);
       }
       if (pageData[i].hasHeading() || pageData[i].hasSubheading()) {
         pageData[i].headingRect = renderHeading(pageData[i]);
+        println(spreadNum + "," + i + " heading: " + pageData[i].headingRect);
       }
       if (showPageNum){
         renderPageNum(pageData[i]);
       }
+      //undo margin adjustment
+      pg.popMatrix();
 
       if (pageData[i].type == null) {
         base(pageData[i]);
@@ -571,62 +583,10 @@ class Spread {
       iBox.render(new Rectangle(0, startY, pd.contentWidthPx, pd.contentHeightPx - startY - footerHeight), pg, debug);
     }
   }
-
-  public void base(PageData pd) {
-    System.out.println("xml is " + pd.xml);
-    if (pd.xml == null){
-      return;
-    }
-    XML[] content = pd.xml.getChildren();
-    Rectangle[] sizing = new Rectangle[content.length];
-    boolean[] isAdjustable = new boolean[content.length];
-    Rectangle contentRect = new Rectangle(pd.leftMarginPx, pd.topMarginPx, pd.contentWidthPx, pd.contentHeightPx);
-    float totalHeight = 0;
-    float adjustableHeight = 0;
-    float numAdjustable = 0;
-    //for each custom box, figure out how big it wants to be
-    for(int i = 0; i < content.length; i++){
-      WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
-      if (box != null){
-        pg.pushStyle();
-        sizing[i] = box.layout(content[i], contentRect, pg, vars);
-        pg.popStyle();
-        totalHeight += sizing[i].h;
-        isAdjustable[i] = box.isResizable();
-        if (isAdjustable[i]){
-          numAdjustable++;
-          adjustableHeight += sizing[i].h;
-        }
-      } else {
-        //empty box as placeholder
-        sizing[i] = new Rectangle(0, 0, 0, 0);
-      }
-    }
-    //calculate how much smaller adjustable boxes need to be
-    float adjustment = 1;
-    if (totalHeight > contentRect.h){
-      float staticHeight = (totalHeight - adjustableHeight);
-      float remainingHeight = contentRect.h - staticHeight;
-      adjustment = remainingHeight / adjustableHeight;
-    }
-    //adjust boxes
-    float y = pd.topMarginPx;
-    for(int i = 0; i < sizing.length; i++){
-      sizing[i].y = y;
-      if (isAdjustable[i]){
-        sizing[i].h *= adjustment;
-      }
-      y += sizing[i].h;
-    }
-    //draw!
-    for(int i = 0; i < content.length; i++){
-      WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
-      if (box != null){
-        pg.pushStyle();
-        box.render(content[i], sizing[i], pg, vars);
-        pg.popStyle();
-      }
-    }
+  
+  private Rectangle getContentRect(PageData pd){
+    float headingHeight = (pd.headingRect != null ? pd.headingRect.h : 0);
+    return new Rectangle(pd.leftMarginPx, pd.topMarginPx + this.headingHeight, pd.contentWidthPx, pd.contentHeightPx - headingHeight);
     
     ////misc "isCover" handling?
     //  if (isCover){
@@ -657,6 +617,64 @@ class Spread {
     //      rArea = new Rectangle(0, headingHeight, pd.contentWidthPx, pd.contentHeightPx - footerHeight - bodyHeight - headingHeight);
     //    }
     //  }
+  }
+
+  public void base(PageData pd) {
+    if (pd.xml == null){
+      return;
+    }
+    XML[] content = pd.xml.getChildren();
+    Rectangle[] sizing = new Rectangle[content.length];
+    boolean[] isAdjustable = new boolean[content.length];
+    Rectangle contentRect = getContentRect(pd);
+    println(spreadNum + "," + pd.pageID + " contentRect: " + contentRect);
+    float totalHeight = 0;
+    float adjustableHeight = 0;
+    float numAdjustable = 0;
+    //for each custom box, figure out how big it wants to be
+    for(int i = 0; i < content.length; i++){
+      WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
+      if (box != null){
+        pg.pushStyle();
+        sizing[i] = box.layout(content[i], contentRect, pg, vars);
+        pg.popStyle();
+        totalHeight += sizing[i].h;
+        isAdjustable[i] = box.isResizable();
+        if (isAdjustable[i]){
+          numAdjustable++;
+          adjustableHeight += sizing[i].h;
+        }
+      } else {
+        //empty box as placeholder
+        sizing[i] = new Rectangle(0, 0, 0, 0);
+      }
+    }
+    //calculate how much smaller adjustable boxes need to be
+    float adjustment = 1;
+    if (totalHeight > contentRect.h){
+      float staticHeight = (totalHeight - adjustableHeight);
+      float remainingHeight = contentRect.h - staticHeight;
+      adjustment = remainingHeight / adjustableHeight;
+    }
+    //adjust boxes
+    float y = contentRect.y;
+    for(int i = 0; i < sizing.length; i++){
+      sizing[i].y = y;
+      if (isAdjustable[i]){
+        sizing[i].h *= adjustment;
+      }
+      y += sizing[i].h;
+    }
+    //draw!
+    for(int i = 0; i < content.length; i++){
+      WorkshopBox box = WorkshopBoxes.GetInstance(ZineBuilder.this).boxes.get(content[i].getName());
+      if (box != null){
+        pg.pushStyle();
+        println("box " + i + " rect: " + sizing[i] + " type: " + content[i].getName());
+        box.render(content[i], sizing[i], pg, vars);
+        pg.popStyle();
+      }
+    }
   }
 
   private Rectangle renderHeading(PageData pd) {
@@ -696,6 +714,8 @@ class Spread {
       }
       pg.text(pd.pageID, myTempX, pd.contentHeightPx + bodySize);
       println("rendering pg: " + pd.pageID);
+      
+      //add squiggle for funsies
       pg.pushMatrix();
       float tmpSize = 50;
       pg.translate(myTempX - tmpSize/2, pd.contentHeightPx + bodySize);
@@ -779,6 +799,8 @@ enum Side {
 }
 
 static class FontFamily{
+  public static Map<String, FontFamily> families = new HashMap<String, FontFamily>();
+  public static Map<String, Integer> sizes = new HashMap<String, Integer>();
   Map<FontWeight, Map<FontEm, PFont>> fonts;
 
   private FontFamily(){
@@ -807,25 +829,42 @@ static class FontFamily{
   }
 
   public static FontFamily loadBody(PApplet p){
-    FontFamily fam = new FontFamily();
-    fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48, p);
-    fam.loadFont(FontWeight.BOLD, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Bold.ttf", 48, p);
-    fam.loadFont(FontWeight.REGULAR, FontEm.ITALIC, "fonts/source-sans-pro/TTF/SourceSansPro-It.ttf", 48, p);
-    fam.loadFont(FontWeight.BOLD, FontEm.ITALIC, "fonts/source-sans-pro/TTF/SourceSansPro-BoldIt.ttf", 48, p);
-    return fam;
+    String key = "body";
+    if (families != null && families.containsKey(key)){
+      return families.get(key);
+    } else {
+      FontFamily fam = new FontFamily();
+      fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Regular.ttf", 48, p);
+      fam.loadFont(FontWeight.BOLD, FontEm.REGULAR, "fonts/source-serif-pro/TTF/SourceSerifPro-Bold.ttf", 48, p);
+      fam.loadFont(FontWeight.REGULAR, FontEm.ITALIC, "fonts/source-sans-pro/TTF/SourceSansPro-It.ttf", 48, p);
+      fam.loadFont(FontWeight.BOLD, FontEm.ITALIC, "fonts/source-sans-pro/TTF/SourceSansPro-BoldIt.ttf", 48, p);
+      families.put(key, fam);
+      return fam;
+    }
   }
 
   public static FontFamily loadHeading(PApplet p){
-    FontFamily fam = new FontFamily();
-    fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, p);
-    fam.loadFont(FontWeight.LIGHT, FontEm.REGULAR, "fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, p);
-    return fam;
+    String key = "heading";
+    if (families != null && families.containsKey(key)){
+      return families.get(key);
+    } else {
+      FontFamily fam = new FontFamily();
+      fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, "fonts/source-sans-pro/TTF/SourceSansPro-Bold.ttf", 48, p);
+      fam.loadFont(FontWeight.LIGHT, FontEm.REGULAR, "fonts/source-sans-pro/TTF/SourceSansPro-Semibold.ttf", 48, p);
+      families.put(key, fam);
+      return fam;
+    }
   }
 
-  public static FontFamily loadSingle(String path, float size, PApplet p){
-    FontFamily fam = new FontFamily();
-    fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, path, size, p);
-    return fam;
+  public static FontFamily loadSingle(String key, String path, float size, PApplet p){
+    if (families != null && families.containsKey(key)){
+      return families.get(key);
+    } else {
+      FontFamily fam = new FontFamily();
+      fam.loadFont(FontWeight.REGULAR, FontEm.REGULAR, path, size, p);
+      families.put(key, fam);
+      return fam;
+    }
   }
 }
 

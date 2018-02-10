@@ -6,16 +6,18 @@
 </page>
 </cover>
 <spread>
-<page>
+<page id="3d">
 <threedee></threedee>
 </page>
-<page>
+<page id="text">
 <heading>This Weird <var key="noun" /> <var key="verb" />s Fast</heading>
+<body>whatever's <bold>clever</bold> <italic>compadre</italic></body>
 <helloworld></helloworld>
 <helloworld></helloworld>
 <helloworld></helloworld>
 <helloworld></helloworld>
 <helloworld></helloworld>
+<body>whatever's clever</body>
 </page>
 </spread>
 </zine>

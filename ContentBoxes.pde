@@ -192,3 +192,21 @@ class HeadingBox extends TextBox{
     }
   }
 }
+
+class WorkshopBody extends WorkshopBox{
+  
+  public Rectangle layout(XML xml, Rectangle rect, PGraphics pg, VarService vars){
+    TextBox textBox = new TextBox(xml, FontFamily.families.get("body"), FontFamily.sizes.get("body"), pg, vars, false);
+    return textBox.layout(rect, pg);
+  }
+  
+  public Rectangle render(XML xml, Rectangle rect, PGraphics pg, VarService vars, boolean debug){
+    println("rendering " + xml + " at " + rect);
+    TextBox textBox = new TextBox(xml, FontFamily.families.get("body"), FontFamily.sizes.get("body"), pg, vars, false);
+    return textBox.render(rect, pg);
+  }
+  
+  public boolean isResizable(){
+    return false;
+  }
+}

@@ -1,10 +1,7 @@
 public class HelloWorld extends WorkshopBox{
   public Rectangle render(XML xml, Rectangle rect, PGraphics pg, VarService vars, boolean debug){
-    pg.pushMatrix();
-    pg.translate(rect.x, rect.y);
     String text = "hello world!";
-    pg.text(text, 0, 0);
-    pg.popMatrix();
+    pg.text(text, rect.x, rect.y);
     return new Rectangle(rect.x, rect.y, pg.textAscent(), pg.textWidth(text));
   }
   
