@@ -30,6 +30,7 @@ Cover and spreads are composed of two ```<page>``` tags to represent the two pag
 ## Tag System
 
 ````
+This is a new set of features. Ask Quin for help with this. 
 (<var key="num"></var>/150)
 ````
 
@@ -68,4 +69,60 @@ Cover and spreads are composed of two ```<page>``` tags to represent the two pag
 </zine>
 </xml>
 ```
+
+## Drawing something
+
+Create a new class that extends WorkshopBox. 
+```
+public class JoshuaExample extends WorkshopBox{
+  public Rectangle render(XML xml, Rectangle rect, PGraphics pg, VarService vars, boolean debug){
+    pg.pushMatrix();
+    pg.fill(122); //set to grey
+    pg.rect(rect.x, rect.y, rect.w, rect.h); // draw a rectangle for the background
+    // do more drawing here
+    
+    
+    // end drawing
+    pg.popMatrix();
+    return new Rectangle(rect.x, rect.y, rect.w, rect.h); // return your size to the layout engine
+  }
+  
+  public boolean isResizable(){
+    return false;
+  }
+}
+```
+
+Edit the WorkshopBoxes Class to connect your class to the XML call 
+```
+boxes.put("JoshuaExample", zineBuilder.new JoshuaExample());
+```
+Now you can use your class in the XML to place your drawing
+```
+<spread id="2">
+	<page id="2">
+		<JoshuaExample></JoshuaExample>
+	</page>
+    <page id="3"></page>
+</spread>
+```
+    
+
+    
+## Drawing a Page, Full Bleed Page, or Full Spread (2 pages together)
+
+You may want to draw within the content area of a page. This means that it will place your graphic within the page margins. You might also want to print all the way to the edge of the paper (full bleed) or across two pages (spread).
+
+```
+    pg.rect(rect.x, rect.y, rect.w, rect.h); // draw a rectangle within the margin areas of the page
+    pg.rect(0, 0, pg.width/2, pg.height); // draw a full bleed pages, ignoring the margins
+    pg.rect(0, 0, pg.width, pg.height); // draw over both pages of the spread, ignoring the margins
+```
+
+## Other Tips / Tricks / Gotchas
+
+* Don't set global drawing parameters such as ```background()``` or ```fill()```, instead use your specific graphics context (```pg.noFill()```) to avoid altering other people's drawings
+* You don't need to call ```beginDraw()``` or ```endDraw()``` or ```pushStyle()``` or ```popStyle()```. These will automatically be called before and after your class.
+* Do let us know what things don't make sense to you.
+* Do ask questions and have fun. 
 
