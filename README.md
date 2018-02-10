@@ -119,7 +119,7 @@ You may want to draw within the content area of a page. This means that it will 
     pg.rect(0, 0, pg.width, pg.height); // draw over both pages of the spread, ignoring the margins
 ```
 
-## Do's and Dont's 
+## Other Tips / Tricks / Gotchas
 
 * Don't set global drawing parameters such as ```background()``` or ```fill()```, instead use your specific graphics context (```pg.noFill()```) to avoid altering other people's drawings
 * You don't need to call ```beginDraw()``` or ```endDraw()``` or ```pushStyle()``` or ```popStyle()```. These will automatically be called before and after your class.
