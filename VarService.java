@@ -18,6 +18,8 @@ class VarService{
   public VarService(ZineBuilder zineBuilder){
     put("noun", zineBuilder.new Noun());
     put("verb", zineBuilder.new Verb());
+    put("keyword", zineBuilder.new KeywordService());
+    put("definition", zineBuilder.new DictionaryService());
   }
   
   public String Get(String key){
@@ -30,6 +32,7 @@ class VarService{
     } else if (generators.containsKey(key)){
       return generators.get(key).GetText(xml, this);
     } else {
+      System.out.println("[VarService.Get] nothing for " + key);
       return null;
     }
   }

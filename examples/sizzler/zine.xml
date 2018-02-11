@@ -17,7 +17,7 @@
 
 We will just jam together to create a group zine. You can participate by creating "WorkshopBox" and "WorkshopText" elements. This zine illustrates a few examples of how to make and use these elements.
 
-A "WorkshopBox" allows you to render graphics into a section (or entire) page.
+A "WorkshopBox" allows you to render graphics into a section.
 
 A "WorkshopText" allows you to generate text which will be rendered by the build-in text rendering engine. Your text can also be consumed by other text generators. Stand on the shoulder of giants!</heading>
 	   <image src="images/U_2_694819491672_archigram.jpg"></image>
@@ -29,7 +29,7 @@ A "WorkshopText" allows you to generate text which will be rendered by the build
 
 * How can we extend our technologies to the objects and environments which help define who we are and how we live? What new sensing will need to be created?
 
-* What if we understood an acre of land? What if the biomass of the earth were networked? 
+* What if we understood an acre of land? What if the biomass of the earth were networked?
 
 We would like to thank the Processing community for making this possible, in particular contributors to Processing Core, CAN_GenerativeTypography, StippleGen2, and iText.
 
@@ -42,13 +42,13 @@ Thanks for reading. Reach us at @sensorycc #sensoryaesthetics</heading>
 	<page id="16" type="quote">
 		<subheading>02015</subheading>
 		<quote author="">Today's noise is tomorrow's information.
-			
+
 -Quin Kennedy</quote>
 		<footer>Sensory Aesthetics</footer>
 	</page>
 	<page id="1" type="toc">
 		<heading>Table of Contents</heading>
-		<footer>Every year children are taught how to interpet a table of contents, an information structure which dates back at least 2000 years. Do you remember learning how to use a table of contents?  
+		<footer>Every year children are taught how to interpet a table of contents, an information structure which dates back at least 2000 years. Do you remember learning how to use a table of contents?
 
 __ yes  __no __not sure</footer>
 	</page>
@@ -65,7 +65,7 @@ On the following spread there is an example of a generative block which renders 
 	</page>
 </spread>
 <spread id="3">
-	<page id="4"> 
+	<page id="4">
 	 <JoshuaExampleFullSpread></JoshuaExampleFullSpread>
 	</page>
 </spread>
@@ -85,6 +85,7 @@ On the following spread there is an example of a generative block which renders 
 		<heading>Pre-rendered</heading>
 		<subheading>Here we see a pre-renderer sequence of images inserted into the document</subheading>
 		<image src="../ProcessingFrameCreator/screen-%04d.tif" />
+		<randomImage />
 	</page>
 	<page id="9">
 		<body>You can also scale up the image</body>
@@ -95,46 +96,59 @@ On the following spread there is an example of a generative block which renders 
 	<page id="10">
 		<heading>Generative Text</heading>
 		<subheading>A <var key="noun" /> tried to <var key="verb" /></subheading>
+		<body>The subheading on this page uses generative text to create a different sentence for each copy. The <italic>var</italic> tag is used to expose these text generators.
+
+Example:
+&lt;var key="noun" />
+
+The following page uses a number of text generators to show a random word and associated content.
+</body>
 	</page>
 	<page id="11">
+		<heading><var key="keyword" keywordIndex="0" /></heading>
+		<subheading><var key="definition" useKeyword="useKeyword" keywordIndex="0" /></subheading>
 	</page>
 </spread>
 <spread id="7">
 	<page id="12" type="toplist">
-		<heading>10 Things we can't Measure</heading>
-		<body><bold>1. Reality
-2. Intention
-3. Success
-4. Godzilla’s Impact on Humanity
-5. True love
-6. The Future
-7. Why we fight
-8. The ringing in my ears
-9. Missed calls (*)
-10. The moment</bold></body>
+		<heading>10 Random Keywords</heading>
+		<body><bold>1. <var key="keyword" keywordIndex="1" />
+2. <var key="keyword" keywordIndex="2" />
+3. <var key="keyword" keywordIndex="3" />
+4. <var key="keyword" keywordIndex="4" />
+5. <var key="keyword" keywordIndex="5" />
+6. <var key="keyword" keywordIndex="6" />
+7. <var key="keyword" keywordIndex="7" />
+8. <var key="keyword" keywordIndex="8" />
+9. <var key="keyword" keywordIndex="9" />
+10. <var key="keyword" keywordIndex="10" /></bold></body>
 <footer>*Did you really miss that call?</footer>
 	</page>
 	<page id="13" type="photo">
 		<image src="images/drawing4b.jpg"></image>
 	</page>
 </spread>
-<spread id="8">
+<spread id="8" renderer="P3D">
 	<page id="14">
- 	<heading>Information Acre</heading>
-	   <subheading>   </subheading>
-	   <body>Imagine the bit as the toss of a fair coin. The result is either heads or tails. The "holographic principle" would suggest that there is a limit to the number of bits which physics can support. This amount is placed at 10^69 bits per square meter before the point in which adding more information would collapse into a black hole. This is approximately 1, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000, 000 bits per square meter of two dimensional space.
+ 	<heading>3D Rendering</heading>
+	   <subheading>You can use a specific renderer (P3D, P2D, OPENGL) for any particular spread.</subheading>
+	   <body>By specifying the <bold>renderer</bold> attribute in the spread tag, you can control which renderer is used for that spread.
 
-Our proposal: Dedicate 1 square acre of land to the deep pursuit of sensing. Bring scientists, artists, hardware and software designers together to try to make a dent in that information space. Sense the biology, the chemistry, the conditions, and the human reaction to that one acre. Publish this material for the world. 
+Valid values are:
+* P3D
+* P2D
+* OPENGL
 
-We have tentatively named this project Information Acre and are currently looking for a suitable area in the Pacific Northwest for this to occur. 
+Example:
+&lt;spread renderer="P3D">
+	&lt;!-- pages and content go here -->
+&lt;/spread>
+
+<italic>This</italic> spread is using the P3D renderer. You can see 3D content on the opposite page.
 </body>
-	   <image src="images/biomass.gif"></image>
 	</page>
 	<page id="15">
-		<heading></heading>
-		<subheading></subheading>
-		<image src="images/archigram14.gif"></image>
-		 <footer>Want to join us on Information Acre? Contact: @brunchstorm or @jamestichenor.</footer>
+		<threedee />
 	</page>
 </spread>
 </zine>

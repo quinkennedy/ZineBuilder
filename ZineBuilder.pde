@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 
 //boolean separateCopies = false;
 boolean debug = false;
-PFont screenFont;
+PFont screenFont; 
 boolean testLayout = false;
 int paperWidthPx;
 int paperHeightPx;
