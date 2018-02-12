@@ -15,6 +15,7 @@ class WorkshopBoxes{
     boxes.put("JoshuaExample", zineBuilder.new JoshuaExample());
     boxes.put("JoshuaExampleFullBleed", zineBuilder.new JoshuaExampleFullBleed());
     boxes.put("JoshuaExampleFullSpread", zineBuilder.new JoshuaExampleFullSpread());
+    boxes.put("JoshuaZinewave", zineBuilder.new JoshuaZinewave());
   }
   
   public static WorkshopBoxes GetInstance(ZineBuilder zineBuilder){

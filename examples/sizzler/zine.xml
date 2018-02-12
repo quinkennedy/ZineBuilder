@@ -6,16 +6,23 @@
 	</page>
 	<page id="1">
 		<image src="images/jq_squares.png"></image>
-		<heading>Generative Zine Workshop 001</heading>
-		<subheading>Let's make a generative zine together using this crazy programmatic layout engine</subheading>
+		<heading>Zine Builder</heading>
+		<subheading>Use Processing or your favorite Creative Coding software to create a zine.</subheading>
 		<footer>#<var key="num" /> of <var key="total" /> generated on <var key="date"/></footer>
 	</page>
 </cover>
 <cover id="2">
 	<page id="3">
-		<heading>Welcome to our zine shindig!
+		<heading>Welcome to the Zine Builder!
 
-We will just jam together to create a group zine. You can participate by creating "WorkshopBox" and "WorkshopText" elements. This zine illustrates a few examples of how to make and use these elements.
+Why?
+We wanted to create zines that can incorporate computer generated or generative designs. Zines are a great format to summarize information, archive ideas, and are fun to distribute. 
+
+Zine are great for collaborations. Collaborate between you and your friends, you and a computer, you and the printed page.
+
+Typically we will just jam together to create a group zine. 
+
+You can participate by creating "WorkshopBox" and "WorkshopText" elements. This zine illustrates a few examples of how to make and use these elements.
 
 A "WorkshopBox" allows you to render graphics into a section.
 
@@ -23,17 +30,7 @@ A "WorkshopText" allows you to generate text which will be rendered by the build
 	   <image src="images/U_2_694819491672_archigram.jpg"></image>
 	</page>
 		<page id="4">
-	   <heading>Thank you for taking the time to read this zine. Our goals were to discuss:
-
-* Why should we invent computing to extend and augment humans? How will it teach us more deeply about ourselves?
-
-* How can we extend our technologies to the objects and environments which help define who we are and how we live? What new sensing will need to be created?
-
-* What if we understood an acre of land? What if the biomass of the earth were networked?
-
-We would like to thank the Processing community for making this possible, in particular contributors to Processing Core, CAN_GenerativeTypography, StippleGen2, and iText.
-
-Thanks for reading. Reach us at @sensorycc #sensoryaesthetics</heading>
+	   <heading></heading>
 	   <subheading></subheading>
 	</page>
 </cover>
@@ -41,16 +38,14 @@ Thanks for reading. Reach us at @sensorycc #sensoryaesthetics</heading>
 	<!-- the first page in the first spread is actually the back cover -->
 	<page id="16" type="quote">
 		<subheading>02015</subheading>
-		<quote author="">Today's noise is tomorrow's information.
+		<quote author="">“Zines are not a new idea. They have been around under different names (ChapBooks, Pamphlets, Flyers). People with independent ideas have been getting their word out since there were printing presses.” 
 
--Quin Kennedy</quote>
-		<footer>Sensory Aesthetics</footer>
+― Mark Todd, Whatcha Mean, What's a Zine?</quote>
+		<footer>Zine Life</footer>
 	</page>
 	<page id="1" type="toc">
-		<heading>Table of Contents</heading>
-		<footer>Every year children are taught how to interpet a table of contents, an information structure which dates back at least 2000 years. Do you remember learning how to use a table of contents?
-
-__ yes  __no __not sure</footer>
+		<heading></heading>
+		<footer></footer>
 	</page>
 </spread>
 <spread id="2">
@@ -150,5 +145,12 @@ Example:
 	<page id="15">
 		<threedee />
 	</page>
+</spread>
+<spread>
+	<heading>zinewave</heading>
+	<page id="16">
+		<JoshuaZinewave />
+	</page>
+	<page id="17"></page>
 </spread>
 </zine>
