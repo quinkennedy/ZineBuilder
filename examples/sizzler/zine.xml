@@ -102,6 +102,7 @@ The following page uses a number of text generators to show a random word and as
 	<page id="11">
 		<heading><var key="keyword" keywordIndex="0" /></heading>
 		<subheading><var key="definition" useKeyword="useKeyword" keywordIndex="0" /></subheading>
+		<image useKeyword="useKeyword" keywordIndex="0" />
 	</page>
 </spread>
 <spread id="7">

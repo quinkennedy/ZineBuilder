@@ -130,7 +130,6 @@ class Spread {
         pageData[i].body = pages[i].getChild("body");
         pageData[i].footer = pages[i].getChild("footer");
         pageData[i].pageID = pages[i].getString("id");
-        pageData[i].contentImages = extractImages(pages[i]);
 
         pageData[i].type = pages[i].getString("type");
         if (pageData[i].type == null) {
@@ -261,15 +260,6 @@ class Spread {
     pg.popStyle();
   }
 
-  public PImage[] extractImages(XML _page) {
-    XML [] tXML = _page.getChildren("image");
-    PImage [] tImages = new PImage[tXML.length];
-    for (int j=0; j<tXML.length; j++) {
-      tImages[j] = loadImage(tXML[j].getString("src"));
-    }
-    return tImages;
-  }
-
   public Content[] extractContents(XML[] _spreads) {
     ArrayList<Content> contents = new ArrayList<Content>();
     for(int i = 0; i < _spreads.length; i++){
@@ -368,7 +358,6 @@ class Spread {
       pageData[i].subheading = pages[i].getChild("subheading");
       pageData[i].body = pages[i].getChild("body");
       pageData[i].footer = pages[i].getChild("footer");
-      pageData[i].contentImages = extractImages(pages[i]);
 
       //if (spreadNum < 2) {
       //  topMargin = 800;

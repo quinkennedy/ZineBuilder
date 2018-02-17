@@ -212,12 +212,24 @@ class WorkshopBody extends WorkshopBox{
 
 class WorkshopImage extends WorkshopBox{
   
-  /**
-   * Loads the image specified by the `<image>` XML.
-   * `src` is run through a string formatter
-   * so you can include `%04d` to inject the copy number
-   */
-  private PImage load(XML xml, VarService vars){
+  LoadRandomImage lri = new LoadRandomImage();
+  
+  private PImage loadRandom(XML xml, Rectangle rect, VarService vars){
+    String keyword = xml.getString("keyword");
+    if (keyword == null){
+      if (xml.hasAttribute("useKeyword")){
+        keyword = vars.Get("keyword", xml);
+      }
+    }
+    
+    if (keyword == null){
+      return lri.loadRandomImage((int)rect.w, (int)rect.h);
+    } else {
+      return lri.loadRandomImage((int)rect.w, (int)rect.h, keyword);
+    }
+  }
+  
+  private PImage loadLocal(XML xml, VarService vars){
     File directory = new File(getDirectory());
     String filename = String.format(xml.getString("src"), parseInt(vars.Get("num")));
     File file = new File(directory, filename);
@@ -228,6 +240,20 @@ class WorkshopImage extends WorkshopBox{
     }
     return image;
   }
+  
+  /**
+   * Loads the image specified by the `<image>` XML.
+   * `src` is run through a string formatter
+   * so you can include `%04d` to inject the copy number
+   */
+  private PImage load(XML xml, Rectangle rect, VarService vars){
+    if (!xml.hasAttribute("src")){
+      return loadRandom(xml, rect, vars);
+    } else {
+      return loadLocal(xml, vars);
+    }
+  }
+  
   private String getFit(XML xml){
     String fit = xml.getString("fit");
     if (fit == null){
@@ -235,22 +261,29 @@ class WorkshopImage extends WorkshopBox{
     }
     return fit;
   }
-  public Rectangle layout(XML xml, Rectangle area, PGraphics pg, VarService vars){
-    PImage image = load(xml, vars);
+  
+  public Rectangle layout(XML xml, Rectangle rect, PGraphics pg, VarService vars){
+    //if we want a random image,
+    //just assume it will fit the provided rect
+    if (xml.hasAttribute("random")){
+      return rect;
+    }
+    //TODO: just return rect for some other fits as well
+    PImage image = load(xml, rect, vars);
     String scaleType = getFit(xml);
     switch (scaleType){
       case "fill":
       case "cover":
-        return area;
+        return rect;
       case "contain":
       {
-        float scale = area.h / Math.max(image.height, 1);
-        scale = Math.min(scale, area.w / Math.max(image.width, 1));
+        float scale = rect.h / Math.max(image.height, 1);
+        scale = Math.min(scale, rect.w / Math.max(image.width, 1));
         float sWidth = image.width * scale;
         float sHeight = image.height * scale;
         return new Rectangle(
-          area.x + (area.w - sWidth) / 2, 
-          area.y + (area.h - sHeight) / 2, 
+          rect.x + (rect.w - sWidth) / 2, 
+          rect.y + (rect.h - sHeight) / 2, 
           sWidth, 
           sHeight);
       }
@@ -258,20 +291,21 @@ class WorkshopImage extends WorkshopBox{
       default:
       {
         float scale = 1;
-        scale = Math.min(scale, area.h / Math.max(image.height, 1));
-        scale = Math.min(scale, area.w / Math.max(image.width, 1));
+        scale = Math.min(scale, rect.h / Math.max(image.height, 1));
+        scale = Math.min(scale, rect.w / Math.max(image.width, 1));
         float sWidth = image.width * scale;
         float sHeight = image.height * scale;
         return new Rectangle(
-          area.x + (area.w - sWidth) / 2, 
-          area.y + (area.h - sHeight) / 2, 
+          rect.x + (rect.w - sWidth) / 2, 
+          rect.y + (rect.h - sHeight) / 2, 
           sWidth, 
           sHeight);
       }
     }
   }
+  
   public Rectangle render(XML xml, Rectangle rect, PGraphics pg, VarService vars, boolean debug){
-    PImage image = load(xml, vars);
+    PImage image = load(xml, rect, vars);
     Rectangle target = layout(xml, rect, pg, vars);
     String scaleType = getFit(xml);
     switch (scaleType){

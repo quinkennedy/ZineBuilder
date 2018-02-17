@@ -27,12 +27,7 @@ public class JoshuaExample extends WorkshopBox{
     //pg.translate(rect.x, rect.y);
     
     // this is the rect you are allowed to fill
-    println(rect.x);
-    println(rect.y);
-    println(rect.w);
-    println(rect.h);
-    
-
+    println("[JoshuaExample] you are meant to fill: " + rect.x + ", " + rect.y + ", " + rect.w + ", " + rect.h);
     
     // Dont do pg.beginDraw();
     // Don't do this... pg.pushStyle();
